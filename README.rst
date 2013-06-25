@@ -1,8 +1,8 @@
-django-skeleton
+go-nike-ghr
 ===============
 
-A Sample Django application that illustrates what bits make up a
-sane Django based web app deployment.
+A Django application to generate content and a vumi-go app to interact 
+with it.
 
 ::
 
@@ -10,12 +10,9 @@ sane Django based web app deployment.
     $ source ve/bin/activate
     (ve)$ pip install -r requirements.pip
 
-You can use Git_ to merge this repository into your own code
-if you would like to use it as a starting point::
 
-    $ git remote add skeleton https://github.com/praekelt/django-skeleton.git
-    $ git fetch skeleton
-    $ git merge skeleton/develop
+Help
+-----
 
 South
 -----
