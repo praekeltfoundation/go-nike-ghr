@@ -1,0 +1,31 @@
+{
+  "name": "go-nike-ghr",
+  "version": "0.0.1",
+  "description": "A Vumi Go application for Nike GHR.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "vumigo_v01": "0.1.x",
+    "jed": "0.5.x"
+  },
+  "devDependencies": {
+    "mocha": "~1.7.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/praekelt/go-nike-ghr"
+  },
+  "keywords": [
+    "vumi",
+    "ussd",
+    "sms"
+  ],
+  "author": "Mike Jones <mike@westerncapelabs.com>",
+  "license": "BSD",
+  "readmeFilename": "README"
+}
