@@ -1,5 +1,11 @@
 *.py[cod]
 
+# Node 
+js_sandbox/node_modules/
+
+# Mac
+.DS_Store
+
 # C extensions
 *.so
 
@@ -15,7 +21,7 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
+# lib
 lib64
 
 # Installer logs
