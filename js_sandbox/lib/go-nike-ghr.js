@@ -18,56 +18,61 @@ var StateCreator = vumigo.state_machine.StateCreator;
 function GoNikeGHR() {
     var self = this;
     // The first state to enter
-    StateCreator.call(self, 'first_state');
+    StateCreator.call(self, 'initial_state');
 
+    self.add_creator('initial_state', function(state_name, im) {
+        return new ChoiceState(
+            state_name,
+            "reg_age",
+            "Please choose your gender:",
+            [
+                new Choice("Male", "Male"),
+                new Choice("Female", "Female")
+            ]
+            );
+    });
+
+    self.add_creator('reg_age', function(state_name, im) {
+        return new ChoiceState(
+            state_name,
+            "reg_sector",
+            "Please choose your age:",
+            [
+                new Choice("12 or under", "12 or under"),
+                new Choice("12-15", "12-15"),
+                new Choice("16-18", "16-18"),
+                new Choice("19-24", "19-24"),
+                new Choice("25-35", "25-35"),
+                new Choice("35+", "35+")
+            ]
+            );
+    });
 
     self.add_state(new FreeText(
-        "first_state",
-        "second_state",
-        "Say something please..."
+        "reg_sector",
+        "reg_thanks",
+        "Which sector do live in?"
     ));
 
-    self.add_creator('second_state', function(state_name, im) {
-        return new ChoiceState(
-            state_name,
-            function(choice) {
-                return (choice.value == 'yes' ? 'third_state' : 'end_state');
-            },
-            "Thank you! Do you what to know what you said?",
-            [
-                new Choice("yes", "Yes"),
-                new Choice("no", "No")
-            ]
+    self.add_creator('reg_thanks', function(state_name, im) {
+        var sector = im.get_user_answer('reg_sector');
+        if (sector=='Valid sector') {
+            return new ChoiceState(
+                state_name,
+                'end_state',
+                "Thank you for registering",
+                [
+                    new Choice("continue", "Continue")
+                ]
             );
-    });
-
-    self.add_creator('third_state', function(state_name, im) {
-        // go back to the first state answer
-        var they_said = im.get_user_answer('first_state');
-        return new ChoiceState(
-            state_name,
-            function(choice) {
-                return (choice.value == 'yes' ? 'end_state_correct' : 'end_state_wrong');
-            },
-            "We think you said '" + they_said + "'. Correct?",
-            [
-                new Choice("yes", "Yes"),
-                new Choice("no", "No")
-            ]
+        } else {
+           return new FreeText(
+                "reg_sector_reenter",
+                "reg_thanks",
+                "Sorry, cannot find a match. Please try again.\nWhich sector do live in?"
             );
+        }
     });
-
-    self.add_state(new EndState(
-        "end_state_correct",
-        "Aren't we clever? Thank you and bye bye!",
-        "first_state"
-    ));
-
-    self.add_state(new EndState(
-        "end_state_wrong",
-        "Silly us! Thank you and bye bye!",
-        "first_state"
-    ));
 
     self.add_state(new EndState(
         "end_state",
