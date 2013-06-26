@@ -80,3 +80,4 @@ function GoNikeGHR() {
 var states = new GoNikeGHR();
 var im = new InteractionMachine(api, states);
 im.attach();
+
