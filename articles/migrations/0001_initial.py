@@ -12,6 +12,9 @@ class Migration(SchemaMigration):
         db.create_table(u'articles_article', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('article', self.gf('django.db.models.fields.CharField')(max_length=480)),
+            ('publish', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('publish_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'articles', ['Article'])
 
@@ -25,7 +28,10 @@ class Migration(SchemaMigration):
         u'articles.article': {
             'Meta': {'object_name': 'Article'},
             'article': ('django.db.models.fields.CharField', [], {'max_length': '480'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'publish': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'publish_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'})
         }
     }
 
