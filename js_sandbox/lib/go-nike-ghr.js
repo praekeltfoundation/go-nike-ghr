@@ -21,7 +21,6 @@ function GoNikeGHR() {
     StateCreator.call(self, 'initial_state');
 
     self.get_today = function(im) {
-        var today = null;
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
                              im.config.testing_mock_today[1],
