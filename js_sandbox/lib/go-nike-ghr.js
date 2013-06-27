@@ -48,7 +48,10 @@ function GoNikeGHR() {
                 var fields = {
                     "ghr_reg_complete": "false",
                     "ghr_reg_started": today.toISOString(),
-                    "ghr_questions": JSON.stringify([])
+                    "ghr_questions": JSON.stringify([]),
+                    "ghr_gender": "",
+                    "ghr_age": "",
+                    "ghr_sector": ""
                 };
                 // Run the extras update
                 return im.api_request('contacts.update_extras', {
