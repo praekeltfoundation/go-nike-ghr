@@ -35,9 +35,10 @@ class TestAPI(TestCase):
                                (timezone.now() - datetime.timedelta(days=2)))
 
         response = self.client.get("/api/articles/")
-        self.assertIn("application/json", response.items()[0])
+        self.assertEqual("application/json", response["Content-Type"])
         self.assertIn('Test2', response.content)
         self.assertEqual(response.status_code, 200)
+
 
     def test_no_article_last_week(self):
         Article.objects.create(article="Test1",
