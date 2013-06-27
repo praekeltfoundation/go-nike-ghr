@@ -32,7 +32,8 @@ describe("When using the USSD line", function() {
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
                 api.config_store.config = JSON.stringify({
-                    //user_store: "go_skeleton"
+                    testing: true,
+                    testing_mock_today: [2013,5,1,8,10]
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);

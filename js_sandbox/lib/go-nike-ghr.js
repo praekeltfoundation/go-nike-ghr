@@ -21,16 +21,91 @@ function GoNikeGHR() {
 
     StateCreator.call(self, 'initial_state');
 
+    self.get_today = function(im) {
+        if (im.config.testing) {
+            return new Date(im.config.testing_mock_today[0],
+                             im.config.testing_mock_today[1],
+                             im.config.testing_mock_today[2],
+                             im.config.testing_mock_today[3],
+                             im.config.testing_mock_today[4]);
+        } else {
+            return new Date();
+        }
+    };
+
+    self.error_state = function() {
+        return new EndState(
+            "end_state_error",
+            "Sorry! Something went wrong. Please redial and try again.",
+            "initial_state"
+        );
+    };
+
+    self.get_contact = function(im){
+        var p = im.api_request('contacts.get_or_create', {
+            delivery_class: 'ussd',
+            addr: im.user_addr
+        });
+        return p;
+    };
+
     self.add_creator('initial_state', function(state_name, im) {
-        return new ChoiceState(
-            state_name,
-            "reg_age",
-            "Please choose your gender:",
-            [
-                new Choice("Male", "Male"),
-                new Choice("Female", "Female")
-            ]
-            );
+        // Check if they've already registered
+        var p = self.get_contact(im);
+
+        p.add_callback(function(result) {
+            // This callback creates extras if first time visitor - or just passes through
+            if (result.contact["extras-ghr_reg_complete"] === undefined){
+                // First visit - create extras
+                var today = self.get_today(im);
+                var fields = {
+                    "ghr_reg_complete": "false",
+                    "ghr_reg_started": today.toISOString(),
+                    "ghr_questions": JSON.stringify([]),
+                    "ghr_gender": "",
+                    "ghr_age": "",
+                    "ghr_sector": ""
+                };
+                // Run the extras update
+                return im.api_request('contacts.update_extras', {
+                    key: result.contact.key,
+                    fields: fields
+                });
+            } else {
+                // Not first so just pass previous callback result on
+                return result;
+            }
+        });
+
+        p.add_callback(function(result) {
+            // This callback generates the state the user sees
+            if (result.success){
+                if (result.contact["extras-ghr_reg_complete"] == "false"){
+                    // Did not finish registration and session state not found
+                    return new ChoiceState(
+                        state_name,
+                        "reg_age",
+                        "Please choose your gender:",
+                        [
+                            new Choice("Male", "Male"),
+                            new Choice("Female", "Female")
+                        ]
+                    );
+                } else {
+                    // Registration complete so check for questions
+                    // TODO
+                    return new EndState(
+                        "end_state",
+                        "Will ask questions - Thank you and bye bye!",
+                        "initial_state"
+                    );
+                }
+            } else {
+                // Something went wrong saving the extras
+                return self.error_state();
+            }
+        });
+        return p;  // return the promise
     });
 
     self.add_state(new ChoiceState(
@@ -57,14 +132,47 @@ function GoNikeGHR() {
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
         if (sector=='Valid sector') {
-            return new ChoiceState(
-                state_name,
-                'end_state',
-                "Thank you for registering",
-                [
-                    new Choice("continue", "Continue")
-                ]
-            );
+            // Get the user
+            var p = self.get_contact(im);
+
+            p.add_callback(function(result) {
+                // This callback updates extras when contact is found
+                if (result.success){
+                    var gender = im.get_user_answer('initial_state');
+                    var age = im.get_user_answer('reg_age');
+                    var fields = {
+                        "ghr_reg_complete": "true",
+                        "ghr_gender": gender,
+                        "ghr_age": age,
+                        "ghr_sector": sector
+                    };
+                    // Run the extras update
+                    return im.api_request('contacts.update_extras', {
+                        key: result.contact.key,
+                        fields: fields
+                    });
+                } else {
+                    // Error finding contact
+                    return self.error_state();
+                }
+            });
+
+            p.add_callback(function(result) {
+                if (result.success){
+                    return new ChoiceState(
+                        state_name,
+                        'end_state',
+                        "Thank you for registering",
+                        [
+                            new Choice("continue", "Continue")
+                        ]
+                    );
+                } else {
+                    // Error saving contact extras
+                    return self.error_state();
+                }
+            });
+            return p;
         } else {
            return new FreeText(
                 "reg_sector_reenter",
