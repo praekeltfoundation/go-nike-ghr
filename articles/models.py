@@ -15,6 +15,9 @@ class Article(models.Model):
 class MonitorAndLearningQuizId(models.Model):
     active = models.BooleanField()
 
+    def __unicode__(self):
+        return "quiz_%s" % self.pk
+
 
 class MonitorAndLearningQuizQuestion(models.Model):
     quiz_id = models.ForeignKey('MonitorAndLearningQuizId')
