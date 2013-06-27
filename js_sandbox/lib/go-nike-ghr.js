@@ -38,15 +38,20 @@ function GoNikeGHR() {
             "end_state_error",
             "Sorry! Something went wrong. Please redial and try again.",
             "initial_state"
-        )
+        );
     };
 
-    self.add_creator('initial_state', function(state_name, im) {
-        // Check if they've already registered
+    self.get_contact = function(im){
         var p = im.api_request('contacts.get_or_create', {
             delivery_class: 'ussd',
             addr: im.user_addr
         });
+        return p;
+    };
+
+    self.add_creator('initial_state', function(state_name, im) {
+        // Check if they've already registered
+        var p = self.get_contact(im);
 
         p.add_callback(function(result) {
             // This callback creates extras if first time visitor - or just passes through
@@ -128,10 +133,7 @@ function GoNikeGHR() {
         var sector = im.get_user_answer('reg_sector');
         if (sector=='Valid sector') {
             // Get the user
-            var p = im.api_request('contacts.get_or_create', {
-                delivery_class: 'ussd',
-                addr: im.user_addr
-            });
+            var p = self.get_contact(im);
 
             p.add_callback(function(result) {
                 // This callback updates extras when contact is found
