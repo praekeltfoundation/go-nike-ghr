@@ -42,3 +42,4 @@ nosetests.xml
 /ve/
 logs/*.log
 *.pid
+*.DS_Store
