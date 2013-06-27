@@ -86,7 +86,7 @@ describe("When using the USSD line", function() {
                 user: user,
                 content: "4",
                 next_state: "reg_sector",
-                response: "^Which sector do live in\\?$"
+                response: "^Which sector do you live in\\?$"
             });
             p.then(done, done);
         });
@@ -125,7 +125,7 @@ describe("When using the USSD line", function() {
                 next_state: "reg_sector_reenter",
                 response: (
                     "^Sorry, cannot find a match. Please try again.\n" +
-                    "Which sector do live in\\?$"
+                    "Which sector do you live in\\?$"
                 )
             });
             p.then(done, done);

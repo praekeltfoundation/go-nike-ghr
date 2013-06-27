@@ -32,9 +32,8 @@ function GoNikeGHR() {
             );
     });
 
-    self.add_creator('reg_age', function(state_name, im) {
-        return new ChoiceState(
-            state_name,
+    self.add_state(new ChoiceState(
+            "reg_age",
             "reg_sector",
             "Please choose your age:",
             [
@@ -45,13 +44,13 @@ function GoNikeGHR() {
                 new Choice("25-35", "25-35"),
                 new Choice("35+", "35+")
             ]
-            );
-    });
+        )
+    );
 
     self.add_state(new FreeText(
         "reg_sector",
         "reg_thanks",
-        "Which sector do live in?"
+        "Which sector do you live in?"
     ));
 
     self.add_creator('reg_thanks', function(state_name, im) {
@@ -69,7 +68,7 @@ function GoNikeGHR() {
            return new FreeText(
                 "reg_sector_reenter",
                 "reg_thanks",
-                "Sorry, cannot find a match. Please try again.\nWhich sector do live in?"
+                "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?"
             );
         }
     });
