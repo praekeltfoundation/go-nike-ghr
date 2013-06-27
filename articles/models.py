@@ -10,3 +10,23 @@ class Article(models.Model):
 
     def __unicode__(self):
         return self.article
+
+
+class MonitorQuizId(models.Model):
+    active = models.BooleanField()
+
+
+class MonitorQuizQuestion(models.Model):
+    quiz_id = models.ForeignKey('MonitorQuizId')
+    question = models.CharField(max_length=160, blank=False)
+
+    def __unicode__(self):
+        return self.question
+
+
+class MonitorQuizAnswer(models.Model):
+    question_id = models.ForeignKey('MonitorQuizQuestion')
+    answer = models.CharField(max_length=160, blank=False)
+
+    def __unicode__(self):
+        return self.answer
