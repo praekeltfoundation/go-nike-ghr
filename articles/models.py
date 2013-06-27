@@ -12,20 +12,20 @@ class Article(models.Model):
         return self.article
 
 
-class MonitorQuizId(models.Model):
+class MonitorAndLearningQuizId(models.Model):
     active = models.BooleanField()
 
 
-class MonitorQuizQuestion(models.Model):
-    quiz_id = models.ForeignKey('MonitorQuizId')
+class MonitorAndLearningQuizQuestion(models.Model):
+    quiz_id = models.ForeignKey('MonitorAndLearningQuizId')
     question = models.CharField(max_length=160, blank=False)
 
     def __unicode__(self):
         return self.question
 
 
-class MonitorQuizAnswer(models.Model):
-    question_id = models.ForeignKey('MonitorQuizQuestion')
+class MonitorAndLearningQuizAnswer(models.Model):
+    question_id = models.ForeignKey('MonitorAndLearningQuizQuestion')
     answer = models.CharField(max_length=160, blank=False)
 
     def __unicode__(self):
