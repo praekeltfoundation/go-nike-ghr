@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-    url(r'^articles$', 'articles.views.get_articles'),
+    url(r'^article$', 'articles.views.get_article'),
 )

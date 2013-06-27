@@ -5,7 +5,7 @@ from django.utils import timezone
 import datetime
 
 
-def get_articles(request):
+def get_article(request):
     timedelta = timezone.now() - datetime.timedelta(days=7)
     try:
         queryset = (Article.objects.all().
