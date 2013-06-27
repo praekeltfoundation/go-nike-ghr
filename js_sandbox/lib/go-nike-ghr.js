@@ -33,6 +33,14 @@ function GoNikeGHR() {
         }
     };
 
+    self.error_state = function() {
+        return new EndState(
+            "end_state_error",
+            "Sorry! Something went wrong. Please redial and try again.",
+            "initial_state"
+        )
+    };
+
     self.add_creator('initial_state', function(state_name, im) {
         // Check if they've already registered
         var p = im.api_request('contacts.get_or_create', {
@@ -89,11 +97,7 @@ function GoNikeGHR() {
                 }
             } else {
                 // Something went wrong saving the extras
-                return new EndState(
-                    "end_state_error",
-                    "Sorry! Something went wrong. Please redial and try again.",
-                    "initial_state"
-                );
+                return self.error_state();
             }
         });
         return p;  // return the promise
@@ -123,14 +127,50 @@ function GoNikeGHR() {
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
         if (sector=='Valid sector') {
-            return new ChoiceState(
-                state_name,
-                'end_state',
-                "Thank you for registering",
-                [
-                    new Choice("continue", "Continue")
-                ]
-            );
+            // Get the user
+            var p = im.api_request('contacts.get_or_create', {
+                delivery_class: 'ussd',
+                addr: im.user_addr
+            });
+
+            p.add_callback(function(result) {
+                // This callback updates extras when contact is found
+                if (result.success){
+                    var gender = im.get_user_answer('initial_state');
+                    var age = im.get_user_answer('reg_age');
+                    var fields = {
+                        "ghr_reg_complete": "true",
+                        "ghr_gender": gender,
+                        "ghr_age": age,
+                        "ghr_sector": sector
+                    };
+                    // Run the extras update
+                    return im.api_request('contacts.update_extras', {
+                        key: result.contact.key,
+                        fields: fields
+                    });
+                } else {
+                    // Error finding contact
+                    return self.error_state();
+                }
+            });
+
+            p.add_callback(function(result) {
+                if (result.success){
+                    return new ChoiceState(
+                        state_name,
+                        'end_state',
+                        "Thank you for registering",
+                        [
+                            new Choice("continue", "Continue")
+                        ]
+                    );
+                } else {
+                    // Error saving contact extras
+                    return self.error_state();
+                }
+            });
+            return p;
         } else {
            return new FreeText(
                 "reg_sector_reenter",
