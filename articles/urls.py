@@ -1,5 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
+from articles.api import ArticleResource
+
+article_resource = ArticleResource()
 
 urlpatterns = patterns('',
-    url(r'^article/$', 'articles.views.get_article'),
+    url(r'^', include(article_resource.urls))
 )
