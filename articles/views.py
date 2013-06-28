@@ -7,14 +7,17 @@ import datetime
 
 def get_article(request):
     timedelta = timezone.now() - datetime.timedelta(days=7)
-    try:
-        queryset = (Article.objects.all().
-                    filter(publish=True).
-                    filter(publish_at__lte=timezone.now()).
-                    filter(publish_at__gte=timedelta).
-                    order_by('publish_at')[0])
-        output = {"article": queryset.article}
-    except IndexError:
+
+    queryset = (Article.objects.all().
+                filter(publish=True).
+                filter(publish_at__lte=timezone.now).
+                filter(publish_at__gte=timedelta).
+                order_by('publish_at'))
+
+    print queryset
+    if queryset.exists():
+        output = {"article": queryset[0].article}
+    else:
         output = {"article":
                   "Sorry there's no article this week, dial back soon!"}
 
