@@ -1,7 +1,7 @@
 from django.test import TestCase
 from articles.models import Article
 from django.utils import timezone
-from django.core.urlresolvers  import reverse
+from django.core.urlresolvers import reverse
 import datetime
 import json
 
@@ -40,7 +40,6 @@ class TestAPI(TestCase):
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'], 'Test2')
-
 
     def test_no_article_last_week(self):
         Article.objects.create(article="Test1",
