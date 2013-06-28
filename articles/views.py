@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from articles.models import Article
-from django.utils import simplejson
+import json
 from django.utils import timezone
 import datetime
 
@@ -18,5 +18,5 @@ def get_article(request):
         output = {"article":
                   "Sorry there's no article this week, dial back soon!"}
 
-    return HttpResponse(simplejson.dumps(output),
+    return HttpResponse(json.dumps(output),
                         content_type="application/json")
