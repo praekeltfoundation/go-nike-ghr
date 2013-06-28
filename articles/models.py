@@ -15,6 +15,12 @@ class Article(models.Model):
 class MonitorAndLearningQuizId(models.Model):
     active = models.BooleanField()
 
+    def __str__(self):
+        return "quiz_%s" % self.pk
+
+    class Meta:
+        verbose_name_plural = "Monitor and Learning Quiz ID's"
+
 
 class MonitorAndLearningQuizQuestion(models.Model):
     quiz_id = models.ForeignKey('MonitorAndLearningQuizId')
@@ -22,6 +28,9 @@ class MonitorAndLearningQuizQuestion(models.Model):
 
     def __unicode__(self):
         return self.question
+
+    class Meta:
+        verbose_name = "Monitor and Learning Quiz Question"
 
 
 class MonitorAndLearningQuizAnswer(models.Model):
