@@ -1,6 +1,7 @@
 from django.test import TestCase
 from articles.models import Article
 from django.utils import timezone
+from django.core.urlresolvers  import reverse
 import datetime
 
 
@@ -51,7 +52,7 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() + datetime.timedelta(seconds=60)))
 
-        response = self.client.get("/api/article")
+        response = self.client.get(reverse('articles.views.get_article'))
         self.assertIn("application/json", response.items()[0])
         self.assertIn("Sorry there's no article this week", response.content)
         self.assertEqual(response.status_code, 200)
@@ -67,7 +68,7 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() + datetime.timedelta(days=1)))
 
-        response = self.client.get("/api/article")
+        response = self.client.get(reverse('articles.views.get_article'))
         self.assertIn("application/json", response.items()[0])
         self.assertIn("Sorry there's no article this week", response.content)
         self.assertEqual(response.status_code, 200)
