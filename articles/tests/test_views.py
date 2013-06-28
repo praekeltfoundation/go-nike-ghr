@@ -36,7 +36,7 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() - datetime.timedelta(days=2)))
 
-        response = self.client.get("/api/article")
+        response = self.client.get(reverse('articles.views.get_article'))
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'], 'Test2')
