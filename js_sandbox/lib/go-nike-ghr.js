@@ -93,12 +93,34 @@ function GoNikeGHR() {
                     );
                 } else {
                     // Registration complete so check for questions
-                    // TODO
-                    return new EndState(
-                        "end_state",
-                        "Will ask questions - Thank you and bye bye!",
-                        "initial_state"
-                    );
+                    // Check all question sets have been answered
+                    // TODO: Make actual question completion status lookup
+                    if (result.contact["extras-ghr_questions"] == '["1", "2", "3", "4"]') {
+                        // All done so show menu
+                        return new ChoiceState(
+                            state_name,
+                            function(choice) {
+                                return choice.value;
+                            },
+                            "",
+                            [
+                                new Choice("articles", "Articles"),
+                                new Choice("opinions", "Opinions"),
+                                new Choice("wwnd", "What would Ndabaga do?"),
+                                new Choice("quiz_start", "Weekly quiz"),
+                                new Choice("directory_start", "Directory")
+                            ]
+                        )
+                    } else {
+                        // User still has unanswered M&L questions
+                        // TODO
+                        return new EndState(
+                            "end_state",
+                            "Will ask questions - Thank you and bye bye!",
+                            "initial_state"
+                        );
+                    }
+                    
                 }
             } else {
                 // Something went wrong saving the extras
