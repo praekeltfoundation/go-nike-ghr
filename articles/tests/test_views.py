@@ -14,12 +14,12 @@ class TestAPI(TestCase):
         Article.objects.create(article="Test1",
                                publish=True,
                                publish_at=
-                               (timezone.now() - datetime.timedelta(days=8)))
+                               (timezone.now() - datetime.timedelta(days=5)))
 
         Article.objects.create(article="Test2",
                                publish=True,
                                publish_at=
-                               (timezone.now() - datetime.timedelta(days=5)))
+                               (timezone.now() - datetime.timedelta(days=8)))
 
         Article.objects.create(article="Test3",
                                publish=False,
@@ -36,10 +36,12 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() - datetime.timedelta(days=2)))
 
-        response = self.client.get(reverse('articles.views.get_article'))
+        # Testing api stuff
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)['article'], 'Test2')
+        self.assertEqual(json.loads(response.content)['article'], 'Test1')
 
     def test_no_article_last_week(self):
         Article.objects.create(article="Test1",
@@ -52,7 +54,8 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() + datetime.timedelta(seconds=60)))
 
-        response = self.client.get(reverse('articles.views.get_article'))
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(json.loads(response.content)['article'],
                          "Sorry there's no article this week, dial back soon!")
@@ -69,7 +72,8 @@ class TestAPI(TestCase):
                                publish_at=
                                (timezone.now() + datetime.timedelta(days=1)))
 
-        response = self.client.get(reverse('articles.views.get_article'))
+        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(json.loads(response.content)['article'],
                          "Sorry there's no article this week, dial back soon!")
