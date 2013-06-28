@@ -3,6 +3,7 @@ from articles.models import Article
 from django.utils import timezone
 from django.core.urlresolvers  import reverse
 import datetime
+import json
 
 
 class TestAPI(TestCase):
@@ -37,8 +38,8 @@ class TestAPI(TestCase):
 
         response = self.client.get("/api/article")
         self.assertEqual("application/json", response["Content-Type"])
-        self.assertIn('Test2', response.content)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)['article'], 'Test2')
 
 
     def test_no_article_last_week(self):
@@ -54,7 +55,8 @@ class TestAPI(TestCase):
 
         response = self.client.get(reverse('articles.views.get_article'))
         self.assertEqual("application/json", response["Content-Type"])
-        self.assertIn("Sorry there's no article this week", response.content)
+        self.assertEqual(json.loads(response.content)['article'],
+                         "Sorry there's no article this week, dial back soon!")
         self.assertEqual(response.status_code, 200)
 
     def test_article_not_published(self):
@@ -70,5 +72,6 @@ class TestAPI(TestCase):
 
         response = self.client.get(reverse('articles.views.get_article'))
         self.assertEqual("application/json", response["Content-Type"])
-        self.assertIn("Sorry there's no article this week", response.content)
+        self.assertEqual(json.loads(response.content)['article'],
+                         "Sorry there's no article this week, dial back soon!")
         self.assertEqual(response.status_code, 200)
