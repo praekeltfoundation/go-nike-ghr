@@ -110,7 +110,7 @@ function GoNikeGHR() {
                                 new Choice("quiz_start", "Weekly quiz"),
                                 new Choice("directory_start", "Directory")
                             ]
-                        )
+                        );
                     } else {
                         // User still has unanswered M&L questions
                         // TODO
@@ -120,7 +120,6 @@ function GoNikeGHR() {
                             "initial_state"
                         );
                     }
-                    
                 }
             } else {
                 // Something went wrong saving the extras
