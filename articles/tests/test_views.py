@@ -1,59 +1,30 @@
 from django.test import TestCase
-from articles.models import Article
-from django.utils import timezone
 from django.core.urlresolvers import reverse
-import datetime
+from articles.models import Article
 import json
 
 
-class TestAPI(TestCase):
-    def setUp(self):
-        pass
+class TestArticlesAPIWorks(TestCase):
+    fixtures = ['test/articles/articles_api_good_test_data.json']
 
     def test_api_works(self):
-        Article.objects.create(article="Test1",
-                               publish=True,
-                               publish_at=
-                               (timezone.now() - datetime.timedelta(days=5)))
-
-        Article.objects.create(article="Test2",
-                               publish=True,
-                               publish_at=
-                               (timezone.now() - datetime.timedelta(days=8)))
-
-        Article.objects.create(article="Test3",
-                               publish=False,
-                               publish_at=
-                               (timezone.now() + datetime.timedelta(days=18)))
-
-        Article.objects.create(article="Test4",
-                               publish=True,
-                               publish_at=
-                               (timezone.now() + datetime.timedelta(days=3)))
-
-        Article.objects.create(article="Test5",
-                               publish=False,
-                               publish_at=
-                               (timezone.now() - datetime.timedelta(days=2)))
-
-        # Testing api stuff
         url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'], 'Test1')
 
+
+class TestAPIArticlesNoNewArticle(TestCase):
+    fixtures = ['test/articles/articles_api_unpublished_test_data.json']
+
     def test_no_article_last_week(self):
-        Article.objects.create(article="Test1",
-                               publish=True,
-                               publish_at=
-                               (timezone.now() - datetime.timedelta(days=8)))
+        get_fixture = Article.objects.get(pk=1)
 
-        Article.objects.create(article="Test7",
-                               publish=True,
-                               publish_at=
-                               (timezone.now() + datetime.timedelta(seconds=60)))
+        # checking if fixture loads
+        self.assertEqual(get_fixture.article, "Test1")
 
+        # Testing the API
         url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
@@ -61,17 +32,17 @@ class TestAPI(TestCase):
                          "Sorry there's no article this week, dial back soon!")
         self.assertEqual(response.status_code, 200)
 
+
+class TestAPIArticlesNotPublished(TestCase):
+    fixtures = ['test/articles/articles_api_non_lastweek_test_data.json']
+
     def test_article_not_published(self):
-        Article.objects.create(article="Test1",
-                               publish=False,
-                               publish_at=
-                               (timezone.now() - datetime.timedelta(days=2)))
+        get_fixture = Article.objects.get(pk=1)
 
-        Article.objects.create(article="Test2",
-                               publish=False,
-                               publish_at=
-                               (timezone.now() + datetime.timedelta(days=1)))
+        # checking if fixture loads
+        self.assertEqual(get_fixture.article, "Test1")
 
+        # Testing the API
         url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
