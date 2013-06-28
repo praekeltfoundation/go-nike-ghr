@@ -53,7 +53,7 @@ class TestAPI(TestCase):
                                (timezone.now() + datetime.timedelta(seconds=60)))
 
         response = self.client.get(reverse('articles.views.get_article'))
-        self.assertIn("application/json", response.items()[0])
+        self.assertEqual("application/json", response["Content-Type"])
         self.assertIn("Sorry there's no article this week", response.content)
         self.assertEqual(response.status_code, 200)
 
@@ -69,6 +69,6 @@ class TestAPI(TestCase):
                                (timezone.now() + datetime.timedelta(days=1)))
 
         response = self.client.get(reverse('articles.views.get_article'))
-        self.assertIn("application/json", response.items()[0])
+        self.assertEqual("application/json", response["Content-Type"])
         self.assertIn("Sorry there's no article this week", response.content)
         self.assertEqual(response.status_code, 200)
