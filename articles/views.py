@@ -14,7 +14,6 @@ def get_article(request):
                 filter(publish_at__gte=timedelta).
                 order_by('publish_at'))
 
-    print queryset
     if queryset.exists():
         output = {"article": queryset[0].article}
     else:
