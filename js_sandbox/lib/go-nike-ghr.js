@@ -15,6 +15,15 @@ var EndState = vumigo.states.EndState;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
 var StateCreator = vumigo.state_machine.StateCreator;
 
+function GoNikeGHRError(msg) {
+    var self = this;
+    self.msg = msg;
+
+    self.toString = function() {
+        return "<GoNikeGHRError: " + self.msg + ">";
+    };
+}
+
 function GoNikeGHR() {
     var self = this;
     // The first state to enter
@@ -47,6 +56,53 @@ function GoNikeGHR() {
             addr: im.user_addr
         });
         return p;
+    };
+
+    self.make_question_state = function(prefix, question) {
+        return function(state_name, im) {
+            var choices = question.choices.map(function(choice) {
+                var name = prefix + "_" + choice[0];
+                var value = choice[1];
+                return new Choice(name, value);
+            });
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, question.question, choices);
+        };
+    };
+
+    self.crm_mandl_quizzes_get = function(im) {
+        var url = im.config.crm_api_root + "mandl/";
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', false);
+            return json;
+        });
+        return p;
+    };
+
+    self.check_reply = function(reply, url, method, data, ignore_error) {
+        var error;
+        if (reply.success && reply.code == 200) {
+            var json = JSON.parse(reply.body);
+            return json;
+        }
+        else {
+            error = reply.reason;
+        }
+        var error_msg = ("API " + method + " to " + url + " failed: " +
+                         error);
+        if (typeof data != 'undefined') {
+            error_msg = error_msg + '; data: ' + JSON.stringify(data);
+        }
+        self.im.log(error_msg);
+        if (!ignore_error) {
+            throw new GoNikeGHRError(error_msg);
+        }
     };
 
     self.add_creator('initial_state', function(state_name, im) {
@@ -161,7 +217,7 @@ function GoNikeGHR() {
                 if (result.success){
                     return new ChoiceState(
                         state_name,
-                        'end_state',
+                        'mandl_builder',
                         "Thank you for registering",
                         [
                             new Choice("continue", "Continue")
@@ -181,6 +237,37 @@ function GoNikeGHR() {
             );
         }
     });
+
+    self.add_creator('mandl_builder', function(state_name, im) {
+        // Get the user
+        var p = self.get_contact(im);
+
+        p.add_callback(function(result) {
+            // This callback checks extras when contact is found
+            if (result.success){
+                if (result.contact["extras-ghr_questions"] !== undefined){
+                    console.log("Am I here?");
+                    var p2 = self.crm_mandl_quizzes_get(im);
+                    console.log(p2);
+                    return new EndState(
+                        "end_question_state",
+                        "Thank you and bye bye!",
+                        "first_state"
+                    );
+                } else {
+                    console.log("Am I here?");
+                    // User doesn't have the correct GHR extras
+                    return self.error_state();
+                }
+
+            } else {
+                // Error saving loading contact extras
+                return self.error_state();
+            }
+        });
+        return p;
+    });
+            
 
     self.add_state(new EndState(
         "end_state",
