@@ -3,7 +3,7 @@ from django.db import models
 
 class MonitorAndLearningQuizId(models.Model):
     active = models.BooleanField()
-    completed = models.BooleanField(editable=False)
+    completed = models.BooleanField()
 
     def __str__(self):
         return "quiz_%s" % self.pk
