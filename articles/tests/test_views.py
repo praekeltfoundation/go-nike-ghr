@@ -8,7 +8,9 @@ class TestArticlesAPIWorks(TestCase):
     fixtures = ['test/articles/articles_api_good_test_data.json']
 
     def test_api_works(self):
-        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'article',
+                      'api_name': 'api'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
@@ -25,7 +27,10 @@ class TestAPIArticlesNoNewArticle(TestCase):
         self.assertEqual(get_fixture.article, "Test1")
 
         # Testing the API
-        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'article',
+                      'api_name': 'api'})
+
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(json.loads(response.content)['article'],
@@ -43,7 +48,9 @@ class TestAPIArticlesNotPublished(TestCase):
         self.assertEqual(get_fixture.article, "Test1")
 
         # Testing the API
-        url = reverse('api_dispatch_list', kwargs={'resource_name': 'article'})
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'article',
+                      'api_name': 'api'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(json.loads(response.content)['article'],
