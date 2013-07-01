@@ -16,6 +16,10 @@ class TestArticlesAPIWorks(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'], 'Test1')
 
+    def test_correct_url(self):
+        response = self.client.get("/api/article/")
+        self.assertEqual(response.status_code, 200)
+
 
 class TestAPIArticlesNoNewArticle(TestCase):
     fixtures = ['test/articles/articles_api_unpublished_test_data.json']
