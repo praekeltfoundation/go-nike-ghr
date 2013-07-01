@@ -1,0 +1,22 @@
+BEGIN;
+TRUNCATE "auth_permission", "auth_group", "djcelery_workerstate", "auth_user_user_permissions", "monitor_and_learn_monitorandlearningquizquestion", "django_site", "djcelery_periodictasks", "djcelery_intervalschedule", "django_content_type", "django_session", "auth_user_groups", "djcelery_periodictask", "celery_taskmeta", "djcelery_taskstate", "django_admin_log", "auth_group_permissions", "celery_tasksetmeta", "monitor_and_learn_monitorandlearningquizid", "south_migrationhistory", "auth_user", "djcelery_crontabschedule", "monitor_and_learn_monitorandlearningquizanswer";
+SELECT setval(pg_get_serial_sequence('"auth_permission"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"auth_group"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"auth_user"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"django_content_type"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"django_site"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"django_admin_log"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"south_migrationhistory"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"celery_taskmeta"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"celery_tasksetmeta"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"djcelery_intervalschedule"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"djcelery_crontabschedule"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"djcelery_periodictask"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"djcelery_workerstate"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"djcelery_taskstate"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"articles_article"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"monitor_and_learn_monitorandlearningquizid"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"monitor_and_learn_monitorandlearningquizquestion"','id'), 1, false);
+SELECT setval(pg_get_serial_sequence('"monitor_and_learn_monitorandlearningquizanswer"','id'), 1, false);
+
+COMMIT;

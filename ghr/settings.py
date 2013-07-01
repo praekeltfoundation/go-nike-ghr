@@ -148,6 +148,7 @@ INSTALLED_APPS = (
 
     # sample apps to explain usage
     'articles',
+    'monitor_and_learn'
     #'celery_app',
 )
 
