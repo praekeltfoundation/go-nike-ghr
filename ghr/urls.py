@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^celery/', include('celery_app.urls')),
 
     # API links
-    url(r'^api/', include('articles.urls')),
+    url(r'^', include('articles.urls')),
 )

@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, url, include
 from articles.api import ArticleResource
+from tastypie.api import Api
 
-article_resource = ArticleResource()
-
+api_resources = Api(api_name='api')
+api_resources.register(ArticleResource())
+api_resources.prepend_urls()
 urlpatterns = patterns('',
-    url(r'^', include(article_resource.urls))
+    url(r'^', include(api_resources.urls))
 )
