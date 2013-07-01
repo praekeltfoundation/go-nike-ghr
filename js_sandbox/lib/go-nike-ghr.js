@@ -12,6 +12,7 @@ var Choice = vumigo.states.Choice;
 var ChoiceState = vumigo.states.ChoiceState;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
+var BookletState = vumigo.states.BookletState;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
 var StateCreator = vumigo.state_machine.StateCreator;
 
@@ -202,6 +203,17 @@ function GoNikeGHR() {
             );
         }
     });
+
+    self.get_article = function(){
+        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+    };
+
+    self.add_state(new BookletState(
+        "articles",
+        "end_state",
+        3,
+        self.get_article
+    ));
 
     self.add_state(new EndState(
         "end_state",

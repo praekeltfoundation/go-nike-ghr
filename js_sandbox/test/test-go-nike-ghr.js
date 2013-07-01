@@ -334,6 +334,22 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
+
+        it.only("selecting 1 from menu should show page one of article", function (done) {
+            var user = {
+                current_state: 'initial_state'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "article",
+                response: (
+                    "^Lorem ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
     });
 });
 
