@@ -26,14 +26,15 @@ describe("When using the USSD line", function() {
         // These are used to mock API reponses
         // EXAMPLE: Response from google maps API
         var fixtures = [
-           // 'test/fixtures/example-geolocation.json'
+           'test/fixtures/mandl.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
                 api.config_store.config = JSON.stringify({
                     testing: true,
-                    testing_mock_today: [2013,5,1,8,10]
+                    testing_mock_today: [2013,5,1,8,10],
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -128,6 +129,29 @@ describe("When using the USSD line", function() {
                 response: (
                     "^Sorry, cannot find a match. Please try again.\n" +
                     "Which sector do you live in\\?$"
+                )
+            });
+            p.then(done, done);
+        });
+
+
+        it.only("completed core registation details should ask M&L questions", function (done) {
+            var user = {
+                current_state: 'reg_thanks',
+                answers: {
+                    initial_state: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: "Valid sector"
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "q_1",
+                response: (
+                    "^Is this fake question one\\?[^]" +
+                    "1. Yes[^]" +
+                    "2. No$"
                 )
             });
             p.then(done, done);
