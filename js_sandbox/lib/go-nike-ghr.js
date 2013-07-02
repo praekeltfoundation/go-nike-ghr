@@ -50,6 +50,10 @@ function GoNikeGHR() {
         return p;
     };
 
+    self.validate_sector = function(im, sector){
+        return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
+    };
+
     self.add_creator('initial_state', function(state_name, im) {
         // Check if they've already registered
         var p = self.get_contact(im);
@@ -153,7 +157,7 @@ function GoNikeGHR() {
 
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
-        if (sector=='Valid sector') {
+        if (self.validate_sector(im, sector)) {
             // Get the user
             var p = self.get_contact(im);
 
