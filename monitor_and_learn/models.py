@@ -6,7 +6,7 @@ class MonitorAndLearningQuizId(models.Model):
     # where the quize can be set to active and a completed field where if 4 questions are added
     # it changes to complete = True
     active = models.BooleanField()
-    completed = models.BooleanField()
+    completed = models.BooleanField(editable=False)
 
     def __str__(self):
         # Provides a User friendly name
