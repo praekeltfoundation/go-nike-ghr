@@ -213,7 +213,7 @@ function GoNikeGHR() {
 
         var next_page = function(page_number) {
             var p = im.api_request('http.get', {
-                url: "http://ghr.preview.westerncapelabs.com/api/article/"
+                url: im.config.crm_api_root + "article/"
             });
             p.add_callback(function(response) {
                 var payload = JSON.parse(response.body);

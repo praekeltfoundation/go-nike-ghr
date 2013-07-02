@@ -35,7 +35,8 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file))
+                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -147,7 +148,8 @@ describe("When using the USSD line", function() {
             custom_setup: function (api) {
                 api.config_store.config = JSON.stringify({
                     testing: true,
-                    testing_mock_today: [2013,5,1,8,10]
+                    testing_mock_today: [2013,5,1,8,10],
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -246,7 +248,8 @@ describe("When using the USSD line", function() {
             custom_setup: function (api) {
                 api.config_store.config = JSON.stringify({
                     testing: true,
-                    testing_mock_today: [2013,5,1,8,10]
+                    testing_mock_today: [2013,5,1,8,10],
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
