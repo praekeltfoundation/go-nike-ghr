@@ -4,7 +4,10 @@ from django.utils import timezone
 
 class Article(models.Model):
     # This class is for the Article model.
-    article = models.CharField(max_length=480, blank=False)
+    page_1 = models.CharField(max_length=125, blank=False)
+    page_2 = models.CharField(max_length=125, blank=False)
+    page_3 = models.CharField(max_length=125, blank=False)
+    page_4 = models.CharField(max_length=125, blank=False)
     publish = models.BooleanField()
     publish_at = models.DateTimeField(default=timezone.now, blank=False)
     created_at = models.DateTimeField(auto_now_add=True,
