@@ -15,4 +15,4 @@ class Article(models.Model):
                                       editable=False)
 
     def __unicode__(self):
-        return self.article
+        return self.page_1
