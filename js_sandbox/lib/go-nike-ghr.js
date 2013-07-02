@@ -208,16 +208,33 @@ function GoNikeGHR() {
         }
     });
 
-    self.get_article = function(){
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-    };
 
-    self.add_state(new BookletState(
-        "articles",
-        "end_state",
-        3,
-        self.get_article
-    ));
+    self.add_creator('articles', function(state_name, im) {
+
+        var next_page = function(page_number) {
+            var p = im.api_request('http.get', {
+                url: "http://ghr.preview.westerncapelabs.com/api/article/"
+            });
+            p.add_callback(function(response) {
+                var payload = JSON.parse(response.body);
+                return payload.article[page_number];
+            });
+            return p;
+        };
+
+        return new BookletState(
+            state_name, {
+                next: 'end_state',
+                pages: 4,
+                page_text: next_page,
+                buttons: {
+                    "1": -1, "2": +1, "0": "exit"
+                },
+                footer_text: "\n1 for prev, 2 for next, 0 to end."
+            }
+        );
+    });
+
 
     self.add_state(new EndState(
         "end_state",
