@@ -18,6 +18,7 @@ describe("test_api", function() {
     });
 });
 
+var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
 
 describe("When using the USSD line", function() {
 
@@ -33,7 +34,8 @@ describe("When using the USSD line", function() {
             custom_setup: function (api) {
                 api.config_store.config = JSON.stringify({
                     testing: true,
-                    testing_mock_today: [2013,5,1,8,10]
+                    testing_mock_today: [2013,5,1,8,10],
+                    sectors: JSON.parse(fs.readFileSync(sector_file))
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -103,7 +105,7 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "Valid sector",
+                content: "Mareba",
                 next_state: "reg_thanks",
                 response: (
                     "^Thank you for registering[^]" +
