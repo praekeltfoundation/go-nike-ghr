@@ -38,11 +38,15 @@ class ArticleResource(ModelResource):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
             if data_dict['objects'] == []:
-                del (data_dict['objects'])
                 data_dict['article'] = ("Sorry there's no article"
                                         " this week, dial back soon!")
+                del (data_dict['objects'])
             else:
-                data_dict['article'] = (copy.copy(data_dict['objects'][0].
-                                        data['article']))
+                a = []
+                a.append(data_dict['objects'][0].data["page_1"])
+                a.append(data_dict['objects'][0].data["page_2"])
+                a.append(data_dict['objects'][0].data["page_3"])
+                a.append(data_dict['objects'][0].data["page_4"])
+                data_dict['article'] = a
                 del (data_dict['objects'])
         return data_dict
