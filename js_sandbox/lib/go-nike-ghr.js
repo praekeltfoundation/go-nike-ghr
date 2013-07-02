@@ -50,11 +50,7 @@ function GoNikeGHR() {
     };
 
     self.validate_sector = function(im, sector){
-        if (im.config.sectors.indexOf(sector.toLowerCase())!=-1){
-            return true;
-        } else {
-            return false;
-        }
+        return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
 
     self.add_creator('initial_state', function(state_name, im) {
