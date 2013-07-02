@@ -31,15 +31,18 @@ class ArticleResource(ModelResource):
             return Article.objects.none()
 
     def alter_list_data_to_serialize(self, request, data_dict):
-        # Modifying the data to provide only what is needed in the right form by
-        # removing the extra meta variables and editing the dictionary
+        # Modifying the data to provide only what is needed in the right
+        # form by removing the extra meta variables and editing the
+        # dictionary
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
             if data_dict['objects'] == []:
                 del (data_dict['objects'])
-                data_dict['article'] = "Sorry there's no article this week, dial back soon!"
+                data_dict['article'] = ("Sorry there's no article"
+                                        " this week, dial back soon!")
             else:
-                data_dict['article'] = copy.copy(data_dict['objects'][0].data['article'])
+                data_dict['article'] = (copy.copy(data_dict['objects'][0].
+                                        data['article']))
                 del (data_dict['objects'])
         return data_dict
