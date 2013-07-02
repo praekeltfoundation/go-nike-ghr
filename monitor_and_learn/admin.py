@@ -12,9 +12,13 @@ class QuestionAdminForm(forms.ModelForm):
         choices = [self.fields["quiz_id"].choices.__iter__().next()]
         choices.pop()
         query = MonitorAndLearningQuizId.objects.all().filter(completed=False)
-        print query
+
         if query.exists():
             choices.append((query[0].pk, 'Quiz %s' % query[0].pk.__str__()))
+
+        if 'question' in self.initial:
+            choices.append((self.initial['quiz_id'],
+                           'Quiz %s' % self.initial['quiz_id']))
 
         self.fields['quiz_id'].choices = choices
 
@@ -40,17 +44,18 @@ class MonitorAndLearningQuizAnswerFormset(BaseInlineFormSet):
                 raise forms.ValidationError("You have gone beyond the character limit"
                                             " please shorten questions and/or answers")
 
-        query = MonitorAndLearningQuizQuestion.objects.all().filter(quiz_id=self.instance.quiz_id)
-        print self.instance.quiz_id
-
-        if len(query) >= 3:
-            query = MonitorAndLearningQuizId.objects.get(pk=self.instance.quiz_id.id)
-            query.completed = True
-            query.save()
+        try:
+            query = MonitorAndLearningQuizQuestion.objects.all().filter(quiz_id=self.instance.quiz_id)
+            if len(query) >= 3:
+                query = MonitorAndLearningQuizId.objects.get(pk=self.instance.quiz_id.id)
+                query.completed = True
+                query.save()
+        except:
+            pass
 
 
 class MonitorAndLearningQuizAnswerInline(admin.StackedInline):
-    # This class sets the answers to be on the same page as teh parent question
+    # This class sets the answers to be on the same page as the parent question
     model = MonitorAndLearningQuizAnswer
     extra = 3
     max_num = 3
