@@ -27,7 +27,7 @@ describe("When using the USSD line", function() {
         // These are used to mock API reponses
         // EXAMPLE: Response from google maps API
         var fixtures = [
-           // 'test/fixtures/example-geolocation.json'
+            'test/fixtures/article.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -337,14 +337,14 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it.only("selecting 1 from menu should show page one of article", function (done) {
+        it("selecting 1 from menu should show page one of article", function (done) {
             var user = {
                 current_state: 'initial_state'
             };
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "article",
+                next_state: "articles",
                 response: (
                     "^Lorem ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
                     "1 for prev, 2 for next, 0 to end.$"
@@ -352,6 +352,88 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
+
+        it('show page two of article', function(done) {
+            var p = tester.check_state({
+                user: {
+                    current_state: 'articles'
+                },
+                content: "2",
+                next_state: 'articles',
+                response: "^Proin a porta justo. Maecenas sem felis, sollicitudin vitae " +
+                          "risus luctus, consectetur sollicitudin leo.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('show page three of article', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        articles: 1
+                    },
+                    current_state: 'articles'
+                },
+                content: "2",
+                next_state: 'articles',
+                response: "^Donec tincidunt lobortis erat eget malesuada. Cras cursus " +
+                          "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('show page four of article', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        articles: 2
+                    },
+                    current_state: 'articles'
+                },
+                content: "2",
+                next_state: 'articles',
+                response: "^Etiam tincidunt, sapien elementum pharetra dapibus, " +
+                          "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('should continue to page 1 after page 4', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        articles: 3
+                    },
+                    current_state: 'articles'
+                },
+                content: "2",
+                next_state: 'articles',
+                response: "^Lorem ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$",
+                continue_session: true
+            });
+            p.then(done, done);
+        });
+
+        it('should continue to end after article finish', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        articles: 2
+                    },
+                    current_state: 'articles'
+                },
+                content: "0",
+                next_state: 'end_state',
+                response: '^Thank you and bye bye!$',
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
     });
 });
 
