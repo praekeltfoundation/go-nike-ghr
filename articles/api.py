@@ -7,6 +7,7 @@ import copy
 
 class ArticleResource(ModelResource):
     class Meta:
+        # Setting the api meta attributes
         resource_name = "article"
         allowed_methods = ['get']
         excludes = ['publish', 'publish_at', 'created_at', 'id']
@@ -15,6 +16,7 @@ class ArticleResource(ModelResource):
         queryset = Article.objects.all()
 
     def get_object_list(self, request):
+        # Filters the queryset in meta to get the specific Article required
         timedelta = timezone.now() - datetime.timedelta(days=7)
         query = super(ArticleResource, self).get_object_list(request)
         query = (query.filter(publish=True).
@@ -25,9 +27,12 @@ class ArticleResource(ModelResource):
         if query.exists():
             return query
         else:
+            # Need to create an empty object otherwise tastypie complains
             return Article.objects.none()
 
     def alter_list_data_to_serialize(self, request, data_dict):
+        # Modifying the data to provide only what is needed in the right form by
+        # removing the extra meta variables and editing the dictionary
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
