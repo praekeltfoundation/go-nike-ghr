@@ -2,9 +2,10 @@ from django.db import models
 
 
 class MonitorAndLearningQuizId(models.Model):
-    # The quiz class which forms the Foreign Key for the questions, contains an active field
-    # where the quize can be set to active and a completed field where if 4 questions are added
-    # it changes to complete = True
+    # The quiz class which forms the Foreign Key for the
+    # questions, contains an active field
+    # where the quize can be set to active and a completed
+    # field where if 4 questions are it changes to complete = True
     active = models.BooleanField()
     completed = models.BooleanField(editable=False)
 

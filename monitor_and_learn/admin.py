@@ -1,12 +1,14 @@
 from django.contrib import admin
-from models import MonitorAndLearningQuizId, MonitorAndLearningQuizQuestion, MonitorAndLearningQuizAnswer
+from models import (MonitorAndLearningQuizId,
+                    MonitorAndLearningQuizQuestion,
+                    MonitorAndLearningQuizAnswer)
 from django import forms
 from django.forms.models import BaseInlineFormSet
 
 
 class QuestionAdminForm(forms.ModelForm):
-    # This form checks to see if there are any uncompleted quizzes (< 4 questions),
-    # if so sets current ID to the uncompleted quiz_id.
+    # This form checks to see if there are any uncompleted quizzes
+    #  (< 4 questions), if so sets current ID to the uncompleted quiz_id.
     # If editing sets the current quiz id  to be edited.
     def __init__(self, *args, **kwargs):
         super(QuestionAdminForm, self).__init__(*args, **kwargs)
@@ -29,7 +31,8 @@ class MonitorAndLearningQuizAnswerFormset(BaseInlineFormSet):
 
     def clean(self):
         # Overiding the clean function so that the max length can be chekced
-        # also checks if the answer has been submitted and Foreign key has been included
+        # also checks if the answer has been submitted and Foreign key has
+        # been included
         super(MonitorAndLearningQuizAnswerFormset, self).clean()
 
         char_limit = len(self.instance.question)
@@ -43,15 +46,19 @@ class MonitorAndLearningQuizAnswerFormset(BaseInlineFormSet):
             char_limit = char_limit + len(form.cleaned_data['answer'])
 
             if char_limit > 160:
-                raise forms.ValidationError("You have gone beyond the character limit"
-                                            " please shorten questions and/or answers")
+                raise forms.ValidationError("You have gone beyond the"
+                                            " character limit"
+                                            " please shorten questions "
+                                            "and/or answers")
 
-        try: 
-        # Checking if Foreign ID has been included otherwise gives an DoesNotExist exception, despite
-        # the validation been active
-            query = MonitorAndLearningQuizQuestion.objects.all().filter(quiz_id=self.instance.quiz_id)
+        try:
+        # Checking if Foreign ID has been included otherwise gives
+        # an DoesNotExist exception, despite the validation been active
+            query = (MonitorAndLearningQuizQuestion.objects.all().
+                     filter(quiz_id=self.instance.quiz_id))
             if len(query) >= 3:
-                query = MonitorAndLearningQuizId.objects.get(pk=self.instance.quiz_id.id)
+                query = (MonitorAndLearningQuizId.objects.
+                         get(pk=self.instance.quiz_id.id))
                 query.completed = True
                 query.save()
         except:
@@ -77,4 +84,5 @@ class MonitorAndLearningQuizQuestionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MonitorAndLearningQuizId, MonitorAndLearningQuizIdAdmin)
-admin.site.register(MonitorAndLearningQuizQuestion, MonitorAndLearningQuizQuestionAdmin)
+admin.site.register(MonitorAndLearningQuizQuestion,
+                    MonitorAndLearningQuizQuestionAdmin)

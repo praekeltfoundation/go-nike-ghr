@@ -1,14 +1,15 @@
 from tastypie.resources import ModelResource
 from tastypie import fields
 from monitor_and_learn.models import (MonitorAndLearningQuizId,
-                               MonitorAndLearningQuizQuestion,
-                               MonitorAndLearningQuizAnswer)
+                                      MonitorAndLearningQuizQuestion,
+                                      MonitorAndLearningQuizAnswer)
 
 
 class MonitorAndLearningQuizIDResource(ModelResource):
     path = 'monitor_and_learn.api.MonitorAndLearningQuizQuestionResource'
     quiz_ids = fields.ToManyField(path,
                                   'quiz_ids', full=True)
+
     class Meta:
         # setting the resoucrce attributes
         resource_name = "mandl"
