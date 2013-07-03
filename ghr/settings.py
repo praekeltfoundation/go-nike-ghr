@@ -145,10 +145,11 @@ INSTALLED_APPS = (
     'djcelery',
     'djcelery_email',
     'debug_toolbar',
+    'tastypie',
 
     # sample apps to explain usage
     'articles',
-    'monitor_and_learn'
+    'monitor_and_learn',
     #'celery_app',
 )
 
