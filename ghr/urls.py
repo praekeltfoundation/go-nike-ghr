@@ -17,4 +17,5 @@ urlpatterns = patterns('',
 
     # API links
     url(r'^', include('articles.urls')),
+    url(r'^', include('opinions.urls')),
 )
