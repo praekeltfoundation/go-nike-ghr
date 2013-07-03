@@ -12,6 +12,7 @@ var Choice = vumigo.states.Choice;
 var ChoiceState = vumigo.states.ChoiceState;
 var FreeText = vumigo.states.FreeText;
 var EndState = vumigo.states.EndState;
+var BookletState = vumigo.states.BookletState;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
 var StateCreator = vumigo.state_machine.StateCreator;
 
@@ -47,6 +48,10 @@ function GoNikeGHR() {
             addr: im.user_addr
         });
         return p;
+    };
+
+    self.validate_sector = function(im, sector){
+        return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
 
     self.add_creator('initial_state', function(state_name, im) {
@@ -93,12 +98,33 @@ function GoNikeGHR() {
                     );
                 } else {
                     // Registration complete so check for questions
-                    // TODO
-                    return new EndState(
-                        "end_state",
-                        "Will ask questions - Thank you and bye bye!",
-                        "initial_state"
-                    );
+                    // Check all question sets have been answered
+                    // TODO: Make actual question completion status lookup
+                    if (result.contact["extras-ghr_questions"] == '["1", "2", "3", "4"]') {
+                        // All done so show menu
+                        return new ChoiceState(
+                            state_name,
+                            function(choice) {
+                                return choice.value;
+                            },
+                            "",
+                            [
+                                new Choice("articles", "Articles"),
+                                new Choice("opinions", "Opinions"),
+                                new Choice("wwnd", "What would Ndabaga do?"),
+                                new Choice("quiz_start", "Weekly quiz"),
+                                new Choice("directory_start", "Directory")
+                            ]
+                        );
+                    } else {
+                        // User still has unanswered M&L questions
+                        // TODO
+                        return new EndState(
+                            "end_state",
+                            "Will ask questions - Thank you and bye bye!",
+                            "initial_state"
+                        );
+                    }
                 }
             } else {
                 // Something went wrong saving the extras
@@ -131,7 +157,7 @@ function GoNikeGHR() {
 
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
-        if (sector=='Valid sector') {
+        if (self.validate_sector(im, sector)) {
             // Get the user
             var p = self.get_contact(im);
 
@@ -181,6 +207,34 @@ function GoNikeGHR() {
             );
         }
     });
+
+
+    self.add_creator('articles', function(state_name, im) {
+
+        var next_page = function(page_number) {
+            var p = im.api_request('http.get', {
+                url: im.config.crm_api_root + "article/"
+            });
+            p.add_callback(function(response) {
+                var payload = JSON.parse(response.body);
+                return payload.article[page_number];
+            });
+            return p;
+        };
+
+        return new BookletState(
+            state_name, {
+                next: 'end_state',
+                pages: 4,
+                page_text: next_page,
+                buttons: {
+                    "1": -1, "2": +1, "0": "exit"
+                },
+                footer_text: "\n1 for prev, 2 for next, 0 to end."
+            }
+        );
+    });
+
 
     self.add_state(new EndState(
         "end_state",
