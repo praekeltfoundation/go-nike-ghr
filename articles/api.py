@@ -24,11 +24,7 @@ class ArticleResource(ModelResource):
                  filter(publish_at__gte=timedelta).
                  order_by('publish_at'))
 
-        if query.exists():
-            return query
-        else:
-            # Need to create an empty object otherwise tastypie complains
-            return Article.objects.none()
+        return query
 
     def alter_list_data_to_serialize(self, request, data_dict):
         # Modifying the data to provide only what is needed in the right
