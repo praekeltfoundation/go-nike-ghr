@@ -1,14 +1,14 @@
 from tastypie.resources import ModelResource
 from tastypie import fields
-from django.conf.urls import url
 from monitor_and_learn.models import (MonitorAndLearningQuizId,
                                MonitorAndLearningQuizQuestion,
                                MonitorAndLearningQuizAnswer)
 
 
 class MonitorAndLearningQuizIDResource(ModelResource):
-    quiz_ids = fields.ToManyField('monitor_and_learn.api.MonitorAndLearningQuizQuestionResource',
-                                 'quiz_ids', full=True)
+    path = 'monitor_and_learn.api.MonitorAndLearningQuizQuestionResource'
+    quiz_ids = fields.ToManyField(path,
+                                  'quiz_ids', full=True)
     class Meta:
         # setting the resoucrce attributes
         resource_name = "mandl"
@@ -33,51 +33,36 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         return data_dict
 
     def alter_detail_data_to_serialize(self, request, data_dict):
-        # print data_dict
-        # print len(data_dict)
-        # print dir(data_dict.obj)
-        print dir(data_dict.data["quiz_ids"])
-        for item in range(len(data_dict.data["quiz_ids"])):
-            print data_dict.data["quiz_ids"][item].data
-        data_dict.data["start"] = "q1"
+        # Altering the response given by accessing different quiz IDs
+        dict_item = {}
+        quiz_ids = data_dict.data["quiz_ids"]
 
+        for i in range(len(quiz_ids)):
+            q_id = "q_%s" % quiz_ids[i].data["id"]
+            dict_item[q_id] = {"choices": []}
+            x = []
+
+            for j in range(len(quiz_ids[i].data["quiz_ids"])):
+                if (i) >= (len(quiz_ids) - 1):
+                    y = "main_menu"
+                else:
+                    y = "q_%s" % (i + 2)
+                z = quiz_ids[i].data["quiz_ids"][j].data["answer"]
+                x.append([y, z])
+
+            dict_item[q_id] = {"question": quiz_ids[i].data["question"],
+                               "choices": x}
+
+        data_dict.data["quiz"] = {"start": "q_%s" % quiz_ids[0].data["id"],
+                                  "questions": dict_item}
         del data_dict.data["quiz_ids"]
         del data_dict.data["id"]
         return data_dict
 
-    # def dehydrate(self, bundle):
-    #     print dir(self)
-    #     print self.get_resource_uri(bundle_or_obj=bundle)
-    #     bundle.data["apples"] = "Apples"
-    #     del bundle.data["quiz_ids"]
-    #     del bundle.data["id"]
-    #     # print bundle.data
-    #     # print dir(bundle)
-    #     # print bundle.data["quiz_ids"][0].data
-    #     # print bundle.data["id"]
-    #     # print bundle.obj
-    #     return bundle
-
-    # def dispatch(self, request_type, request, **kwargs):
-    #     print dir(self)
-    # def prepend_urls(self):
-    #     return[
-    #         url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/" %
-    #             (self._meta.resource_name), self.wrap_view('filter_questions'),
-    #             name="filter_questions")
-    #     ]
-
-    # def filter_questions(self, request, **kwargs):
-    #     print dir(self)
-    #     queryset = MonitorAndLearningQuizId.objects.all()
-    #     print queryset
-    #     print self.build_bundle()
-    #     object_list = {"apples": 1}
-    #     return self.create_response(request, object_list)
-
 
 class MonitorAndLearningQuizQuestionResource(ModelResource):
-    quiz_ids = fields.ToManyField('monitor_and_learn.api.MonitorAndLearningQuizAnswerResource',
+    path = 'monitor_and_learn.api.MonitorAndLearningQuizAnswerResource'
+    quiz_ids = fields.ToManyField(path,
                                   'question_ids', full=True)
 
     class Meta:
