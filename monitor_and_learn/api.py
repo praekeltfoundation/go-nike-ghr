@@ -20,7 +20,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
     def alter_list_data_to_serialize(self, request, data_dict):
         # Modifying the data to provide only what is needed in the right
         # form by removing the extra meta variables and editing the
-        # dictionary
+        # dictionary. This function handles /api/mandl/
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
@@ -34,22 +34,27 @@ class MonitorAndLearningQuizIDResource(ModelResource):
 
     def alter_detail_data_to_serialize(self, request, data_dict):
         # Altering the response given by accessing different quiz IDs
+        # This function handles /api/mandl/quiz_id/
         dict_item = {}  # Dict item to hold final structure
         quiz_ids = data_dict.data["quiz_ids"]
         min_id = []  # Variable to hold min id for start key
         max_id = []  # Variable to hold the max question id for menu endpoint
 
         for i in range(len(quiz_ids)):
+            # Need to store end point for main_menu
             max_id.append(quiz_ids[i].data["id"])
 
         max_id = max(max_id)
         for i in range(len(quiz_ids)):
+            # Looping through data and adding it to dict_item for final output
             q_id = "q_%s" % quiz_ids[i].data["id"]
             dict_item[q_id] = {"choices": []}
             x = []
             min_id.append(quiz_ids[i].data["id"])
 
             for j in range(len(quiz_ids[i].data["quiz_ids"])):
+                # For loop adds answer to a list that will be appended to dict.
+                # also adds go to variables to the answer
                 if quiz_ids[i].data["id"] == max_id:
                     y = "main_menu"
                 else:
