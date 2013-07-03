@@ -18,7 +18,8 @@ class MonitorAndLearningQuizId(models.Model):
 
 class MonitorAndLearningQuizQuestion(models.Model):
     # This class stores the questions to be asked
-    quiz_id = models.ForeignKey('MonitorAndLearningQuizId')
+    quiz_id = models.ForeignKey('MonitorAndLearningQuizId',
+                                related_name='quiz_ids')
     question = models.CharField(max_length=160, blank=False)
 
     def __unicode__(self):
@@ -30,7 +31,8 @@ class MonitorAndLearningQuizQuestion(models.Model):
 
 class MonitorAndLearningQuizAnswer(models.Model):
     # This class stores the answers.
-    question_id = models.ForeignKey('MonitorAndLearningQuizQuestion')
+    question_id = models.ForeignKey('MonitorAndLearningQuizQuestion',
+                                    related_name="question_ids")
     answer = models.CharField(max_length=160, blank=False)
 
     def __unicode__(self):
