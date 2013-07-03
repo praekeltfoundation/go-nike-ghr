@@ -14,15 +14,11 @@ class TestArticlesAPIWorks(TestCase):
                       kwargs={'resource_name': 'article',
                       'api_name': 'api'})
         response = self.client.get(url)
+        self.assertEqual("/api/article/", response.request["PATH_INFO"])
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'][0],
                          unicode('Test 1'))
-
-    def test_correct_url(self):
-        # Tests teh URL path to see if it is what its expected
-        response = self.client.get("/api/article/")
-        self.assertEqual(response.status_code, 200)
 
 
 class TestAPIArticlesNoNewArticle(TestCase):
