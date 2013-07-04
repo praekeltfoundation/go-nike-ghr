@@ -16,4 +16,4 @@ class Opinion(models.Model):
         return self.opinion_1
 
     class Meta:
-        verbose_name_plural= "User Opinions"
+        verbose_name_plural = "User Opinions"

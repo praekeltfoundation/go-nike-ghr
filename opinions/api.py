@@ -2,6 +2,7 @@ from tastypie.resources import ModelResource
 from opinions.models import Opinion
 import copy
 
+
 class OpinionResource(ModelResource):
     class Meta:
         # Setting the api meta attributes
