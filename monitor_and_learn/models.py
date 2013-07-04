@@ -6,10 +6,10 @@ class MonitorAndLearningQuizId(models.Model):
     # questions, contains an active field
     # where the quize can be set to active and a completed
     # field where if 4 questions are it changes to complete = True
-    name = models.CharField(max_length=50, blank=False, verbose_name="Name of Quiz")
+    name = models.CharField(max_length=50, blank=False,
+                            verbose_name="Name of Quiz")
     active = models.BooleanField()
     completed = models.BooleanField()
-
 
     def __str__(self):
         # Provides a User friendly name
@@ -22,7 +22,8 @@ class MonitorAndLearningQuizId(models.Model):
 class MonitorAndLearningQuizQuestion(models.Model):
     # This class stores the questions to be asked
     quiz_id = models.ForeignKey('MonitorAndLearningQuizId',
-                                related_name='quiz_ids')
+                                related_name='quiz_ids',
+                                verbose_name='Quiz Name')
     question = models.CharField(max_length=160, blank=False)
 
     def __unicode__(self):
@@ -36,7 +37,7 @@ class MonitorAndLearningQuizAnswer(models.Model):
     # This class stores the answers.
     question_id = models.ForeignKey('MonitorAndLearningQuizQuestion',
                                     related_name="question_ids")
-    answer = models.CharField(max_length=160, blank=False)
+    answer = models.CharField(max_length=160)
 
     def __unicode__(self):
         return self.answer
