@@ -1,16 +1,10 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from opinions.models import Opinion
 import json
 
 
 class TestOpinion(TestCase):
-    def setUp(self):
-        Opinion.objects.create(opinion_1="A",
-                               opinion_2="B",
-                               opinion_3="C",
-                               opinion_4="D",
-                               opinion_5="E")
+    fixtures = ['test/test_opinion.json']
 
     def test_api_works(self):
         url = reverse('api_dispatch_list',
