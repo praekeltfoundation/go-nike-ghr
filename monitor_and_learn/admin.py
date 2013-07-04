@@ -14,14 +14,17 @@ class QuestionAdminForm(forms.ModelForm):
         super(QuestionAdminForm, self).__init__(*args, **kwargs)
         choices = [self.fields["quiz_id"].choices.__iter__().next()]
         choices.pop()
-        query = MonitorAndLearningQuizId.objects.all().filter(completed=False)
-
-        if query.exists():
-            choices.append((query[0].pk, 'Quiz %s' % query[0].pk.__str__()))
+        query = MonitorAndLearningQuizId.objects.all().filter(completed=False).order_by('pk')
 
         if 'question' in self.initial:
-            choices.append((self.initial['quiz_id'],
-                           'Quiz %s' % self.initial['quiz_id']))
+            get = query = MonitorAndLearningQuizId.objects.get(pk=
+                                                               self.initial['quiz_id'])
+            print get.name
+            choices.append((self.initial['quiz_id'], get.name))
+        else:
+            if query.exists():
+                for item in range(len(query)):
+                    choices.append((query[item].pk, query[item].name))
 
         self.fields['quiz_id'].choices = choices
 
