@@ -6,12 +6,14 @@ class MonitorAndLearningQuizId(models.Model):
     # questions, contains an active field
     # where the quize can be set to active and a completed
     # field where if 4 questions are it changes to complete = True
+    name = models.CharField(max_length=50, blank=False, verbose_name="Name of Quiz")
     active = models.BooleanField()
-    completed = models.BooleanField(editable=False)
+    completed = models.BooleanField()
+
 
     def __str__(self):
         # Provides a User friendly name
-        return "quiz_%s" % self.pk
+        return self.name
 
     class Meta:
         verbose_name_plural = "Monitor and Learning Quiz ID's"
