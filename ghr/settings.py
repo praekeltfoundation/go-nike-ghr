@@ -149,6 +149,7 @@ INSTALLED_APPS = (
 
     # sample apps to explain usage
     'articles',
+    'weekly_quiz',
     #'celery_app',
 )
 
