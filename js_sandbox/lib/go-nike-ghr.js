@@ -73,6 +73,31 @@ function GoNikeGHR() {
         };
     };
 
+    self.make_initial_mandl_question_state = function(state_name, prefix, question) {
+            var choices = question.choices.map(function(choice) {
+                var name = prefix + "_" + choice[0];
+                var value = choice[1];
+                return new Choice(name, value);
+            });
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, question.question, choices);
+    };
+
+    self.crm_get = function(im, path) {
+        var url = im.config.crm_api_root + path;
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', false);
+            return json;
+        });
+        return p;
+    };
+
     self.crm_mandl_quizzes_get = function(im) {
         var url = im.config.crm_api_root + "mandl/";
         var p = im.api_request("http.get", {
@@ -291,15 +316,13 @@ function GoNikeGHR() {
                 return self.error_state();
             }
 
-            if (result.contact["extras-ghr_questions"] == undefined) {
+            if (result.contact["extras-ghr_questions"] === undefined) {
                 return self.error_state();
             }
 
-            // console.log("Am I here?");
             var completed_mandl = JSON.parse(result.contact["extras-ghr_questions"]);
             var p2 = self.crm_mandl_quizzes_get(im);
             p2.add_callback(function(result) {
-                console.log(completed_mandl);
                 // TODO: actual completion check still to be implemented.
                 if (completed_mandl.indexOf(2) != -1){
                     // There's no M&L quizzes incomplete
@@ -307,36 +330,13 @@ function GoNikeGHR() {
                 } else {
                     // TODO: Get the next M&L Quiz
                     var quiz_id = "1";
-                    var p3 = self.crm_mandl_quiz_get(im, quiz_id);
-                    p3.add_callback(function(result) {
-                        var quiz = result.quiz;
-                        var quiz_name = "mandl_" + quiz_id;
-                        // Create the quiz
-                        for (var question_name in quiz.questions){
-
-                            var question = quiz.questions[question_name];
-                            var question_state_name = quiz_name + "_" + question_name;
-
-                            // do not recreate states that already exist.
-                            if(self.state_creators.hasOwnProperty(question_state_name)) {
-                                continue;
-                            }
-
-                            // construct a function using make_question_state()
-                            // to prevent getting a wrongly scoped 'question'
-                            self.add_creator(question_state_name,
-                                self.make_question_state(quiz_name, question));
-                        }
-                        return self.error_state();
-                    });
-                    return p3;
+                    var quiz_name = "mandl_quiz_" + quiz_id;
+                    var quiz = im.config.quizzes[quiz_name]
+                    return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
                 }
             });
             return p2;
-
-
         });
-        //console.log(im)
         return p;
     });
 
@@ -371,6 +371,37 @@ function GoNikeGHR() {
         "Thank you and bye bye!",
         "first_state"
     ));
+
+    self.on_config_read = function(event){
+        // Run calls out to the APIs to load dynamic states
+
+        var p_mandl = self.crm_get(im, 'mandl/all/');
+        p_mandl.add_callback(function(result) {
+            var quizzes = result.quizzes;
+            im.config.quizzes = quizzes;
+            for (var quiz_name in quizzes){
+                var quiz = quizzes[quiz_name];
+                // Create the quiz
+                for (var question_name in quiz.questions){
+
+                    var question = quiz.questions[question_name];
+                    var question_state_name = quiz_name + "_" + question_name;
+
+                    // do not recreate states that already exist.
+                    if(self.state_creators.hasOwnProperty(question_state_name)) {
+                        continue;
+                    }
+
+                    // construct a function using make_question_state()
+                    // to prevent getting a wrongly scoped 'question'
+                    self.add_creator(question_state_name,
+                        self.make_question_state(quiz_name, question));
+                }
+            }
+            return self.error_state();
+        });
+        return p_mandl;
+    };
 }
 
 // launch app
