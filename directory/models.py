@@ -13,8 +13,7 @@ class Category(models.Model):
 
 
 class SubCategory(models.Model):
-    # This class stores the questions to be asked
-    category = models.ForeignKey('WeeklyQuizId',
+    category = models.ForeignKey('Category',
                                  related_name='category',
                                  verbose_name='Category Id')
 
