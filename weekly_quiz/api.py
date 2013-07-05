@@ -43,9 +43,9 @@ class WeeklyQuizIDResource(ModelResource):
                 answers = {}  # Dict item to hold final answer structure
                 first_question_id = []  # Variable to hold min id for start key
                 last_question_id = []  # Variable to hold the max question id for menu endpoint
-                for i in range(len(wq_data)):
-                    last_question_id.append(wq_data[i].data["id"])
-                last_question_id = max(last_question_id)
+
+                # Variable to hold the max question id for menu endpoint
+                last_question_id = max([wq_data[i].data["id"] for i in range(len(wq_data))])
 
                 for question_i in range(len(wq_data)):
                     q_id = "q_%s" % wq_data[question_i].data["id"]
