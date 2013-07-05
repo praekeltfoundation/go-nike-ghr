@@ -35,14 +35,14 @@ class MonitorAndLearningQuizIDResource(ModelResource):
             for quiz_i in range(len(data_dict['objects'])):
                 quizzes.append(data_dict['objects'][quiz_i].data['id'])
 
-            data_dict['quizzes'] = quizzes  # Adding the quiz ids to quizzes variable
+            data_dict['quizzes'] = quizzes  # Adding the quiz ids to quizzes
             del (data_dict['objects'])
         return data_dict
 
     def alter_detail_data_to_serialize(self, request, data_dict):
         """
-        Modifying the data for the individual quiz to return data in the required
-        structure. This function handles /api/mandl/#/
+        Modifying the data for the individual quiz to return data in
+        the required structure. This function handles /api/mandl/#/
         """
         questions = {}  # Dict item to hold the questions structure
         quiz_ids = data_dict.data["quiz_ids"]  # Variable to hold the quiz dict
@@ -66,7 +66,8 @@ class MonitorAndLearningQuizIDResource(ModelResource):
                 else:
                     next = "q_%s" % (quiz_ids[question_i].data["id"] + 1)
 
-                answer = quiz_ids[question_i].data["quiz_ids"][answer_i].data["answer"]
+                answer = (quiz_ids[question_i].
+                          data["quiz_ids"][answer_i].data["answer"])
                 choices.append([next, answer])
 
             questions[q_id] = {"question": quiz_ids[question_i].data["question"],
@@ -82,7 +83,8 @@ class MonitorAndLearningQuizIDResource(ModelResource):
 
 class MonitorAndLearningQuizQuestionResource(ModelResource):
     """
-    Class that returns the Questions to QuizIDResource based on Foreign Key Assoication
+    Class that returns the Questions to QuizIDResource based on
+    Foreign Key Assoication
     """
 
     path = 'monitor_and_learn.api.MonitorAndLearningQuizAnswerResource'
@@ -97,7 +99,8 @@ class MonitorAndLearningQuizQuestionResource(ModelResource):
 
 class MonitorAndLearningQuizAnswerResource(ModelResource):
     """
-    Class that returns the Answers to QuestionResource based on Foreign Key Assoication
+    Class that returns the Answers to QuestionResource based on Foreign
+    Key Assoication
     """
     class Meta:
         queryset = MonitorAndLearningQuizAnswer.objects.all()
