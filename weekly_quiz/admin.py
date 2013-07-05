@@ -31,6 +31,7 @@ class WeeklyQuizQuestionAdminForm(forms.ModelForm):
 
 class WeeklyQuizIdAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        # Overiding the clean function of the WeeklyQuizAdmin Form
         self.request = kwargs.pop('request', None)
         super(WeeklyQuizIdAdminForm, self).__init__(*args, **kwargs)
 
@@ -61,22 +62,34 @@ class WeeklyQuizAnswerFormset(BaseInlineFormSet):
         # also checks if the answer has been submitted and Foreign key has
         # been included
         super(WeeklyQuizAnswerFormset, self).clean()
-        char_limit = len(self.instance.question)
+        char_limit_answer = len(self.instance.question)
+        char_limit_response = 0
         for form in self.forms:
             if not hasattr(form, 'cleaned_data'):
                 continue
 
             if ("answer" not in form.cleaned_data):
                 raise forms.ValidationError("You need to complete the answers")
-            else:
-                if "answer" in form.cleaned_data:
-                    char_limit = char_limit + len(form.cleaned_data['answer'])
 
-                    if char_limit > 160:
-                        raise forms.ValidationError("You have gone beyond the"
-                                                    " character limit"
-                                                    " please shorten questions"
-                                                    " and/or answers")
+            else:
+                char_limit_answer = char_limit_answer + len(form.cleaned_data['answer'])
+
+                if char_limit_answer > 160:
+                    raise forms.ValidationError("You have gone beyond the"
+                                                " character limit"
+                                                " please shorten questions"
+                                                " and/or answers")
+
+            if ("response" not in form.cleaned_data):
+                raise forms.ValidationError("You need to complete the responses")
+
+            else:
+                char_limit_response = char_limit_response + len(form.cleaned_data['response'])
+                print char_limit_response
+                if char_limit_response > 160:
+                    raise forms.ValidationError("You have gone beyond the"
+                                                " character limit"
+                                                " please shorten the responses")
 
         try:
         # Checking if Foreign ID has been included otherwise gives
