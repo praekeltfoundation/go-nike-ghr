@@ -5,7 +5,24 @@ from django.forms.models import BaseInlineFormSet
 
 
 class SubCategoryFormset(BaseInlineFormSet):
-    pass
+    def clean(self):
+        super(SubCategoryFormset, self).clean()
+
+        for form in self.forms:
+            if not hasattr(form, 'cleaned_data'):
+                continue
+
+            sub_cat_index = 0
+            if ("name" not in form.cleaned_data and sub_cat_index >= 1):
+                raise forms.ValidationError("You need the Sub Category Name")
+
+            if ("name" in form.cleaned_data):
+                if not (form.cleaned_data["content_1"] or
+                        form.cleaned_data["content_2"] or
+                        form.cleaned_data["content_2"]):
+                    raise forms.ValidationError("You need atleast 1 Content")
+
+            sub_cat_index = sub_cat_index + 1
 
 
 class SubCategoryInline(admin.StackedInline):
@@ -17,10 +34,4 @@ class SubCategoryInline(admin.StackedInline):
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [SubCategoryInline]
 
-
-class SubCategoryAdmin(admin.ModelAdmin):
-    pass
-
-
 admin.site.register(Category, CategoryAdmin)
-# admin.site.register(SubCategory, SubCategoryAdmin)
