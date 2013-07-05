@@ -287,55 +287,54 @@ function GoNikeGHR() {
 
         p.add_callback(function(result) {
             // This callback checks extras when contact is found
-            if (result.success){
-                if (result.contact["extras-ghr_questions"] !== undefined){
-                    // console.log("Am I here?");
-                    var completed_mandl = JSON.parse(result.contact["extras-ghr_questions"]);
-                    var p2 = self.crm_mandl_quizzes_get(im);
-                    p2.add_callback(function(result) {
-                        console.log(completed_mandl);
-                        if (completed_mandl.indexOf(2) != -1){
-                            // There's no M&L quizzes incomplete
-                            return self.make_main_menu();
-                        } else {
-                            // Get the next M&L Quiz
-                            var quiz_id = "1";
-                            var p3 = self.crm_mandl_quiz_get(im, quiz_id);
-                            p3.add_callback(function(result) {
-                                var quiz = result.quiz;
-                                var quiz_name = "mandl_" + quiz_id;
-                                // Create the quiz
-                                for (var question_name in quiz.questions){
-
-                                    var question = quiz.questions[question_name];
-                                    var question_state_name = quiz_name + "_" + question_name;
-
-                                    // do not recreate states that already exist.
-                                    if(self.state_creators.hasOwnProperty(question_state_name)) {
-                                        continue;
-                                    }
-
-                                    // construct a function using make_question_state()
-                                    // to prevent getting a wrongly scoped 'question'
-                                    self.add_creator(question_state_name,
-                                        self.make_question_state(quiz_name, question));
-                                }
-                                return self.error_state();
-                            });
-                            return p3;
-                        }
-                    });
-                    return p2;
-                } else {
-                    // console.log("Am I here?");
-                    // User doesn't have the correct GHR extras
-                    return self.error_state();
-                }
-
-            } else {
-                // Error saving loading contact extras
+            if (!result.success) {
                 return self.error_state();
             }
+
+            if (result.contact["extras-ghr_questions"] == undefined) {
+                return self.error_state();
+            }
+
+            // console.log("Am I here?");
+            var completed_mandl = JSON.parse(result.contact["extras-ghr_questions"]);
+            var p2 = self.crm_mandl_quizzes_get(im);
+            p2.add_callback(function(result) {
+                console.log(completed_mandl);
+                // TODO: actual completion check still to be implemented.
+                if (completed_mandl.indexOf(2) != -1){
+                    // There's no M&L quizzes incomplete
+                    return self.make_main_menu();
+                } else {
+                    // TODO: Get the next M&L Quiz
+                    var quiz_id = "1";
+                    var p3 = self.crm_mandl_quiz_get(im, quiz_id);
+                    p3.add_callback(function(result) {
+                        var quiz = result.quiz;
+                        var quiz_name = "mandl_" + quiz_id;
+                        // Create the quiz
+                        for (var question_name in quiz.questions){
+
+                            var question = quiz.questions[question_name];
+                            var question_state_name = quiz_name + "_" + question_name;
+
+                            // do not recreate states that already exist.
+                            if(self.state_creators.hasOwnProperty(question_state_name)) {
+                                continue;
+                            }
+
+                            // construct a function using make_question_state()
+                            // to prevent getting a wrongly scoped 'question'
+                            self.add_creator(question_state_name,
+                                self.make_question_state(quiz_name, question));
+                        }
+                        return self.error_state();
+                    });
+                    return p3;
+                }
+            });
+            return p2;
+
+
         });
         //console.log(im)
         return p;
