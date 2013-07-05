@@ -60,7 +60,7 @@ function GoNikeGHR() {
     };
 
     self.make_question_state = function(prefix, question) {
-        return function(state_name, im) {
+         return function(state_name, im) {
             var choices = question.choices.map(function(choice) {
                 var name = prefix + "_" + choice[0];
                 var value = choice[1];
@@ -75,6 +75,19 @@ function GoNikeGHR() {
 
     self.crm_mandl_quizzes_get = function(im) {
         var url = im.config.crm_api_root + "mandl/";
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', false);
+            return json;
+        });
+        return p;
+    };
+
+    self.crm_mandl_quiz_get = function(im, quiz_id) {
+        var url = im.config.crm_api_root + "mandl/" + quiz_id;
         var p = im.api_request("http.get", {
             url: url,
             headers: self.headers
@@ -108,6 +121,23 @@ function GoNikeGHR() {
 
     self.validate_sector = function(im, sector) {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
+    };
+
+    self.make_main_menu = function(){
+        return new ChoiceState(
+            "main_menu",
+            function(choice) {
+                return choice.value;
+            },
+            "",
+            [
+                new Choice("articles", "Articles"),
+                new Choice("opinions", "Opinions"),
+                new Choice("wwnd", "What would Ndabaga do?"),
+                new Choice("quiz_start", "Weekly quiz"),
+                new Choice("directory_start", "Directory")
+            ]
+        );
     };
 
     self.add_creator('initial_state', function(state_name, im) {
@@ -158,20 +188,7 @@ function GoNikeGHR() {
                     // TODO: Make actual question completion status lookup
                     if (result.contact["extras-ghr_questions"] == '["1", "2", "3", "4"]') {
                         // All done so show menu
-                        return new ChoiceState(
-                            state_name,
-                            function(choice) {
-                                return choice.value;
-                            },
-                            "",
-                            [
-                                new Choice("articles", "Articles"),
-                                new Choice("opinions", "Opinions"),
-                                new Choice("wwnd", "What would Ndabaga do?"),
-                                new Choice("quiz_start", "Weekly quiz"),
-                                new Choice("directory_start", "Directory")
-                            ]
-                        );
+                        return self.make_main_menu();
                     } else {
                         // User still has unanswered M&L questions
                         // TODO
@@ -272,16 +289,45 @@ function GoNikeGHR() {
             // This callback checks extras when contact is found
             if (result.success){
                 if (result.contact["extras-ghr_questions"] !== undefined){
-                    console.log("Am I here?");
+                    // console.log("Am I here?");
+                    var completed_mandl = JSON.parse(result.contact["extras-ghr_questions"]);
                     var p2 = self.crm_mandl_quizzes_get(im);
-                    console.log(p2);
-                    return new EndState(
-                        "end_question_state",
-                        "Thank you and bye bye!",
-                        "first_state"
-                    );
+                    p2.add_callback(function(result) {
+                        console.log(completed_mandl);
+                        if (completed_mandl.indexOf(2) != -1){
+                            // There's no M&L quizzes incomplete
+                            return self.make_main_menu();
+                        } else {
+                            // Get the next M&L Quiz
+                            var quiz_id = "1";
+                            var p3 = self.crm_mandl_quiz_get(im, quiz_id);
+                            p3.add_callback(function(result) {
+                                var quiz = result.quiz;
+                                var quiz_name = "mandl_" + quiz_id;
+                                // Create the quiz
+                                for (var question_name in quiz.questions){
+
+                                    var question = quiz.questions[question_name];
+                                    var question_state_name = quiz_name + "_" + question_name;
+
+                                    // do not recreate states that already exist.
+                                    if(self.state_creators.hasOwnProperty(question_state_name)) {
+                                        continue;
+                                    }
+
+                                    // construct a function using make_question_state()
+                                    // to prevent getting a wrongly scoped 'question'
+                                    self.add_creator(question_state_name,
+                                        self.make_question_state(quiz_name, question));
+                                }
+                                return self.error_state();
+                            });
+                            return p3;
+                        }
+                    });
+                    return p2;
                 } else {
-                    console.log("Am I here?");
+                    // console.log("Am I here?");
                     // User doesn't have the correct GHR extras
                     return self.error_state();
                 }
@@ -291,6 +337,7 @@ function GoNikeGHR() {
                 return self.error_state();
             }
         });
+        //console.log(im)
         return p;
     });
 

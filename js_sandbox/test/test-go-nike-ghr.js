@@ -137,20 +137,109 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+    });
 
-        it.skip("completed core registation details should ask M&L questions", function (done) {
+    describe("as a partially registered user - not completed any M&L questions", function() {
+        // These are used to mock API reponses
+        var fixtures = [
+            'test/fixtures/mandl.json',
+            'test/fixtures/article.json',
+            'test/fixtures/mandl_quiz.json',
+        ];
+
+        var tester = new vumigo.test_utils.ImTester(app.api, {
+            custom_setup: function (api) {
+                api.config_store.config = JSON.stringify({
+                    testing: true,
+                    testing_mock_today: [2013,5,1,8,10],
+                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                });
+                fixtures.forEach(function (f) {
+                    api.load_http_fixture(f);
+                });
+
+                api._dummy_contacts = {
+                    "f953710a2472447591bd59e906dc2c26": {
+                        key: "f953710a2472447591bd59e906dc2c26",
+                        surname: "Trotter",
+                        user_account: "test-0-user",
+                        bbm_pin: null,
+                        msisdn: "1234567",
+                        created_at: "2013-04-24 14:01:41.803693",
+                        gtalk_id: null,
+                        dob: null,
+                        groups: null,
+                        facebook_id: null,
+                        twitter_handle: null,
+                        email_address: null,
+                        name: "Rodney",
+                        "extras-ghr_reg_complete": "true",
+                        "extras-ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                        "extras-ghr_questions": '[]',
+                        "extras-ghr_gender": "Male",
+                        "extras-ghr_age": "25-35",
+                        "extras-ghr_sector": "Test"
+                    }
+                };
+
+                api._handle_contacts_get_or_create = function(cmd, reply) {
+                    var reply_contact = false;
+                    for (var contact_key in api._dummy_contacts){
+                        if (api._dummy_contacts[contact_key].msisdn == cmd.addr){
+                            reply_contact = api._dummy_contacts[contact_key];
+                        }
+                    }
+                    if (reply_contact){
+                        reply({
+                            success: true,
+                            created: false,
+                            contact: reply_contact
+                        });
+                    } else {
+                        api._dummy_contacts['contact-key'] = api._new_contact;
+                        api._dummy_contacts['contact-key'].msisdn = cmd.addr;
+                        reply({
+                            success: true,
+                            created: true,
+                            contact: api._new_contact
+                        });
+                    }
+                };
+
+                api._handle_contacts_update = function(cmd, reply) {
+                    api._dummy_contacts[cmd.key] = cmd.fields;
+                    reply({
+                        success: true,
+                        contact: api._dummy_contacts[cmd.key]
+                    });
+                };
+
+                // TODO: This will break when contacts api gets changed to newer format
+                api._handle_contacts_update_extras = function(cmd, reply) {
+                    for (var k in cmd.fields) { api._dummy_contacts[cmd.key]['extras-'+k] = cmd.fields[k]; }
+                    reply({
+                        success: true,
+                        contact: api._dummy_contacts[cmd.key]
+                    });
+                };
+            },
+            async: true
+        });
+
+        it.only("completed core registation details should ask M&L questions", function (done) {
             var user = {
                 current_state: 'reg_thanks',
                 answers: {
                     initial_state: 'Male',
                     reg_age: '19-24',
-                    reg_sector: "Valid sector"
+                    reg_sector: "Mareba"
                 }
             };
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "q_1",
+                next_state: "mandl_1_q_1",
                 response: (
                     "^Is this fake question one\\?[^]" +
                     "1. Yes[^]" +
@@ -165,7 +254,8 @@ describe("When using the USSD line", function() {
     describe("as an registered user - not completed all M&L questions", function() {
         // These are used to mock API reponses
         var fixtures = [
-           'test/fixtures/article.json'
+            'test/fixtures/mandl.json',
+            'test/fixtures/article.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -173,6 +263,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
+                    sectors: JSON.parse(fs.readFileSync(sector_file)),
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
@@ -265,7 +356,8 @@ describe("When using the USSD line", function() {
     describe("as an registered user - completed all M&L questions", function() {
         // These are used to mock API reponses
         var fixtures = [
-           'test/fixtures/article.json'
+            'test/fixtures/mandl.json',
+            'test/fixtures/article.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -273,6 +365,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
+                    sectors: JSON.parse(fs.readFileSync(sector_file)),
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
                 });
                 fixtures.forEach(function (f) {
