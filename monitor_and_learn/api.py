@@ -54,7 +54,6 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         # Looping through data and adding it to questions dict for final output
         for question_i in range(len(quiz_ids)):
             q_id = "q_%s" % quiz_ids[question_i].data["id"]  # Variable for q_#
-            questions[q_id] = {"choices": []}
             choices = []  # List to hold the final answer and "next"
             first_question_id.append(quiz_ids[question_i].data["id"])
 
@@ -92,7 +91,6 @@ class MonitorAndLearningQuizQuestionResource(ModelResource):
                                   'question_ids', full=True)
 
     class Meta:
-        excludes = []
         include_resource_uri = False
         queryset = MonitorAndLearningQuizQuestion.objects.all()
 
