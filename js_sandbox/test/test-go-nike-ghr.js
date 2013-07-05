@@ -28,7 +28,8 @@ describe("When using the USSD line", function() {
         // EXAMPLE: Response from google maps API
         var fixtures = [
             'test/fixtures/mandl.json',
-            'test/fixtures/article.json'
+            'test/fixtures/article.json',
+            'test/fixtures/mandl_all.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -145,6 +146,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
             'test/fixtures/mandl_quiz.json',
+            'test/fixtures/mandl_all.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -239,7 +241,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "mandl_1_q_1",
+                next_state: "mandl_builder",
                 response: (
                     "^Is this fake question one\\?[^]" +
                     "1. Yes[^]" +
@@ -255,7 +257,8 @@ describe("When using the USSD line", function() {
         // These are used to mock API reponses
         var fixtures = [
             'test/fixtures/mandl.json',
-            'test/fixtures/article.json'
+            'test/fixtures/article.json',
+            'test/fixtures/mandl_all.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
