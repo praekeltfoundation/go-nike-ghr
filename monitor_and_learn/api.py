@@ -47,13 +47,9 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         questions = {}  # Dict item to hold the questions structure
         quiz_ids = data_dict.data["quiz_ids"]  # Variable to hold the quiz dict
         first_question_id = []  # Variable to hold min id for start key
-        last_question_id = []  # Variable to hold the max question id for menu endpoint
 
-        for i in range(len(quiz_ids)):
-            # Need to store end point for main_menu
-            last_question_id.append(quiz_ids[i].data["id"])
-
-        last_question_id = max(last_question_id)
+        # Variable to hold the max question id for menu endpoint
+        last_question_id = max([quiz_ids[i].data["id"] for i in range(len(quiz_ids))])
 
         # Looping through data and adding it to questions dict for final output
         for question_i in range(len(quiz_ids)):
