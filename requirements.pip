@@ -13,5 +13,6 @@ redis
 django-debug-toolbar
 django-celery
 django-celery-email
+django-tastypie
 pep8
 pyflakes
