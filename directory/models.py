@@ -19,11 +19,11 @@ class SubCategory(models.Model):
 
     name = models.CharField(max_length=125)
     content_1 = models.CharField(max_length=125)
-    content_1 = models.CharField(max_length=125)
-    content_1 = models.CharField(max_length=125)
+    content_2 = models.CharField(max_length=125)
+    content_3 = models.CharField(max_length=125, blank=False)
 
     def __unicode__(self):
         return self.name
 
     class Meta:
-        verbose_name = "Sub Category"
+        verbose_name_plural = "Sub Category"
