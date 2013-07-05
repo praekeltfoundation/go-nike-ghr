@@ -17,10 +17,10 @@ class SubCategory(models.Model):
                                  related_name='category',
                                  verbose_name='Category Id')
 
-    name = models.CharField(max_length=125)
-    content_1 = models.CharField(max_length=125)
-    content_2 = models.CharField(max_length=125)
-    content_3 = models.CharField(max_length=125, blank=False)
+    name = models.CharField(max_length=125, blank=False)
+    content_1 = models.CharField(max_length=125, blank=True)
+    content_2 = models.CharField(max_length=125, blank=True)
+    content_3 = models.CharField(max_length=125, blank=True)
 
     def __unicode__(self):
         return self.name
