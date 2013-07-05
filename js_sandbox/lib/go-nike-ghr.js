@@ -165,6 +165,23 @@ function GoNikeGHR() {
         );
     };
 
+    self.array_parse_ints = function(target){
+        for (var i = 0; i < target.length; i++) {
+            target[i] = parseInt(target[i],10);
+        }
+        return target;
+    };
+
+    self.array_strip_duplicates = function(in_array, from_array){
+        for (var i = 0; i < in_array.length; i++) {
+            if (from_array.indexOf(in_array[i]) != -1) {
+                in_array.splice(i, 1);
+                i--;
+            }
+        }
+        return in_array;
+    };
+
     self.add_creator('initial_state', function(state_name, im) {
         // Check if they've already registered
         var p = self.get_contact(im);
@@ -320,18 +337,19 @@ function GoNikeGHR() {
                 return self.error_state();
             }
 
-            var completed_mandl = JSON.parse(result.contact["extras-ghr_questions"]);
+            var completed_mandl = self.array_parse_ints(JSON.parse(result.contact["extras-ghr_questions"]));
             var p2 = self.crm_mandl_quizzes_get(im);
             p2.add_callback(function(result) {
-                // TODO: actual completion check still to be implemented.
-                if (completed_mandl.indexOf(2) != -1){
+                // Strip out quizzes that we've done
+                var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
+                if (incomplete_mandl.length === 0){
                     // There's no M&L quizzes incomplete
                     return self.make_main_menu();
                 } else {
-                    // TODO: Get the next M&L Quiz
-                    var quiz_id = "1";
+                    // Get's first incomplete quiz
+                    var quiz_id = incomplete_mandl[0];
                     var quiz_name = "mandl_quiz_" + quiz_id;
-                    var quiz = im.config.quizzes[quiz_name]
+                    var quiz = im.config.quizzes[quiz_name];
                     return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
                 }
             });
