@@ -6,6 +6,12 @@ from weekly_quiz.models import (WeeklyQuizId,
 
 
 class WeeklyQuizIDResource(ModelResource):
+    """
+    This class:
+        - Adds resource_name for the API
+        - Returns the required data for the API via Foreign key association,
+        based on the url
+    """
     path = 'weekly_quiz.api.WeeklyQuizQuestionResource'
     wq_quiz_id = fields.ToManyField(path,
                                     'wq_quiz_id', full=True)
@@ -19,16 +25,21 @@ class WeeklyQuizIDResource(ModelResource):
         queryset = WeeklyQuizId.objects.all()
 
     def get_object_list(self, request):
-        # Filters the queryset in meta to get the specific Article required
+        """
+        Filters the queryset in meta to get the specific Article required
+        ordered by the primary key descending.
+        """
         query = super(WeeklyQuizIDResource, self).get_object_list(request)
         query = (query.order_by('-pk'))
 
         return query
 
     def alter_list_data_to_serialize(self, request, data_dict):
-        # Modifying the data to provide only what is needed in the right
-        # form by removing the extra meta variables and editing the
-        # dictionary. This function handles /api/mandl/
+        """
+        Modifying the data to provide the quiz and answers and responses.
+        Structure is {quiz:{start:"q_id", quiz_details: {answers:{}, questions: {}}}}
+        This function handles /api/weeklyquiz/
+        """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
@@ -47,13 +58,16 @@ class WeeklyQuizIDResource(ModelResource):
                 # Variable to hold the max question id for menu endpoint
                 last_question_id = max([wq_data[i].data["id"] for i in range(len(wq_data))])
 
+                # Looping through data and adding it to questions dict for final output
                 for question_i in range(len(wq_data)):
                     q_id = "q_%s" % wq_data[question_i].data["id"]
 
-                    # dict_item_question[q_id] = {"answers": []}
-                    choices = []
+                    choices = []  # List to hold the final answer and the "next q_id"
                     first_question_id.append(wq_data[question_i].data["id"])
 
+                    # Looping through data and adding to choices list for final output
+                    # Also adds the "next question"
+                    # Loop also adds data to answers{}
                     for answer_i in range(len(wq_data[question_i].data["wq_question_id"])):
                         a_id = wq_data[question_i].data["wq_question_id"][answer_i].data["id"]
                         answer = wq_data[question_i].data["wq_question_id"][answer_i].data["answer"]
@@ -79,16 +93,21 @@ class WeeklyQuizIDResource(ModelResource):
 
 
 class WeeklyQuizQuestionResource(ModelResource):
+    """
+    Class that returns the Questions to QuizIDResource based on Foreign Key Assoication
+    """
     path = 'weekly_quiz.api.WeeklyQuizAnswerResource'
     wq_question_id = fields.ToManyField(path,
                                         'wq_question_id', full=True)
 
     class Meta:
-        excludes = []
         include_resource_uri = False
         queryset = WeeklyQuizQuestion.objects.all()
 
 
 class WeeklyQuizAnswerResource(ModelResource):
+    """
+    Class that returns the Answers to QuestionResource based on Foreign Key Assoication
+    """
     class Meta:
         queryset = WeeklyQuizAnswer.objects.all()
