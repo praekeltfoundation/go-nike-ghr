@@ -41,37 +41,37 @@ class WeeklyQuizIDResource(ModelResource):
                 wq_data = data_dict["objects"][0].data["wq_quiz_id"]
                 questions = {}  # Dict item to hold final question structure
                 answers = {}  # Dict item to hold final answer structure
-                min_id = []  # Variable to hold min id for start key
-                max_id = []  # Variable to hold the max question id for menu endpoint
+                first_question_id = []  # Variable to hold min id for start key
+                last_question_id = []  # Variable to hold the max question id for menu endpoint
                 for i in range(len(wq_data)):
-                    max_id.append(wq_data[i].data["id"])
-                max_id = max(max_id)
+                    last_question_id.append(wq_data[i].data["id"])
+                last_question_id = max(last_question_id)
 
-                for i in range(len(wq_data)):
-                    q_id = "q_%s" % wq_data[i].data["id"]
+                for question_i in range(len(wq_data)):
+                    q_id = "q_%s" % wq_data[question_i].data["id"]
 
                     # dict_item_question[q_id] = {"answers": []}
-                    x = []
-                    min_id.append(wq_data[i].data["id"])
+                    choices = []
+                    first_question_id.append(wq_data[question_i].data["id"])
 
-                    for j in range(len(wq_data[i].data["wq_question_id"])):
-                        k = wq_data[i].data["wq_question_id"][j].data["id"]
-                        l = wq_data[i].data["wq_question_id"][j].data["answer"]
-                        m = "%s_a_%s" % (q_id, k)
-                        n = wq_data[i].data["wq_question_id"][j].data["response"]
-                        x.append([m, l])
+                    for answer_i in range(len(wq_data[question_i].data["wq_question_id"])):
+                        a_id = wq_data[question_i].data["wq_question_id"][answer_i].data["id"]
+                        answer = wq_data[question_i].data["wq_question_id"][answer_i].data["answer"]
+                        q_id_a_id = "%s_a_%s" % (q_id, a_id)
+                        response = wq_data[question_i].data["wq_question_id"][answer_i].data["response"]
+                        choices.append([q_id_a_id, answer])
 
-                        if wq_data[i].data["id"] == max_id:
+                        if wq_data[question_i].data["id"] == last_question_id:
                             next = "main_menu"
                         else:
-                            next = "q_%s" % (wq_data[i].data["id"] + 1)
+                            next = "q_%s" % (wq_data[question_i].data["id"] + 1)
 
-                        answers[m] = {"response": n, "next": next}
+                        answers[q_id_a_id] = {"response": response, "next": next}
 
-                    questions[q_id] = {"question": wq_data[i].data["question"],
-                                       "choices": x}
-                min_id = min(min_id)
-                data_dict['quiz'] = {"start": "q_%s" % min_id,
+                    questions[q_id] = {"question": wq_data[question_i].data["question"],
+                                       "choices": choices}
+                first_question_id = min(first_question_id)
+                data_dict['quiz'] = {"start": "q_%s" % first_question_id,
                                      "quiz_details": {"questions": questions,
                                                       "answers": answers}}
                 del (data_dict['objects'])
