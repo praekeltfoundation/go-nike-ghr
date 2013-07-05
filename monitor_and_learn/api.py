@@ -25,49 +25,50 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
-            a = []
-            for item in range(len(data_dict['objects'])):
-                a.append(data_dict['objects'][item].data['id'])
+            quizzes = []
+            for quiz_i in range(len(data_dict['objects'])):
+                quizzes.append(data_dict['objects'][quiz_i].data['id'])
 
-            data_dict['quizzes'] = a
+            data_dict['quizzes'] = quizzes
             del (data_dict['objects'])
         return data_dict
 
     def alter_detail_data_to_serialize(self, request, data_dict):
         # Altering the response given by accessing different quiz IDs
         # This function handles /api/mandl/quiz_id/
-        dict_item = {}  # Dict item to hold final structure
-        quiz_ids = data_dict.data["quiz_ids"]
-        min_id = []  # Variable to hold min id for start key
-        max_id = []  # Variable to hold the max question id for menu endpoint
+        questions = {}  # Dict item to hold the questions structure
+        quiz_ids = data_dict.data["quiz_ids"]  # Variable to hold the quiz dict
+        first_question_id = []  # Variable to hold min id for start key
+        last_question_id = []  # Variable to hold the max question id for menu endpoint
 
         for i in range(len(quiz_ids)):
             # Need to store end point for main_menu
-            max_id.append(quiz_ids[i].data["id"])
+            last_question_id.append(quiz_ids[i].data["id"])
 
-        max_id = max(max_id)
-        for i in range(len(quiz_ids)):
+        last_question_id = max(last_question_id)
+        for question_i in range(len(quiz_ids)):
             # Looping through data and adding it to dict_item for final output
-            q_id = "q_%s" % quiz_ids[i].data["id"]
-            dict_item[q_id] = {"choices": []}
-            x = []
-            min_id.append(quiz_ids[i].data["id"])
+            q_id = "q_%s" % quiz_ids[question_i].data["id"]  # Variable for q_#
+            questions[q_id] = {"choices": []}
+            choices = []
+            first_question_id.append(quiz_ids[question_i].data["id"])
 
-            for j in range(len(quiz_ids[i].data["quiz_ids"])):
+            for answer_i in range(len(quiz_ids[question_i].data["quiz_ids"])):
                 # For loop adds answer to a list that will be appended to dict.
                 # also adds go to variables to the answer
-                if quiz_ids[i].data["id"] == max_id:
-                    y = "main_menu"
+                if quiz_ids[question_i].data["id"] == last_question_id:
+                    next = "main_menu"
                 else:
-                    y = "q_%s" % (quiz_ids[i].data["id"] + 1)
-                z = quiz_ids[i].data["quiz_ids"][j].data["answer"]
-                x.append([y, z])
+                    next = "q_%s" % (quiz_ids[question_i].data["id"] + 1)
+                answer = quiz_ids[question_i].data["quiz_ids"][answer_i].data["answer"]
+                choices.append([next, answer])
 
-            dict_item[q_id] = {"question": quiz_ids[i].data["question"],
-                               "choices": x}
-        min_id = min(min_id)
-        data_dict.data["quiz"] = {"start": "q_%s" % min_id,
-                                  "questions": dict_item}
+            questions[q_id] = {"question": quiz_ids[question_i].data["question"],
+                               "choices": choices}
+
+        first_question_id = min(first_question_id)
+        data_dict.data["quiz"] = {"start": "q_%s" % first_question_id,
+                                  "questions": questions}
         del data_dict.data["quiz_ids"]
         del data_dict.data["id"]
         return data_dict
