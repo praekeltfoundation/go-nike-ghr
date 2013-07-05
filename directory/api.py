@@ -24,7 +24,7 @@ class CategoryResource(ModelResource):
     def alter_list_data_to_serialize(self, request, data_dict):
         """
         Modifying the data to provide the quiz and answers and responses.
-        Structure is {{{}}}
+        Structure is {dir: {cat: {sub_cat{c: "a", c2: "b", "c3: "c"}}}}
         This function handles /api/weeklyquiz/
         """
         if isinstance(data_dict, dict):
@@ -41,14 +41,14 @@ class CategoryResource(ModelResource):
                     category_name = category_obj[category_i].data["name"]
                     sub_category_obj = category_obj[category_i].data["category"]
 
-                    sub_category_dict = {}
+                    sub_category_dict = {}  # Dict for holding sub categories
                     for sub_category_i in range(len(sub_category_obj)):
-                        sub_category_content = {}
-                        sub_category_obj_data = sub_category_obj[sub_category_i].data
-                        for key, value in sub_category_obj_data.iteritems():
+                        sub_cat_content = {}  # Dict for holding sub categories content
+                        sub_cat_obj_data = sub_category_obj[sub_category_i].data
+                        for key, value in sub_cat_obj_data.iteritems():
                             if key in ["content_1", "content_2", "content_3"]:
-                                sub_category_content[key] = value
-                        sub_category_dict[sub_category_obj_data["name"]] = sub_category_content
+                                sub_cat_content[key] = value
+                        sub_category_dict[sub_cat_obj_data["name"]] = sub_cat_content
 
                     directory[category_name] = sub_category_dict
                 data_dict['directory'] = directory
