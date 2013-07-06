@@ -1,4 +1,5 @@
 from tastypie.resources import ModelResource
+from django.conf.urls import url
 from tastypie import fields
 from monitor_and_learn.models import (MonitorAndLearningQuizId,
                                       MonitorAndLearningQuizQuestion,
@@ -23,6 +24,10 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         include_resource_uri = False
         queryset = MonitorAndLearningQuizId.objects.all()
 
+    def get_object_list(self, request):
+        query = super(MonitorAndLearningQuizIDResource, self).get_object_list(request)
+        return query
+
     def alter_list_data_to_serialize(self, request, data_dict):
         """
         Modifying the data to provide only the quiz id and nothing else.
@@ -31,11 +36,35 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
-            quizzes = []  # List to hold the quiz IDs
-            for quiz_i in range(len(data_dict['objects'])):
-                quizzes.append(data_dict['objects'][quiz_i].data['id'])
 
-            data_dict['quizzes'] = quizzes  # Adding the quiz ids to quizzes
+            quizzes_dict = {}  # List to hold the quiz IDs
+            for quiz_i in range(len(data_dict['objects'])):
+                quizzes = data_dict['objects'][quiz_i]
+                questions = data_dict['objects'][quiz_i].data['quiz_ids']
+                questions_dict = {}
+
+                last_question_id = max([questions[i].data["id"] for i in range(len(questions))])
+                first_question_id = min([questions[i].data["id"] for i in range(len(questions))])
+
+                for questions_i in range(len(questions)):
+                    q_id = "q_%s" % questions[questions_i].data["id"]  # question id
+                    choices = []  # A list do hold the answers and "next" variable
+
+                    answers = questions[questions_i].data["quiz_ids"]
+                    for answer_i in range(len(answers)):
+                        if last_question_id == questions[questions_i].data["id"]:
+                            next = "main_menu"
+                        else:
+                            next = "q_%s" % (questions[questions_i].data["id"] + 1)
+
+                        choices.append([next, answers[answer_i].data["answer"]])
+                    questions_dict[q_id] = {"question": questions[questions_i].data["question"],
+                                            "choices": choices}
+
+                mandl_id = "mandl_quiz_%s" % quizzes.data['id']
+                quizzes_dict[mandl_id] = {"questions": questions_dict,
+                                          "start": "q_%s" % first_question_id}
+            data_dict['quizzes'] = quizzes_dict  # Adding the quiz ids to quizzes
             del (data_dict['objects'])
         return data_dict
 
@@ -78,6 +107,20 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         del data_dict.data["quiz_ids"]
         del data_dict.data["id"]
         return data_dict
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<detail_uri_name>%s)/" % (self._meta.resource_name, "all"), self.wrap_view("get_quiz_ids"), name="api_quiz_ids"),
+        ]
+
+    def get_quiz_ids(self, request, **kwargs):
+        quizzes = super(MonitorAndLearningQuizIDResource, self).get_object_list(request)
+
+        quiz_id = []
+        for quiz in range(len(quizzes)):
+            quiz_id.append(quizzes[quiz].pk)
+
+        return self.create_response(request, {"quizzes": quiz_id})
 
 
 class MonitorAndLearningQuizQuestionResource(ModelResource):
