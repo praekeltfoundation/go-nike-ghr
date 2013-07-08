@@ -84,8 +84,8 @@ class WeeklyQuizIDResource(ModelResource):
 
                     questions[q_id] = {"question": wq_data[question_i].data["question"],
                                        "choices": choices}
-                first_question_id = min(first_question_id)
-                data_dict['quiz'] = {"start": "q_%s" % first_question_id,
+                first_question_id_item = min(first_question_id)
+                data_dict['quiz'] = {"start": "q_%s" % first_question_id_item,
                                      "quiz_details": {"questions": questions,
                                                       "answers": answers}}
                 del (data_dict['objects'])
