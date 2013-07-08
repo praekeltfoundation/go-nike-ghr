@@ -229,7 +229,7 @@ describe("When using the USSD line", function() {
             async: true
         });
 
-        it.only("completed core registation details should ask M&L questions", function (done) {
+        it("completed core registation details should ask M&L questions", function (done) {
             var user = {
                 current_state: 'reg_thanks',
                 answers: {
