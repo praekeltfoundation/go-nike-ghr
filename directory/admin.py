@@ -14,13 +14,14 @@ class SubCategoryFormset(BaseInlineFormSet):
 
             sub_cat_index = 0
             if ("name" not in form.cleaned_data and sub_cat_index >= 1):
-                raise forms.ValidationError("You need the Sub Category Name")
+                raise forms.ValidationError("You need to name the Sub Category")
 
             if ("name" in form.cleaned_data):
                 if not (form.cleaned_data["content_1"] or
                         form.cleaned_data["content_2"] or
                         form.cleaned_data["content_2"]):
-                    raise forms.ValidationError("You need atleast 1 Content")
+                    raise forms.ValidationError("You need to enter at least one "
+                                                "screen of content to display")
 
             sub_cat_index = sub_cat_index + 1
 
