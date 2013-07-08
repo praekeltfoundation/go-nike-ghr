@@ -26,6 +26,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
 
     def get_object_list(self, request):
         query = super(MonitorAndLearningQuizIDResource, self).get_object_list(request)
+        query = query.filter(active=True)
         return query
 
     def alter_list_data_to_serialize(self, request, data_dict):
@@ -115,7 +116,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
 
     def get_quiz_ids(self, request, **kwargs):
         quizzes = super(MonitorAndLearningQuizIDResource, self).get_object_list(request)
-
+        quizzes = self.get_object_list(request)
         quiz_id = []
         for quiz in range(len(quizzes)):
             quiz_id.append(quizzes[quiz].pk)
