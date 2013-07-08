@@ -11,7 +11,7 @@
     "pk": 2, 
     "model": "monitor_and_learn.monitorandlearningquizid", 
     "fields": {
-        "active": true, 
+        "active": false, 
         "completed": true
     }
 },

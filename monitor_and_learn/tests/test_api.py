@@ -15,7 +15,7 @@ class TestMLAPI(TestCase):
         self.assertEqual(response.request["PATH_INFO"], "/api/mandl/all/")
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content)["quizzes"], [1, 2, 3])
+        self.assertEqual(json.loads(response.content)["quizzes"], [1, 3])
 
     def test_all_data(self):
         url = reverse('api_dispatch_list',
@@ -25,25 +25,11 @@ class TestMLAPI(TestCase):
         json_item = json.loads(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertIn("quizzes", json_item)
-        
-        # for k1, v1 in json_item.iteritems():
-        #     self.assertEqual("quizzes", k1)
-        #     print k1
-        #     for k2, v2 in v1.iteritems():
-        #       print k2
-        #       self.assertIn(k2, ["mandl_quiz_1", "mandl_quiz_2", "mandl_quiz_3"])
-        #       if isinstance(v2, dict):
-        #         for k3, v3 in v2.iteritems():
-        #           print k3
-        #           if isinstance(v3, dict):
-        #             for k4, v4 in v3.iteritems():
-        #               print k4
-        #               print v4
 
         quizzes = []
         [quizzes.append(k) for k in json_item["quizzes"].iterkeys()]
         self.assertEqual(sorted(quizzes),
-                         sorted(["mandl_quiz_1", "mandl_quiz_2", "mandl_quiz_3"]))
+                         sorted(["mandl_quiz_1", "mandl_quiz_3"]))
 
         # Asserting Start
         self.assertEqual("q_1", json_item["quizzes"]["mandl_quiz_1"]["start"])
@@ -53,11 +39,6 @@ class TestMLAPI(TestCase):
         [quizzes.append(k) for k in json_item["quizzes"]["mandl_quiz_1"]["questions"].iterkeys()]
         self.assertEqual(sorted(quizzes),
                          sorted(["q_1", "q_2", "q_3", "q_4"]))
-
-        quizzes = []
-        [quizzes.append(k) for k in json_item["quizzes"]["mandl_quiz_2"]["questions"].iterkeys()]
-        self.assertEqual(sorted(quizzes),
-                         sorted(["q_5", "q_6", "q_7", "q_8"]))
 
         quizzes = []
         [quizzes.append(k) for k in json_item["quizzes"]["mandl_quiz_3"]["questions"].iterkeys()]
@@ -93,7 +74,7 @@ class TestMLAPI(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_get_questions(self):
+    def test_get_unique_quizzes(self):
         url = reverse('api_dispatch_detail',
                       kwargs={'resource_name': 'mandl',
                       'api_name': 'api', "pk": 1})
@@ -136,3 +117,10 @@ class TestMLAPI(TestCase):
         self.assertEqual(sorted(json_item["quiz"]["questions"]["q_4"]["choices"]),
                          sorted([["main_menu", "A1Da"], ["main_menu", "A1Db"],
                                 ["main_menu", "A1Dc"]]))
+
+    def test_inactive_unique_quizzes(self):
+        url = reverse('api_dispatch_detail',
+                        kwargs={'resource_name': 'mandl',
+                        'api_name': 'api', "pk": 2})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
