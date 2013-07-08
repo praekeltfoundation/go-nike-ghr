@@ -80,3 +80,14 @@ class TestWeeklyQuizApi(TestCase):
 
         self.assertDictEqual(json_item["quiz"]["quiz_details"]["answers"]["q_8_a_24"],
                              {"response": "R23c", "next": "main_menu"})
+
+class TestWeeklyQuizApiNotActive(TestCase):
+    fixtures = ['test/test_weekly_quiz_inactive.json']
+
+    def test_api_response(self):
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'weeklyquiz',
+                      'api_name': 'api'})
+        response = self.client.get(url)
+        json_item = json.loads(response.content)
+        self.assertEqual(json_item["quiz"], False)

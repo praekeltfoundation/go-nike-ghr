@@ -12,7 +12,7 @@
     "pk": 3, 
     "model": "weekly_quiz.weeklyquizid", 
     "fields": {
-        "active": true, 
+        "active": false, 
         "completed": true, 
         "name": "Quiz 2"
     }
