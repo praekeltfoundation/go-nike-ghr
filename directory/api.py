@@ -23,9 +23,9 @@ class CategoryResource(ModelResource):
 
     def alter_list_data_to_serialize(self, request, data_dict):
         """
-        Modifying the data to provide the quiz and answers and responses.
+        Modifying the data to provide the Categories and Sub Categories.
         Structure is {dir: {cat: {sub_cat{c: "a", c2: "b", "c3: "c"}}}}
-        This function handles /api/weeklyquiz/
+        This function handles /api/category/
         """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
