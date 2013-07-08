@@ -102,8 +102,8 @@ class MonitorAndLearningQuizIDResource(ModelResource):
             questions[q_id] = {"question": quiz_ids[question_i].data["question"],
                                "choices": choices}
 
-        first_question_id = min(first_question_id)
-        data_dict.data["quiz"] = {"start": "q_%s" % first_question_id,
+        first_question_id_item = min(first_question_id)
+        data_dict.data["quiz"] = {"start": "q_%s" % first_question_id_item,
                                   "questions": questions}
         del data_dict.data["quiz_ids"]
         del data_dict.data["id"]
