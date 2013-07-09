@@ -449,7 +449,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: null,
                 content: null,
-                next_state: "initial_state",
+                next_state: "main_menu",
                 response: "^[^]" +
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
@@ -462,7 +462,7 @@ describe("When using the USSD line", function() {
 
         it("selecting 1 from menu should show page one of article", function (done) {
             var user = {
-                current_state: 'initial_state'
+                current_state: 'main_menu'
             };
             var p = tester.check_state({
                 user: user,
