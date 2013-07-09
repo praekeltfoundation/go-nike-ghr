@@ -138,7 +138,7 @@ function GoNikeGHR() {
         if (typeof data != 'undefined') {
             error_msg = error_msg + '; data: ' + JSON.stringify(data);
         }
-        self.im.log(error_msg);
+        im.log(error_msg);
         if (!ignore_error) {
             throw new GoNikeGHRError(error_msg);
         }
@@ -411,6 +411,26 @@ function GoNikeGHR() {
         );
     });
 
+    self.add_creator('opinions_popular', function(state_name, im) {
+
+        var next_page = function(page_number) {
+            // We load the opinions in all in one go on_config_load
+            return im.config.opinions["opinion_"+(page_number+1)];
+        };
+
+        return new BookletState(
+            state_name, {
+                next: 'end_state',
+                pages: 5,
+                page_text: next_page,
+                buttons: {
+                    "1": -1, "2": +1, "0": "exit"
+                },
+                footer_text: "\n1 for prev, 2 for next, 0 to end."
+            }
+        );
+    });
+
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",
@@ -445,6 +465,14 @@ function GoNikeGHR() {
                 }
             }
             return self.error_state();
+        });
+        p_mandl.add_callback(function(){
+            var p_opinion = self.crm_get('opinion/');
+            p_opinion.add_callback(function(result){
+                im.config.opinions = result.opinions;
+                return true;
+            });
+            return p_opinion;
         });
         return p_mandl;
     };
