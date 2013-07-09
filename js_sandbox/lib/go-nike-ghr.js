@@ -99,7 +99,7 @@ function GoNikeGHR() {
     };
 
     self.crm_mandl_quizzes_get = function(im) {
-        var url = im.config.crm_api_root + "mandl/";
+        var url = im.config.crm_api_root + "mandl/all/";
         var p = im.api_request("http.get", {
             url: url,
             headers: self.headers
@@ -393,7 +393,7 @@ function GoNikeGHR() {
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
 
-        var p_mandl = self.crm_get(im, 'mandl/all/');
+        var p_mandl = self.crm_get(im, 'mandl/');
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
             im.config.quizzes = quizzes;
