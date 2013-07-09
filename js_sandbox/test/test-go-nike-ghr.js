@@ -362,6 +362,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
             'test/fixtures/mandl_all.json',
+            'test/fixtures/ndabaga.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -549,6 +550,103 @@ describe("When using the USSD line", function() {
                         articles: 2
                     },
                     current_state: 'articles'
+                },
+                content: "0",
+                next_state: 'end_state',
+                response: '^Thank you and bye bye!$',
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 3 from menu should show page one of Ndabaga Opinions", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "3",
+                next_state: "wwnd",
+                response: (
+                    "^Ndabaga ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it('show page two of Ndabaga Opinions', function(done) {
+            var p = tester.check_state({
+                user: {
+                    current_state: 'wwnd'
+                },
+                content: "2",
+                next_state: 'wwnd',
+                response: "^Ndabaga a porta justo. Maecenas sem felis, sollicitudin vitae " +
+                          "risus luctus, consectetur sollicitudin leo.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('show page three of Ndabaga Opinions', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        wwnd: 1
+                    },
+                    current_state: 'wwnd'
+                },
+                content: "2",
+                next_state: 'wwnd',
+                response: "^Ndabaga tincidunt lobortis erat eget malesuada. Cras cursus " +
+                          "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('show page four of Ndabaga Opinions', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        wwnd: 2
+                    },
+                    current_state: 'wwnd'
+                },
+                content: "2",
+                next_state: 'wwnd',
+                response: "^Ndabaga tincidunt, sapien elementum pharetra dapibus, " +
+                          "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$"
+            });
+            p.then(done, done);
+        });
+
+        it('should continue to page 1 after page 4 of Ndabaga Opinions', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        wwnd: 3
+                    },
+                    current_state: 'wwnd'
+                },
+                content: "2",
+                next_state: 'wwnd',
+                response: "^Ndabaga ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                          "1 for prev, 2 for next, 0 to end.$",
+                continue_session: true
+            });
+            p.then(done, done);
+        });
+
+        it('should continue to end after Ndabaga Opinions finish', function(done) {
+            var p = tester.check_state({
+                user: {
+                    pages: {
+                        wwnd: 2
+                    },
+                    current_state: 'wwnd'
                 },
                 content: "0",
                 next_state: 'end_state',
