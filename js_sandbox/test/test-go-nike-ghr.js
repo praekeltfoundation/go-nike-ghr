@@ -674,6 +674,26 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("selecting 3 from Opinions submenu should return to the main menu", function (done) {
+            var user = {
+                current_state: 'opinions'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "3",
+                next_state: "main_menu",
+                response: (
+                    "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Ndabaga do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
+                )
+            });
+            p.then(done, done);
+        });
+
     });
 });
 
