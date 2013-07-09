@@ -373,6 +373,21 @@ function GoNikeGHR() {
         );
     });
 
+    self.add_state(new ChoiceState(
+            "opinions",
+            function(choice) {
+                return choice.value;
+            },
+            "Please choose an option:",
+            [
+                new Choice("opinions_popular", "Popular opinions from SMS"),
+                new Choice("opinions_view", "Leave your opinion"),
+                new Choice("main_menu", "Back")
+            ]
+        )
+    );
+
+
     self.add_creator('wwnd', function(state_name, im) {
 
         var next_page = function(page_number) {
