@@ -30,6 +30,8 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
             'test/fixtures/mandl_all.json',
+            'test/fixtures/ndabaga.json',
+            'test/fixtures/opinions.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -145,8 +147,9 @@ describe("When using the USSD line", function() {
         var fixtures = [
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
-            'test/fixtures/mandl_quiz.json',
             'test/fixtures/mandl_all.json',
+            'test/fixtures/ndabaga.json',
+            'test/fixtures/opinions.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -259,6 +262,8 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
             'test/fixtures/mandl_all.json',
+            'test/fixtures/ndabaga.json',
+            'test/fixtures/opinions.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -363,6 +368,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/article.json',
             'test/fixtures/mandl_all.json',
             'test/fixtures/ndabaga.json',
+            'test/fixtures/opinions.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -690,6 +696,114 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
                 )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 from Opinions submenu should display 1st of 5 opinions", function (done) {
+            var user = {
+                current_state: 'opinions'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinions_popular",
+                response: (
+                    "^This is opinion one[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 viewing 1st Opinion should display 2nd of 5 opinions", function (done) {
+            var user = {
+                current_state: 'opinions_popular'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions_popular",
+                response: (
+                    "^This is opinion two[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 viewing 2nd Opinion should display 3rd of 5 opinions", function (done) {
+            var user = {
+                current_state: 'opinions_popular',
+                pages: {
+                    opinions_popular: 1
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions_popular",
+                response: (
+                    "^This is opinion three[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 viewing 3rd Opinion should display 4th of 5 opinions", function (done) {
+            var user = {
+                current_state: 'opinions_popular',
+                pages: {
+                    opinions_popular: 2
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions_popular",
+                response: (
+                    "^This is opinion four[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 viewing 4th Opinion should display 5th of 5 opinions", function (done) {
+            var user = {
+                current_state: 'opinions_popular',
+                pages: {
+                    opinions_popular: 3
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions_popular",
+                response: (
+                    "^This is opinion five[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 0 viewing 5th Opinion should display thank you and end", function (done) {
+            var user = {
+                current_state: 'opinions_popular',
+                pages: {
+                    opinions_popular: 4
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "0",
+                next_state: "end_state",
+                response: (
+                    "^Thank you and bye bye!$"
+                ),
+                continue_session: false
             });
             p.then(done, done);
         });
