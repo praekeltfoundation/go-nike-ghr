@@ -353,12 +353,9 @@ function GoNikeGHR() {
     self.add_creator('articles', function(state_name, im) {
 
         var next_page = function(page_number) {
-            var p = im.api_request('http.get', {
-                url: im.config.crm_api_root + "article/"
-            });
+            var p = self.crm_get("article/");
             p.add_callback(function(response) {
-                var payload = JSON.parse(response.body);
-                return payload.article[page_number];
+                return response.article[page_number];
             });
             return p;
         };
