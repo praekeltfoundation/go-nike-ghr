@@ -343,14 +343,14 @@ describe("When using the USSD line", function() {
 
         // first test should always start 'null, null' because we haven't
         // started interacting yet
-        it.skip("first screen should ask us a question set we've not seen", function (done) {
+        it("first screen should ask us a question set we've not seen", function (done) {
             var p = tester.check_state({
                 user: null,
                 content: null,
                 next_state: "initial_state",
-                response: "^Please choose your gender:[^]" +
-                    "1. Male[^]"+
-                    "2. Female$"
+                response: "^Is this fake question three\\?[^]" +
+                    "1. Yes[^]"+
+                    "2. No$"
             });
             p.then(done, done);
         });
@@ -360,7 +360,8 @@ describe("When using the USSD line", function() {
         // These are used to mock API reponses
         var fixtures = [
             'test/fixtures/mandl.json',
-            'test/fixtures/article.json'
+            'test/fixtures/article.json',
+            'test/fixtures/mandl_all.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -392,7 +393,7 @@ describe("When using the USSD line", function() {
                         name: "Rodney",
                         "extras-ghr_reg_complete": "true",
                         "extras-ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                        "extras-ghr_questions": '["1", "2", "3", "4"]',
+                        "extras-ghr_questions": '["1", "2", "3", "4", "5"]',
                         "extras-ghr_gender": "Male",
                         "extras-ghr_age": "25-35",
                         "extras-ghr_sector": "Test"

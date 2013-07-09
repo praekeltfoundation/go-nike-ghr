@@ -144,6 +144,26 @@ function GoNikeGHR() {
         }
     };
 
+    self.make_mandl_or_mainmenu = function(state_name, contact){
+        var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
+        var p2 = self.crm_mandl_quizzes_get(im);
+        p2.add_callback(function(result) {
+            // Strip out quizzes that we've done
+            var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
+            if (incomplete_mandl.length === 0){
+                // There's no M&L quizzes incomplete
+                return self.make_main_menu();
+            } else {
+                // Get's first incomplete quiz
+                var quiz_id = incomplete_mandl[0];
+                var quiz_name = "mandl_quiz_" + quiz_id;
+                var quiz = im.config.quizzes[quiz_name];
+                return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
+            }
+        });
+        return p2;
+    };
+
     self.validate_sector = function(im, sector) {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
@@ -227,19 +247,7 @@ function GoNikeGHR() {
                 } else {
                     // Registration complete so check for questions
                     // Check all question sets have been answered
-                    // TODO: Make actual question completion status lookup
-                    if (result.contact["extras-ghr_questions"] == '["1", "2", "3", "4"]') {
-                        // All done so show menu
-                        return self.make_main_menu();
-                    } else {
-                        // User still has unanswered M&L questions
-                        // TODO
-                        return new EndState(
-                            "end_state",
-                            "Will ask questions - Thank you and bye bye!",
-                            "initial_state"
-                        );
-                    }
+                    return self.make_mandl_or_mainmenu(state_name, result.contact);
                 }
             } else {
                 // Something went wrong saving the extras
@@ -337,23 +345,7 @@ function GoNikeGHR() {
                 return self.error_state();
             }
 
-            var completed_mandl = self.array_parse_ints(JSON.parse(result.contact["extras-ghr_questions"]));
-            var p2 = self.crm_mandl_quizzes_get(im);
-            p2.add_callback(function(result) {
-                // Strip out quizzes that we've done
-                var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
-                if (incomplete_mandl.length === 0){
-                    // There's no M&L quizzes incomplete
-                    return self.make_main_menu();
-                } else {
-                    // Get's first incomplete quiz
-                    var quiz_id = incomplete_mandl[0];
-                    var quiz_name = "mandl_quiz_" + quiz_id;
-                    var quiz = im.config.quizzes[quiz_name];
-                    return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
-                }
-            });
-            return p2;
+            return self.make_mandl_or_mainmenu(state_name, result.contact);
         });
         return p;
     });
@@ -396,6 +388,7 @@ function GoNikeGHR() {
         var p_mandl = self.crm_get(im, 'mandl/');
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
+            // Make the M&L quizzes available to other states too
             im.config.quizzes = quizzes;
             for (var quiz_name in quizzes){
                 var quiz = quizzes[quiz_name];
