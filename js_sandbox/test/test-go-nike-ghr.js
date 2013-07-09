@@ -656,6 +656,24 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("selecting 2 from menu should show Opinions submenu", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions",
+                response: (
+                    "^Please choose an option:[^]" +
+                    "1. Popular opinions from SMS[^]" +
+                    "2. Leave your opinion[^]" +
+                    "3. Back$"
+                )
+            });
+            p.then(done, done);
+        });
+
     });
 });
 
