@@ -85,7 +85,7 @@ function GoNikeGHR() {
             }, question.question, choices);
     };
 
-    self.crm_get = function(im, path) {
+    self.crm_get = function(path) {
         var url = im.config.crm_api_root + path;
         var p = im.api_request("http.get", {
             url: url,
@@ -376,6 +376,29 @@ function GoNikeGHR() {
         );
     });
 
+    self.add_creator('wwnd', function(state_name, im) {
+
+        var next_page = function(page_number) {
+            var p = self.crm_get("ndabaga/");
+            p.add_callback(function(response) {
+                return response.ndabaga[page_number];
+            });
+            return p;
+        };
+
+        return new BookletState(
+            state_name, {
+                next: 'end_state',
+                pages: 4,
+                page_text: next_page,
+                buttons: {
+                    "1": -1, "2": +1, "0": "exit"
+                },
+                footer_text: "\n1 for prev, 2 for next, 0 to end."
+            }
+        );
+    });
+
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",
@@ -385,7 +408,7 @@ function GoNikeGHR() {
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
 
-        var p_mandl = self.crm_get(im, 'mandl/');
+        var p_mandl = self.crm_get('mandl/');
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
             // Make the M&L quizzes available to other states too
