@@ -32,6 +32,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl_all.json',
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
+            'test/fixtures/opinions_view.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -150,6 +151,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl_all.json',
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
+            'test/fixtures/opinions_view.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -264,6 +266,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl_all.json',
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
+            'test/fixtures/opinions_view.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -369,6 +372,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl_all.json',
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
+            'test/fixtures/opinions_view.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
