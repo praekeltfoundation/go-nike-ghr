@@ -12,7 +12,6 @@ class TestMLAPI(TestCase):
                       'api_name': 'api',
                       "detail_uri_name": "all"})
         response = self.client.get(url)
-        self.assertEqual(response.request["PATH_INFO"], "/api/mandl/all/")
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)["quizzes"], [1, 3])
@@ -80,7 +79,6 @@ class TestMLAPI(TestCase):
                       'api_name': 'api', "pk": 1})
         response = self.client.get(url)
         json_item = json.loads(response.content)
-        self.assertEqual(response.request["PATH_INFO"], "/api/mandl/1/")
         self.assertIn("quiz", json_item)
 
         # Asserying Keys are in data
