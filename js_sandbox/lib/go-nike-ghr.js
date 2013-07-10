@@ -78,6 +78,38 @@ function GoNikeGHR() {
         };
     };
 
+    self.make_initial_question_state = function(state_name, prefix, question) {
+        var choices = question.choices.map(function(choice) {
+            var name = "";
+            if (choice[0] == "main_menu"){
+                name = "main_menu";
+            } else {
+                name = prefix + "_" + choice[0];
+            }
+            var value = choice[1];
+            return new Choice(name, value);
+        });
+
+        return new ChoiceState(state_name, function(choice) {
+            return choice.value;
+        }, question.question, choices);
+    };
+
+    self.make_answer_state = function(prefix, answer) {
+        return function(state_name, im) {
+            return new ChoiceState(
+                state_name,
+                function(choice) {
+                    return prefix + "_" + choice.value;
+                },
+                answer.response,
+                [
+                    new Choice(answer["next"], "Next")
+                ]
+            );
+        };
+    },
+
     self.make_initial_mandl_question_state = function(state_name, prefix, question) {
             var choices = question.choices.map(function(choice) {
                 var name = prefix + "_" + choice[0];
@@ -496,6 +528,52 @@ function GoNikeGHR() {
             return self.make_initial_view_state(state_name, payload[0], payload[1]);
         });
         return p_opinion_view;
+    });
+
+    self.add_creator('quiz_start', function(state_name, im) {
+        // Get the user
+        var p_weeklyquiz = self.crm_get('weeklyquiz/');
+        p_weeklyquiz.add_callback(function(result) {
+            // This callback checks extras when contact is found
+            var quiz = result.quiz;
+            if (!quiz) {
+                return self.error_state();
+            }
+            var quiz_name = "weekly_quiz";
+            var first_view_prefix = false;
+            var first_view = false;
+            // Create the quiz
+            for (var question_name in quiz.questions){
+
+                var question = quiz.questions[question_name];
+                var question_state_name = quiz_name + "_" + question_name;
+
+                // do not recreate states that already exist.
+                if(self.state_creators.hasOwnProperty(question_state_name)) {
+                    continue;
+                }
+
+                // construct a function using make_question_state()
+                // to prevent getting a wrongly scoped 'question'
+                self.add_creator(question_state_name,
+                    self.make_question_state(quiz_name, question));
+            }
+
+            // create the answer states
+            for (var answer_name in quiz.quiz_details.answers){
+                var answer = quiz.quiz_details.answers[answer_name];
+                var answer_state_name = quiz_name + "_" + answer_name;
+
+                if(self.state_creators.hasOwnProperty(answer_state_name)) {
+                    continue;
+                }
+
+                self.add_creator(answer_state_name,
+                    self.make_answer_state(quiz_name, answer));
+            }
+            return self.make_initial_question_state(state_name, quiz_name, quiz.quiz_details.questions[quiz['start']]);
+        });
+        return p_weeklyquiz;
     });
 
     self.add_state(new EndState(
