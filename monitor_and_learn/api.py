@@ -36,7 +36,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
         """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                del(data_dict['meta'])
+                del data_dict['meta']
 
             quizzes_dict = {}  # List to hold the quiz IDs
             for quiz_i in range(len(data_dict['objects'])):
@@ -66,7 +66,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
                 quizzes_dict[mandl_id] = {"questions": questions_dict,
                                           "start": "q_%s" % first_question_id}
             data_dict['quizzes'] = quizzes_dict  # Adding the quiz ids to quizzes
-            del (data_dict['objects'])
+            del data_dict['objects']
         return data_dict
 
     def alter_detail_data_to_serialize(self, request, data_dict):
