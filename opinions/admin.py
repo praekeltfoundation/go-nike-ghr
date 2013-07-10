@@ -1,6 +1,27 @@
 from django.contrib import admin
-from opinions.models import Opinion
+from opinions.models import (Opinion,
+                             OpinionPollId,
+                             OpinionPollOpinion,
+                             OpinionPollChoices)
 from django import forms
+from django.forms.models import BaseInlineFormSet
+
+class OpinionPollIdForms(forms.ModelForm):
+    pass
+
+
+class OpinionPollOpinionForms(forms.ModelForm):
+    pass
+
+
+class OpinionPollChoicesFormset(BaseInlineFormSet):
+    pass
+
+
+class OpinionPollChoicesInline(admin.StackedInline):
+    model = OpinionPollChoices
+    formset = OpinionPollChoicesFormset
+    extra = 1
 
 
 class OpinionAdmin(admin.ModelAdmin):
@@ -13,5 +34,17 @@ class OpinionAdmin(admin.ModelAdmin):
             formfield.widget = forms.Textarea(attrs=formfield.widget.attrs)
         return formfield
 
-# Registering the Article with the admin
+
+class OpinionPollIdAdmin(admin.ModelAdmin):
+    list_display = ["name", "active"]
+
+
+class OpinionPollOpinionAdmin(admin.ModelAdmin):
+    inlines = [OpinionPollChoicesInline]
+    form = OpinionPollOpinionForms
+    list_display = ["opinion"]
+
+# Registering the Opinion with the admin
 admin.site.register(Opinion, OpinionAdmin)
+admin.site.register(OpinionPollId, OpinionPollIdAdmin)
+admin.site.register(OpinionPollOpinion, OpinionPollOpinionAdmin)
