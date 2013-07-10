@@ -6,6 +6,7 @@ from opinions.models import (Opinion,
 from django import forms
 from django.forms.models import BaseInlineFormSet
 
+
 class OpinionPollIdForms(forms.ModelForm):
     pass
 
@@ -15,7 +16,27 @@ class OpinionPollOpinionForms(forms.ModelForm):
 
 
 class OpinionPollChoicesFormset(BaseInlineFormSet):
-    pass
+    def clean(self):
+        super(OpinionPollChoicesFormset, self).clean()
+        char_limit_opinions = len(self.instance.opinion)
+
+        number_of_choices = 0
+        for form in self.forms:
+            if not hasattr(form, 'cleaned_data'):
+                continue
+
+            if ("choices" not in form.cleaned_data and number_of_choices < 1):
+                print number_of_choices
+                raise forms.ValidationError("You need atleast one opinion")
+            else:
+                if ("choices" in form.cleaned_data):
+                    char_limit_opinions = char_limit_opinions + len(form.cleaned_data['choices'])
+                    if char_limit_opinions > 160:
+                        raise forms.ValidationError("You have gone beyond the"
+                                                    " character limit"
+                                                    " please shorten opinions"
+                                                    " and/or choices")
+            number_of_choices = + 1
 
 
 class OpinionPollChoicesInline(admin.StackedInline):
