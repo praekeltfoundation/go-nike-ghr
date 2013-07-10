@@ -98,7 +98,8 @@ class MonitorAndLearningQuizAnswerFormset(BaseInlineFormSet):
         # an DoesNotExist exception, despite the validation been active
             query = (MonitorAndLearningQuizQuestion.objects.all().
                      filter(quiz_id=self.instance.quiz_id))
-            if len(query) >= 3:
+
+            if query.count() >= 3:
                 query = (MonitorAndLearningQuizId.objects.
                          get(pk=self.instance.quiz_id.id))
                 query.completed = True
