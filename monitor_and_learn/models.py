@@ -9,7 +9,7 @@ class MonitorAndLearningQuizId(models.Model):
     name = models.CharField(max_length=50, blank=False,
                             verbose_name="Name of Quiz")
     active = models.BooleanField()
-    completed = models.BooleanField()
+    completed = models.BooleanField(editable=False)
 
     def __unicode__(self):
         # Provides a User friendly name
