@@ -17,16 +17,18 @@ class OpinionPollOpinionForms(forms.ModelForm):
 
 class OpinionPollChoicesFormset(BaseInlineFormSet):
     def clean(self):
+        """
+        Overiding clean function to check combined char length
+        """
         super(OpinionPollChoicesFormset, self).clean()
-        char_limit_opinions = len(self.instance.opinion)
+        char_limit_opinions = len(self.instance.opinion)  # opinion char length
 
-        number_of_choices = 0
+        number_of_choices = 0  # Variable to ensure atleast one choice is entered
         for form in self.forms:
             if not hasattr(form, 'cleaned_data'):
                 continue
 
             if ("choices" not in form.cleaned_data and number_of_choices < 1):
-                print number_of_choices
                 raise forms.ValidationError("You need atleast one opinion")
             else:
                 if ("choices" in form.cleaned_data):
