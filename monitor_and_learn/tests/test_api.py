@@ -66,7 +66,7 @@ class TestMLAPI(TestCase):
                                 ["main_menu", "A1Dc"]]))
         # print json_item
 
-    def test_invalid_addres(self):
+    def test_invalid_address(self):
         url = reverse('api_dispatch_detail',
                       kwargs={'resource_name': 'mandl',
                       'api_name': 'api', "pk": 77})
