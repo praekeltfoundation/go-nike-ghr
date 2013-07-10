@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from articles.api import UserInteractionResource
+from user_interactions.api import UserInteractionResource
 from tastypie.api import Api
 
 
