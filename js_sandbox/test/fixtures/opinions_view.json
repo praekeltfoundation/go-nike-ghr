@@ -23,17 +23,49 @@
             "opinion": "I think something really stupid",
             "choices": [
                 [
-                    "main_menu",
+                    "opinions",
                     "Yes, I agree"
                 ],
                 [
-                    "main_menu",
+                    "opinions",
+                    "No way"
+                ]
+            ]
+          }
+        }
+      },
+      "opinion_view_2": {
+        "start": "o_3",
+        "views": {
+          "o_3": {
+            "opinion": "I think something really ugly",
+            "choices": [
+                [
+                    "o_2",
+                    "Yes, I agree"
+                ],
+                [
+                    "o_2",
+                    "No way"
+                ]
+            ]
+          },
+          "o_4": {
+            "opinion": "I think something really pretty",
+            "choices": [
+                [
+                    "opinions",
+                    "Yes, I agree"
+                ],
+                [
+                    "opinions",
                     "No way"
                 ]
             ]
           }
         }
       }
+
     }
   }
 }
