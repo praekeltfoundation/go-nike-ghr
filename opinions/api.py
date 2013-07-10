@@ -59,15 +59,14 @@ class OpinionPollIdResource(ModelResource):
 
             else:
                 opinions = {}
-                # print data_dict['objects'][1].data["opinionpollid"][0].data
-                print data_dict['objects'][1].data["opinionpollid"]
-                # print [k for k in data_dict['objects'][1].data.iterkeys()]
                 for op_id_i in range(len(data_dict['objects'])):
                     opinion_view_dict = {}
                     op_view_data = data_dict['objects'][op_id_i]
                     opinion_view_id = "opinion_view_%s" % op_view_data.data["id"]
-
                     op_opinions = op_view_data.data["opinionpollid"]
+
+                    start_opinion_id = min([op_opinions[i].data["id"] for i in range(len(op_opinions))])
+                    exit_opinion_id = max([op_opinions[i].data["id"] for i in range(len(op_opinions))])
 
                     opinion_opinions_dict = {}
                     for op_op_i in range(len(op_opinions)):
@@ -75,17 +74,25 @@ class OpinionPollIdResource(ModelResource):
                         opinion_actual = op_opinions[op_op_i].data["opinion"]
 
                         choices = []
+                        op_choices = op_opinions[op_op_i].data["opinionpollopinion"]
+                        for op_ch_i in range(len(op_choices)):
+                            if op_opinions[op_op_i].data["id"] == exit_opinion_id:
+                                next = "main_menu"
+                            else:
+                                next = "o_%s" % (op_opinions[op_op_i].data["id"]+1)
 
+                            choice_actual = op_choices[op_ch_i].data["choices"]
+                            choices.append([next, choice_actual])
 
                         opinion_opinions_dict[o_id] = {"opinions": opinion_actual,
-                                                        "choices": choices}
+                                                       "choices": choices}
 
-                    opinion_view_dict["start"] = ""
+                    opinion_view_dict["start"] = 'o_%s' % start_opinion_id
                     opinion_view_dict["views"] = opinion_opinions_dict
                     opinions[opinion_view_id] = opinion_view_dict
 
                 data_dict['opinions'] = opinions
-                del (data_dict['objects'])
+                del data_dict['objects']
         return data_dict
 
 
