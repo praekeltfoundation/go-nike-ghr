@@ -117,11 +117,11 @@ class MonitorAndLearningQuizIDResource(ModelResource):
     def get_quiz_ids(self, request, **kwargs):
         quizzes = super(MonitorAndLearningQuizIDResource, self).get_object_list(request)
         quizzes = self.get_object_list(request)
-        quiz_id = []
+        quiz_ids = []
         for quiz in range(len(quizzes)):
-            quiz_id.append(quizzes[quiz].pk)
+            quiz_ids.append(quizzes[quiz].pk)
 
-        return self.create_response(request, {"quizzes": quiz_id})
+        return self.create_response(request, {"quizzes": quiz_ids})
 
 
 class MonitorAndLearningQuizQuestionResource(ModelResource):
