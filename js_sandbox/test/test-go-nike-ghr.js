@@ -33,6 +33,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
+            'test/fixtures/weekly_quiz.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -152,6 +153,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
+            'test/fixtures/weekly_quiz.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -267,6 +269,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
+            'test/fixtures/weekly_quiz.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -373,6 +376,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/ndabaga.json',
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
+            'test/fixtures/weekly_quiz.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -859,6 +863,40 @@ describe("When using the USSD line", function() {
                     "1. Popular opinions from SMS[^]" +
                     "2. Leave your opinion[^]" +
                     "3. Back$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 4 from menu should show first weekly quiz question", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "4",
+                next_state: "quiz_start",
+                response: (
+                    "^Am I fake question 1\\?[^]" +
+                    "1. Yes![^]" +
+                    "2. No![^]" +
+                    "3. Maybe!$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 from first weekly quiz question should give feedback", function (done) {
+            var user = {
+                current_state: 'quiz_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "weekly_quiz_q_1_a_1",
+                response: (
+                    "^Yes -  Genius[^]" +
+                    "1. Next$"
                 )
             });
             p.then(done, done);
