@@ -44,7 +44,7 @@
     "model": "opinions.opinionpollopinion", 
     "fields": {
         "opinion": "O2B", 
-        "opinionpollid": 1
+        "opinionpollid": 2
     }
 },
 {
