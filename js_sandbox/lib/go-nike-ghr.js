@@ -16,6 +16,15 @@ var BookletState = vumigo.states.BookletState;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
 var StateCreator = vumigo.state_machine.StateCreator;
 
+function GoNikeGHRError(msg) {
+    var self = this;
+    self.msg = msg;
+
+    self.toString = function() {
+        return "<GoNikeGHRError: " + self.msg + ">";
+    };
+}
+
 function GoNikeGHR() {
     var self = this;
     // The first state to enter
@@ -50,8 +59,129 @@ function GoNikeGHR() {
         return p;
     };
 
-    self.validate_sector = function(im, sector){
+    self.make_question_state = function(prefix, question) {
+         return function(state_name, im) {
+            var choices = question.choices.map(function(choice) {
+                var name = prefix + "_" + choice[0];
+                var value = choice[1];
+                return new Choice(name, value);
+            });
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, question.question, choices);
+        };
+    };
+
+    self.make_initial_mandl_question_state = function(state_name, prefix, question) {
+            var choices = question.choices.map(function(choice) {
+                var name = prefix + "_" + choice[0];
+                var value = choice[1];
+                return new Choice(name, value);
+            });
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, question.question, choices);
+    };
+
+    self.crm_get = function(im, path) {
+        var url = im.config.crm_api_root + path;
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', false);
+            return json;
+        });
+        return p;
+    };
+
+    self.crm_mandl_quizzes_get = function(im) {
+        return self.crm_get(im, 'mandl/all/');
+    };
+
+    self.crm_mandl_quiz_get = function(im, quiz_id) {
+        return self.crm_get(im, 'mandl/' + quiz_id);
+    };
+
+    self.check_reply = function(reply, url, method, data, ignore_error) {
+        var error;
+        if (reply.success && reply.code == 200) {
+            var json = JSON.parse(reply.body);
+            return json;
+        }
+        else {
+            error = reply.reason;
+        }
+        var error_msg = ("API " + method + " to " + url + " failed: " +
+                         error);
+        if (typeof data != 'undefined') {
+            error_msg = error_msg + '; data: ' + JSON.stringify(data);
+        }
+        self.im.log(error_msg);
+        if (!ignore_error) {
+            throw new GoNikeGHRError(error_msg);
+        }
+    };
+
+    self.make_mandl_or_mainmenu = function(state_name, contact){
+        var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
+        var p2 = self.crm_mandl_quizzes_get(im);
+        p2.add_callback(function(result) {
+            // Strip out quizzes that we've done
+            var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
+            if (incomplete_mandl.length === 0){
+                // There's no M&L quizzes incomplete
+                return self.make_main_menu();
+            } else {
+                // Get's first incomplete quiz
+                var quiz_id = incomplete_mandl[0];
+                var quiz_name = "mandl_quiz_" + quiz_id;
+                var quiz = im.config.quizzes[quiz_name];
+                return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
+            }
+        });
+        return p2;
+    };
+
+    self.validate_sector = function(im, sector) {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
+    };
+
+    self.make_main_menu = function(){
+        return new ChoiceState(
+            "main_menu",
+            function(choice) {
+                return choice.value;
+            },
+            "",
+            [
+                new Choice("articles", "Articles"),
+                new Choice("opinions", "Opinions"),
+                new Choice("wwnd", "What would Ndabaga do?"),
+                new Choice("quiz_start", "Weekly quiz"),
+                new Choice("directory_start", "Directory")
+            ]
+        );
+    };
+
+    self.array_parse_ints = function(target){
+        for (var i = 0; i < target.length; i++) {
+            target[i] = parseInt(target[i],10);
+        }
+        return target;
+    };
+
+    self.array_strip_duplicates = function(in_array, from_array){
+        for (var i = 0; i < in_array.length; i++) {
+            if (from_array.indexOf(in_array[i]) != -1) {
+                in_array.splice(i, 1);
+                i--;
+            }
+        }
+        return in_array;
     };
 
     self.add_creator('initial_state', function(state_name, im) {
@@ -99,32 +229,7 @@ function GoNikeGHR() {
                 } else {
                     // Registration complete so check for questions
                     // Check all question sets have been answered
-                    // TODO: Make actual question completion status lookup
-                    if (result.contact["extras-ghr_questions"] == '["1", "2", "3", "4"]') {
-                        // All done so show menu
-                        return new ChoiceState(
-                            state_name,
-                            function(choice) {
-                                return choice.value;
-                            },
-                            "",
-                            [
-                                new Choice("articles", "Articles"),
-                                new Choice("opinions", "Opinions"),
-                                new Choice("wwnd", "What would Ndabaga do?"),
-                                new Choice("quiz_start", "Weekly quiz"),
-                                new Choice("directory_start", "Directory")
-                            ]
-                        );
-                    } else {
-                        // User still has unanswered M&L questions
-                        // TODO
-                        return new EndState(
-                            "end_state",
-                            "Will ask questions - Thank you and bye bye!",
-                            "initial_state"
-                        );
-                    }
+                    return self.make_mandl_or_mainmenu(state_name, result.contact);
                 }
             } else {
                 // Something went wrong saving the extras
@@ -187,7 +292,7 @@ function GoNikeGHR() {
                 if (result.success){
                     return new ChoiceState(
                         state_name,
-                        'end_state',
+                        'mandl_builder',
                         "Thank you for registering",
                         [
                             new Choice("continue", "Continue")
@@ -208,6 +313,23 @@ function GoNikeGHR() {
         }
     });
 
+    self.add_creator('mandl_builder', function(state_name, im) {
+        // Get the user
+        var p = self.get_contact(im);
+
+        p.add_callback(function(result) {
+            // This callback checks extras when contact is found
+            if (!result.success) {
+                return self.error_state();
+            }
+            if (result.contact["extras-ghr_questions"] === undefined) {
+                return self.error_state();
+            }
+
+            return self.make_mandl_or_mainmenu(state_name, result.contact);
+        });
+        return p;
+    });
 
     self.add_creator('articles', function(state_name, im) {
 
@@ -235,16 +357,46 @@ function GoNikeGHR() {
         );
     });
 
-
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",
         "first_state"
     ));
+
+    self.on_config_read = function(event){
+        // Run calls out to the APIs to load dynamic states
+
+        var p_mandl = self.crm_get(im, 'mandl/');
+        p_mandl.add_callback(function(result) {
+            var quizzes = result.quizzes;
+            // Make the M&L quizzes available to other states too
+            im.config.quizzes = quizzes;
+            for (var quiz_name in quizzes){
+                var quiz = quizzes[quiz_name];
+                // Create the quiz
+                for (var question_name in quiz.questions){
+
+                    var question = quiz.questions[question_name];
+                    var question_state_name = quiz_name + "_" + question_name;
+
+                    // do not recreate states that already exist.
+                    if(self.state_creators.hasOwnProperty(question_state_name)) {
+                        continue;
+                    }
+
+                    // construct a function using make_question_state()
+                    // to prevent getting a wrongly scoped 'question'
+                    self.add_creator(question_state_name,
+                        self.make_question_state(quiz_name, question));
+                }
+            }
+            return self.error_state();
+        });
+        return p_mandl;
+    };
 }
 
 // launch app
 var states = new GoNikeGHR();
 var im = new InteractionMachine(api, states);
 im.attach();
-

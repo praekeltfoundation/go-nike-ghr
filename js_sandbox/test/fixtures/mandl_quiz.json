@@ -1,0 +1,37 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/mandl/1",
+  "method": "GET",
+  "body": {
+    "quiz": {
+       "start": "q_1",
+       "questions": {
+        "q_1": {
+              "question": "Is this fake question one?",
+              "choices": [
+                  [
+                      "q_2",
+                      "Yes"
+                  ],
+                  [
+                      "q_2",
+                      "No"
+                  ]
+              ]
+          },
+          "q_2": {
+              "question": "Is this fake question two?",
+              "choices": [
+                  [
+                      "main_menu",
+                      "Of course"
+                  ],
+                  [
+                      "main_menu",
+                      "No way!"
+                  ]
+              ]
+          }          
+      }
+    }
+  }
+}
