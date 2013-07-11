@@ -10,4 +10,4 @@ before_script:
   - psql -c 'create database ghr;' -U postgres
 script:
     - 'python manage.py test'
-    - 'cd js_sandbox && npm test'.
+    - 'cd js_sandbox && npm test'
