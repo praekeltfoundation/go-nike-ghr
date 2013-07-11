@@ -7,6 +7,8 @@ def export_as_csv_action(description="Export selected objects as CSV file",
     This function returns an export csv action
     'fields' and 'exclude' work like in django ModelForm
     'header' is whether or not to output the column names as the first row
+
+    from http://djangosnippets.org/snippets/2369/
     """
     def export_as_csv(modeladmin, request, queryset):
         """
