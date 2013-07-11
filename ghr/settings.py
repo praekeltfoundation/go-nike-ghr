@@ -26,10 +26,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ghr',
-        'USER': 'praekelt',
-        'PASSWORD': 'praekelt',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -149,6 +149,7 @@ INSTALLED_APPS = (
 
     # sample apps to explain usage
     'articles',
+    'monitor_and_learn',
     #'celery_app',
 )
 
