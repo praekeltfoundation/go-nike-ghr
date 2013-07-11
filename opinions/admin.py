@@ -27,7 +27,7 @@ class OpinionPollChoicesFormset(BaseInlineFormSet):
         Overiding clean function to check combined char length
         """
         super(OpinionPollChoicesFormset, self).clean()
-        char_limit_opinions = len(self.instance.opinion)  # opinion char length
+        char_lim_op = len(self.instance.opinion)  # opinion char length
 
         number_of_choices = 0  # Variable to ensure atleast one choice is entered
         for form in self.forms:
@@ -38,8 +38,8 @@ class OpinionPollChoicesFormset(BaseInlineFormSet):
                 raise forms.ValidationError("You need atleast one opinion")
             else:
                 if ("choices" in form.cleaned_data):
-                    char_limit_opinions = char_limit_opinions + len(form.cleaned_data['choices'])
-                    if char_limit_opinions > 160:
+                    char_lim_op = char_lim_op + len(form.cleaned_data['choices'])
+                    if char_lim_op > 160:
                         raise forms.ValidationError("You have gone beyond the"
                                                     " character limit"
                                                     " please shorten opinions"

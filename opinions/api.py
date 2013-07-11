@@ -79,8 +79,10 @@ class OpinionPollIdResource(ModelResource):
                     opinion_view_id = "opinion_view_%s" % op_view_data.data["id"]
                     op_opinions = op_view_data.data["opinionpollid"]
 
-                    start_opinion_id = min([op_opinions[i].data["id"] for i in range(len(op_opinions))])
-                    exit_opinion_id = max([op_opinions[i].data["id"] for i in range(len(op_opinions))])
+                    start_opinion_id = min([op_opinions[i].data["id"]
+                                           for i in range(len(op_opinions))])
+                    exit_opinion_id = max([op_opinions[i].data["id"]
+                                          for i in range(len(op_opinions))])
 
                     opinion_opinions_dict = {}
                     for op_op_i in range(len(op_opinions)):
