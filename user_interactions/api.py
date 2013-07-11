@@ -15,7 +15,8 @@ class UserInteractionResource(ModelResource):
 
     def post_list(self, request, **kwargs):
         """
-        Gets posted data so as to save it in the UserInteraction Table
+        Gets posted data so as to save it in the UserInteraction Table, but checks if
+        the characters are not too long (if this is not done TastyPie returns a huge annoying error)
         """
         user_data = request.POST.dict()
         if (len(user_data['msisdn']) > 20):
@@ -40,6 +41,9 @@ class UserInteractionResource(ModelResource):
 
         @csrf_exempt
         def wrapper(request, *args, **kwargs):
+            """
+            This function specifically catches the error too long exception
+            """
             try:
                 callback = getattr(self, view)
                 response = callback(request, *args, **kwargs)
