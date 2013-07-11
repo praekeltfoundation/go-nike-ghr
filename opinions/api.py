@@ -8,6 +8,9 @@ import copy
 
 
 class OpinionResource(ModelResource):
+    """
+    This resource handles /api/opinions/sms/
+    """
     class Meta:
         # Setting the api meta attributes
         resource_name = "opinions/sms"
@@ -18,9 +21,11 @@ class OpinionResource(ModelResource):
         queryset = Opinion.objects.all()
 
     def alter_list_data_to_serialize(self, request, data_dict):
-        # Modifying the data to provide only what is needed in the right
-        # form by removing the extra meta variables and editing the
-        # dictionary
+        """
+        Modifying the data to provide only what is needed in the right
+        form by removing the extra meta variables and editing the
+        dictionary
+        """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
@@ -31,6 +36,9 @@ class OpinionResource(ModelResource):
 
 
 class OpinionPollIdResource(ModelResource):
+    """
+    This resource handles /api/opinions/view/
+    """
     path = 'opinions.api.OpinionPollOpinionResource'
     opinionpollid = fields.ToManyField(path,
                                        'opinionpollid',
@@ -45,11 +53,17 @@ class OpinionPollIdResource(ModelResource):
         queryset = OpinionPollId.objects.all()
 
     def get_object_list(self, request):
+        """
+        tastypie function that returns filtered data
+        """
         query = super(OpinionPollIdResource, self).get_object_list(request)
         query = (query.filter(active=True))
         return query
 
     def alter_list_data_to_serialize(self, request, data_dict):
+        """
+        overiding tastypie function that returns data in required format
+        """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
@@ -97,6 +111,11 @@ class OpinionPollIdResource(ModelResource):
 
 
 class OpinionPollOpinionResource(ModelResource):
+    """
+    Class that returns the different opinions to opinion id.
+    Has many OpinionPollChoicesResource but belongs to
+    OpinionPollIdResource
+    """
     path = 'opinions.api.OpinionPollChoicesResource'
     opinionpollopinion = fields.ToManyField(path,
                                             'opinionpollopinion',
@@ -108,6 +127,9 @@ class OpinionPollOpinionResource(ModelResource):
 
 
 class OpinionPollChoicesResource(ModelResource):
+    """
+    Class that returns the choices, belongs to OpinionPollOpinionResource
+    """
     class Meta:
         queryset = OpinionPollChoices.objects.all()
         include_resource_uri = False
