@@ -11,7 +11,7 @@ class UserInteractionResource(ModelResource):
 
     def post_list(self, request, **kwargs):
         """
-        Gets posted data and stores it the the UserInteraction Table
+        Gets posted data so as to save it in the UserInteraction Table
         """
         user_data = request.POST.dict()
         userinteraction = UserInteraction(msisdn=user_data['msisdn'],
