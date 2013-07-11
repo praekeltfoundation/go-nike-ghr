@@ -12,10 +12,16 @@ class OpinionPollIdForms(forms.ModelForm):
 
 
 class OpinionPollOpinionForms(forms.ModelForm):
+    """
+    The form that is used by OpinionPollIdAdmin
+    """
     pass
 
 
 class OpinionPollChoicesFormset(BaseInlineFormSet):
+    """
+    This class handles data that has been cleaned by teh formset
+    """
     def clean(self):
         """
         Overiding clean function to check combined char length
@@ -49,7 +55,9 @@ class OpinionPollChoicesInline(admin.StackedInline):
 
 class OpinionAdmin(admin.ModelAdmin):
     def formfield_for_dbfield(self, db_field, **kwargs):
-        # Overiding the opinion CharField widget to Text Area
+        """
+        Overiding the opinion CharField widget to Text Area
+        """
         formfield = super(OpinionAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
         if db_field.name in ['opinion_1', 'opinion_2', 'opinion_3',
