@@ -3,7 +3,6 @@ python:
   - 2.6
   - 2.7
 install:
-    - pip install coveralls --use-mirrors
     - pip install -r requirements.pip --use-mirrors
     - 'cd js_sandbox && npm install .'
 before_script:
