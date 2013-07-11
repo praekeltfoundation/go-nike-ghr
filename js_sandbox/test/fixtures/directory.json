@@ -1,0 +1,31 @@
+{
+    "url": "http://ghr.preview.westerncapelabs.com/api/directory/",
+    "method": "GET",
+    "body": {
+        "directory": {
+            "category one": {
+                "sub category one": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category two": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                }
+            },
+            "category two": {
+                "sub category one": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category two": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            }
+        }
+    }
+}
