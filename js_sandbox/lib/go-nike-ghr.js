@@ -322,7 +322,6 @@ function GoNikeGHR() {
             if (!result.success) {
                 return self.error_state();
             }
-
             if (result.contact["extras-ghr_questions"] === undefined) {
                 return self.error_state();
             }
