@@ -231,6 +231,58 @@ function GoNikeGHR() {
         return p2;
     };
 
+    self.make_navigation_state = function(page, prefix, question, items, first, last) {
+         return function(state_name, im) {
+            var choices = items.map(function(item) {
+                var name = prefix + "_" + page + "_" + item;
+                var value = item;
+                return new Choice(name, value);
+            });
+            if (!first) choices.push(new Choice(prefix + "_" + (page-1), "Back"));
+            if (!last) choices.push(new Choice(prefix + "_" + (page+1), "Next"));
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, question, choices);
+        };
+    };
+
+    self.make_navigation_states = function(prefix, question, items, max_items) {
+        // Generates the navigation paging states
+        var total_pages = Math.ceil(items.length / max_items);
+        var pages = [];
+        for (var i = 0; i < total_pages; i++){
+            start = i*max_items;
+            pages.push(items.slice(start, start+max_items));
+        }
+
+        for (var p = 0; p < pages.length; p++){
+            var first = (p===0) ? true : false;
+            var last = (p==(pages.length-1)) ? true : false;
+            // Give the state a name
+            navigation_page_name = prefix + "_" + p;
+            // Make sure it doesn't exist
+            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
+                continue;
+            }
+            self.add_creator(navigation_page_name,
+                                    self.make_navigation_state(p, prefix, question, pages[p], first, last));
+        }
+    };
+
+    self.make_initial_navigation_state = function(state_name, prefix, question, items, last) {
+        var choices = items.map(function(item) {
+                var name = prefix + "_1_" + item;
+                var value = item;
+                return new Choice(name, value);
+        });
+        if (!last) choices.push(new Choice(prefix + "_1", "Next"));
+
+        return new ChoiceState(state_name, function(choice) {
+            return choice.value;
+        }, question, choices);
+    };
+
     self.validate_sector = function(im, sector) {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
@@ -576,6 +628,22 @@ function GoNikeGHR() {
         return p_weeklyquiz;
     });
 
+    self.add_creator('directory_start', function(state_name, im) {
+        // Get the directory
+        var p_dir = self.crm_get('directory/');
+        p_dir.add_callback(function(result) {
+            var directory = result.directory;
+            var max_items = 3;
+            var prefix = "directory";
+            var question = "Please select an option:";
+            var items = Object.keys(directory);
+            self.make_navigation_states(prefix, question, items, max_items);
+            var last = (items.length <= max_items) ? true : false;
+            return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last);
+        });
+        return p_dir;
+    });
+
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",
@@ -616,6 +684,18 @@ function GoNikeGHR() {
             p_opinion.add_callback(function(result){
                 im.config.opinions = result.opinions;
                 return true;
+            });
+            p_opinion.add_callback(function(){
+                var p_directory = self.crm_get('directory/');
+                p_directory.add_callback(function(result) {
+                    var directory = result.directory;
+                    var max_items = 3;
+                    var prefix = "directory";
+                    var question = "Please select an option:";
+                    var items = Object.keys(directory);
+                    self.make_navigation_states(prefix, question, items, max_items);
+                });
+                return p_directory;
             });
             return p_opinion;
         });
