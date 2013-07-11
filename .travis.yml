@@ -4,9 +4,8 @@ python:
   - 2.7
 install:
     - pip install -r requirements.pip --use-mirrors
-    - 'cd js_sandbox && npm install . && cd ..'
 before_script:
   - psql -c 'create database ghr;' -U postgres
 script:
     - 'python manage.py test'
-    - 'cd js_sandbox && npm test && cd ..'
+    - 'cd js_sandbox && npm install . && npm test && cd ..'
