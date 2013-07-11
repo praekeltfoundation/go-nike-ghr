@@ -34,6 +34,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
             'test/fixtures/weekly_quiz.json',
+            'test/fixtures/directory.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -154,6 +155,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
             'test/fixtures/weekly_quiz.json',
+            'test/fixtures/directory.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -270,6 +272,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
             'test/fixtures/weekly_quiz.json',
+            'test/fixtures/directory.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -377,6 +380,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/opinions.json',
             'test/fixtures/opinions_view.json',
             'test/fixtures/weekly_quiz.json',
+            'test/fixtures/directory.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -901,6 +905,83 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
+
+        it("selecting 5 from menu should show the directory category listing", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "5",
+                next_state: "directory_start",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category one[^]" +
+                    "2. category two[^]" +
+                    "3. category three[^]" +
+                    "4. Next$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 4 from directory should show the second page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "4",
+                next_state: "directory_1",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category four[^]" +
+                    "2. category five[^]" +
+                    "3. category six[^]" +
+                    "4. Back[^]" +
+                    "5. Next$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 4 from directory page 2 should show the 1st page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_1'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "4",
+                next_state: "directory_0",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category one[^]" +
+                    "2. category two[^]" +
+                    "3. category three[^]" +
+                    "4. Next$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 5 from directory page 2 should show the last page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_1'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "5",
+                next_state: "directory_2",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category seven[^]" +
+                    "2. category eight[^]" +
+                    "3. Back$"
+                )
+            });
+            p.then(done, done);
+        });
+
 
     });
 });
