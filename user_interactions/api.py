@@ -10,23 +10,27 @@ class UserInteractionResource(ModelResource):
     class Meta:
         resource_name = "userinteraction"
         allowed_methods = ['post']
-        list_allowed_methods = ['post']  # Tells API that POST is allowed for base URL
+        list_allowed_methods = ['post']  # POST is allowed for base URL
         include_resource_uri = False
 
     def post_list(self, request, **kwargs):
         """
-        Gets posted data so as to save it in the UserInteraction Table, but checks if
-        the characters are not too long (if this is not done TastyPie returns a huge annoying error)
+        Gets posted data so as to save it in the UserInteraction Table, but
+        checks if the characters are not too long (if this is not done TastyPie
+        returns a huge annoying error)
         """
         user_data = request.POST.dict()
         if (len(user_data['msisdn']) > 20):
-            raise TastypieError("msisdn Chars are too long, len = %s" % len(user_data['msisdn']))
+            raise TastypieError("msisdn Chars are too long, len = %s"
+                                % len(user_data['msisdn']))
 
         if len(user_data['action']) > 200:
-            raise TastypieError("action Chars are too long, len = %s" % len(user_data['action']))
+            raise TastypieError("action Chars are too long, len = %s"
+                                % len(user_data['action']))
 
         if len(user_data['transport']) > 5:
-            raise TastypieError("transport Chars are too long, len = %s" % len(user_data['transport']))
+            raise TastypieError("transport Chars are too long, len = %s"
+                                % len(user_data['transport']))
 
         userinteraction = UserInteraction(msisdn=user_data['msisdn'],
                                           action=user_data['action'],

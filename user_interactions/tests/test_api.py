@@ -10,9 +10,11 @@ class TestUserInteraction(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'userinteraction',
                       'api_name': 'api'})
-        response = self.client.post(url, format="json", data={"msisdn": "msisdn",
-                                                "action": "action",
-                                                "transport": "sms"})
+        response = self.client.post(url,
+                                    format="json",
+                                    data={"msisdn": "msisdn",
+                                    "action": "action",
+                                    "transport": "sms"})
 
         query = UserInteraction.objects.all()
         self.assertEqual(response.status_code, 204)
@@ -24,9 +26,11 @@ class TestUserInteraction(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'userinteraction',
                       'api_name': 'api'})
-        response = self.client.post(url, format="json", data={"msisdn": "msisdn",
-                                                "action": "action",
-                                                "transport": "This is way too long"})
+        response = self.client.post(url,
+                                    format="json",
+                                    data={"msisdn": "msisdn",
+                                    "action": "action",
+                                    "transport": "This is way too long"})
         self.assertEqual(response.status_code, 400)
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
@@ -37,9 +41,11 @@ class TestUserInteraction(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'userinteraction',
                       'api_name': 'api'})
-        response = self.client.post(url, format="json", data={"msisdn": "msisdnmsisdnmsisdnmsisdn",
-                                                "action": "action",
-                                                "transport": "sms"})
+        response = self.client.post(url,
+                                    format="json",
+                                    data={"msisdn": "msisdnmsisdnmsisdnmsisdn",
+                                    "action": "action",
+                                    "transport": "sms"})
         self.assertEqual(response.status_code, 400)
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
