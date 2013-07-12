@@ -25,6 +25,7 @@ var test_fixtures_full = [
     'test/fixtures/article.json',
     'test/fixtures/mandl_all.json',
     'test/fixtures/ndabaga.json',
+    'test/fixtures/opinions.json',
 ];
 
 describe("When using the USSD line", function() {
