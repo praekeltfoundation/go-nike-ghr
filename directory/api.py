@@ -31,20 +31,18 @@ class CategoryResource(ModelResource):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
 
-            if data_dict["objects"] == []:
-                data_dict['quiz'] = False
-                del (data_dict['objects'])
-            else:
+            if data_dict["objects"] != []:
                 directory = {}  # Variable to hold directory structure
                 category_obj = data_dict["objects"]
-                for category_i in range(len(category_obj)):
-                    category_name = category_obj[category_i].data["name"]
-                    sub_category_obj = category_obj[category_i].data["category"]
+
+                for category_bundle in category_obj:
+                    category_name = category_bundle.data["name"]
+                    sub_category_obj = category_bundle.data["category"]
 
                     sub_category_dict = {}  # Dict for holding sub categories
-                    for sub_category_i in range(len(sub_category_obj)):
+                    for sub_category_bundle in sub_category_obj:
                         sub_cat_content = {}  # Dict for holding sub categories content
-                        sub_cat_obj_data = sub_category_obj[sub_category_i].data
+                        sub_cat_obj_data = sub_category_bundle.data
                         for key, value in sub_cat_obj_data.iteritems():
                             if key in ["content_1", "content_2", "content_3"]:
                                 sub_cat_content[key] = value
@@ -52,7 +50,8 @@ class CategoryResource(ModelResource):
 
                     directory[category_name] = sub_category_dict
                 data_dict['directory'] = directory
-                del (data_dict['objects'])
+
+            del (data_dict['objects'])
         return data_dict
 
 
