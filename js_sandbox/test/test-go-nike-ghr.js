@@ -986,6 +986,41 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("selecting 1 from directory page 1 should show the first sub directory listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_0",
+                response: (
+                    "^Please select an organization:[^]" +
+                    "1. sub category one[^]" +
+                    "2. sub category two[^]" +
+                    "3. Back to categories$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from directory page 1 should show the second sub directory listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "directory_category_two_0",
+                response: (
+                    "^Please select an organization:[^]" +
+                    "1. sub category three[^]" +
+                    "2. sub category four[^]" +
+                    "3. Back to categories$"
+                )
+            });
+            p.then(done, done);
+        });
 
     });
 });
