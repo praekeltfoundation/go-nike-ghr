@@ -57,8 +57,7 @@ class OpinionPollIdResource(ModelResource):
         tastypie function that returns filtered data
         """
         query = super(OpinionPollIdResource, self).get_object_list(request)
-        query = (query.filter(active=True))
-        return query
+        return query.filter(active=True)
 
     def alter_list_data_to_serialize(self, request, data_dict):
         """
