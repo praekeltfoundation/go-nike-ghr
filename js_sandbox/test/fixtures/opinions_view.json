@@ -1,0 +1,71 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/opinion/view/",
+  "method": "GET",
+  "body": {
+    "opinions": {
+      "opinion_view_1": {
+        "start": "o_1",
+        "views": {
+          "o_1": {
+            "opinion": "I think something really clever",
+            "choices": [
+                [
+                    "o_2",
+                    "Yes, I agree"
+                ],
+                [
+                    "o_2",
+                    "No way"
+                ]
+            ]
+          },
+          "o_2": {
+            "opinion": "I think something really stupid",
+            "choices": [
+                [
+                    "opinions",
+                    "Yes, I agree"
+                ],
+                [
+                    "opinions",
+                    "No way"
+                ]
+            ]
+          }
+        }
+      },
+      "opinion_view_2": {
+        "start": "o_3",
+        "views": {
+          "o_3": {
+            "opinion": "I think something really ugly",
+            "choices": [
+                [
+                    "o_2",
+                    "Yes, I agree"
+                ],
+                [
+                    "o_2",
+                    "No way"
+                ]
+            ]
+          },
+          "o_4": {
+            "opinion": "I think something really pretty",
+            "choices": [
+                [
+                    "opinions",
+                    "Yes, I agree"
+                ],
+                [
+                    "opinions",
+                    "No way"
+                ]
+            ]
+          }
+        }
+      }
+
+    }
+  }
+}
