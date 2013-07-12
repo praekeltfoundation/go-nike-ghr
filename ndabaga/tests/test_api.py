@@ -38,9 +38,7 @@ class TestAPINdabagaNoNewNdabaga(TestCase):
 
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
-
-        self.assertEqual(json.loads(response.content)['ndabaga'],
-                         "Sorry Ndabaga has nothing to say this week, dial back soon!")
+        self.assertDictEqual(json.loads(response.content), {})
         self.assertEqual(response.status_code, 200)
 
 
@@ -60,6 +58,5 @@ class TestAPINdabagaNotPublished(TestCase):
                       'api_name': 'api'})
         response = self.client.get(url)
         self.assertEqual("application/json", response["Content-Type"])
-        self.assertEqual(json.loads(response.content)['ndabaga'],
-                         "Sorry Ndabaga has nothing to say this week, dial back soon!")
+        self.assertDictEqual(json.loads(response.content), {})
         self.assertEqual(response.status_code, 200)
