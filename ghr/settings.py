@@ -149,8 +149,9 @@ INSTALLED_APPS = (
 
     # sample apps to explain usage
     'articles',
-    'opinions',
+    'ndabaga',
     'monitor_and_learn',
+    'opinions',
     #'celery_app',
 )
 
