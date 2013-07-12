@@ -30,7 +30,7 @@ class WeeklyQuizIDResource(ModelResource):
         ordered by the primary key descending.
         """
         query = super(WeeklyQuizIDResource, self).get_object_list(request)
-        return (query.filter(active=True).order_by('-pk'))
+        return query.filter(active=True).order_by('-pk')
 
     def alter_list_data_to_serialize(self, request, data_dict):
         """
