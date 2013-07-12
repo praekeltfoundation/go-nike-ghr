@@ -44,5 +44,5 @@ class ArticleResource(ModelResource):
                 a.append(data_dict['objects'][0].data["page_3"])
                 a.append(data_dict['objects'][0].data["page_4"])
                 data_dict['article'] = a
-                del (data_dict['objects'])
+                del data_dict['objects']
         return data_dict

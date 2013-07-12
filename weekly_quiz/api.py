@@ -40,7 +40,7 @@ class WeeklyQuizIDResource(ModelResource):
         """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                del(data_dict['meta'])
+                del data_dict['meta']
 
             if data_dict["objects"] != []:
                 wq_data = data_dict["objects"][0].data["wq_quiz_id"]
@@ -83,7 +83,7 @@ class WeeklyQuizIDResource(ModelResource):
                 data_dict['quiz'] = {"start": "q_%s" % first_question_id,
                                      "quiz_details": {"questions": questions,
                                                       "answers": answers}}
-            del (data_dict['objects'])
+            del data_dict['objects']
         return data_dict
 
 
