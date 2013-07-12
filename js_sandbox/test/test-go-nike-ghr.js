@@ -19,6 +19,13 @@ describe("test_api", function() {
 });
 
 var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
+// for test fixtures where the data is all good
+var test_fixtures_full = [
+    'test/fixtures/mandl.json',
+    'test/fixtures/article.json',
+    'test/fixtures/mandl_all.json',
+    'test/fixtures/ndabaga.json',
+];
 
 describe("When using the USSD line", function() {
 
@@ -26,11 +33,7 @@ describe("When using the USSD line", function() {
     describe("as an unregistered user", function() {
         // These are used to mock API reponses
         // EXAMPLE: Response from google maps API
-        var fixtures = [
-            'test/fixtures/mandl.json',
-            'test/fixtures/article.json',
-            'test/fixtures/mandl_all.json'
-        ];
+        var fixtures = test_fixtures_full;
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
@@ -161,12 +164,7 @@ describe("When using the USSD line", function() {
 
     describe("as a partially registered user - not completed any M&L questions", function() {
         // These are used to mock API reponses
-        var fixtures = [
-            'test/fixtures/mandl.json',
-            'test/fixtures/article.json',
-            'test/fixtures/mandl_quiz.json',
-            'test/fixtures/mandl_all.json'
-        ];
+        var fixtures = test_fixtures_full;
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
@@ -235,11 +233,7 @@ describe("When using the USSD line", function() {
 
     describe("as an registered user - not completed all M&L questions", function() {
         // These are used to mock API reponses
-        var fixtures = [
-            'test/fixtures/mandl.json',
-            'test/fixtures/article.json',
-            'test/fixtures/mandl_all.json'
-        ];
+        var fixtures = test_fixtures_full;
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
@@ -300,12 +294,7 @@ describe("When using the USSD line", function() {
 
     describe("as an registered user - completed all M&L questions", function() {
         // These are used to mock API reponses
-        var fixtures = [
-            'test/fixtures/mandl.json',
-            'test/fixtures/article.json',
-            'test/fixtures/mandl_all.json',
-            'test/fixtures/ndabaga.json',
-        ];
+        var fixtures = test_fixtures_full;
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
