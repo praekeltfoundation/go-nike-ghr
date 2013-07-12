@@ -44,11 +44,7 @@ class WeeklyQuizIDResource(ModelResource):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
 
-            if data_dict["objects"] == []:
-                data_dict['quiz'] = False
-                del (data_dict['objects'])
-
-            else:
+            if data_dict["objects"] != []:
                 wq_data = data_dict["objects"][0].data["wq_quiz_id"]
                 questions = {}  # Dict item to hold final question structure
                 answers = {}  # Dict item to hold final answer structure
@@ -89,7 +85,7 @@ class WeeklyQuizIDResource(ModelResource):
                 data_dict['quiz'] = {"start": "q_%s" % first_question_id,
                                      "quiz_details": {"questions": questions,
                                                       "answers": answers}}
-                del (data_dict['objects'])
+            del (data_dict['objects'])
         return data_dict
 
 
