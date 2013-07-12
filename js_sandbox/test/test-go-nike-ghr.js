@@ -919,7 +919,8 @@ describe("When using the USSD line", function() {
                     "1. category one[^]" +
                     "2. category two[^]" +
                     "3. category three[^]" +
-                    "4. Next$"
+                    "4. Next[^]" +
+                    "5. Main menu$"
                 )
             });
             p.then(done, done);
@@ -939,7 +940,8 @@ describe("When using the USSD line", function() {
                     "2. category five[^]" +
                     "3. category six[^]" +
                     "4. Back[^]" +
-                    "5. Next$"
+                    "5. Next[^]" +
+                    "6. Main menu$"
                 )
             });
             p.then(done, done);
@@ -958,7 +960,8 @@ describe("When using the USSD line", function() {
                     "1. category one[^]" +
                     "2. category two[^]" +
                     "3. category three[^]" +
-                    "4. Next$"
+                    "4. Next[^]" +
+                    "5. Main menu$"
                 )
             });
             p.then(done, done);
@@ -976,7 +979,8 @@ describe("When using the USSD line", function() {
                     "^Please select an option:[^]" +
                     "1. category seven[^]" +
                     "2. category eight[^]" +
-                    "3. Back$"
+                    "3. Back[^]" +
+                    "4. Main menu$"
                 )
             });
             p.then(done, done);
