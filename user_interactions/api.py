@@ -54,8 +54,6 @@ class UserInteractionResource(ModelResource):
 
                 if request.is_ajax():
                     patch_cache_control(response, no_cache=True)
-                    pass
-
                 return response
 
             except TastypieError, e:
@@ -63,4 +61,11 @@ class UserInteractionResource(ModelResource):
                 return self.error_response(request,
                                            data,
                                            response_class=http.HttpBadRequest)
+
+            except Exception, e:
+                if hasattr(e, 'response'):
+                    return e.response
+
+                return self._handle_500(request, e)
+
         return wrapper
