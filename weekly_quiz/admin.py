@@ -34,11 +34,6 @@ class WeeklyQuizIdAdminForm(forms.ModelForm):
     """
     This form checks if there are 3 questions in quiz before it can be activated
     """
-    def __init__(self, *args, **kwargs):
-        # Overiding the clean function of the WeeklyQuizAdmin Form
-        self.request = kwargs.pop('request', None)
-        super(WeeklyQuizIdAdminForm, self).__init__(*args, **kwargs)
-
     class Meta:
         model = WeeklyQuizId
 
