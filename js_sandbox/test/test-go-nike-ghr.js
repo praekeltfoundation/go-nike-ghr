@@ -1022,6 +1022,76 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("selecting 1 from directory sub category one should show the first page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_0'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^first part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from page 1 of content in directory sub category one should show the second page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^second part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from page 2 of content in directory sub category one should show the third page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one',
+                pages: {
+                    directory_category_one_sub_category_one: 0
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^second part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 0 from page 2 of content in directory sub category one show end_state", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one',
+                pages: {
+                    directory_category_one_sub_category_one: 0
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "0",
+                next_state: "end_state",
+                response: (
+                    "^Thank you and bye bye!$"
+                ),
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
     });
 });
 
