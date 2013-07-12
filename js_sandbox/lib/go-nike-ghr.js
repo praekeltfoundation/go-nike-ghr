@@ -120,7 +120,7 @@ function GoNikeGHR() {
         if (typeof data != 'undefined') {
             error_msg = error_msg + '; data: ' + JSON.stringify(data);
         }
-        self.im.log(error_msg);
+        im.log(error_msg);
         if (!ignore_error) {
             throw new GoNikeGHRError(error_msg);
         }
