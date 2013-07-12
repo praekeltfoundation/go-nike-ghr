@@ -61,29 +61,29 @@ class WeeklyQuizIDResource(ModelResource):
                 last_question_id = max(question_ids)
 
                 # Looping through data and adding it to questions dict for final output
-                for question_i in range(len(wq_data)):
-                    q_id = "q_%s" % wq_data[question_i].data["id"]
+                for question_bundle in wq_data:
+                    q_id = "q_%s" % question_bundle.data["id"]
 
                     choices = []  # List to hold the final answer and the "next q_id"
 
                     # Looping through data and adding to choices list for final output
                     # Also adds the "next question"
                     # Loop also adds data to answers{}
-                    for answer_i in range(len(wq_data[question_i].data["wq_question_id"])):
-                        a_id = wq_data[question_i].data["wq_question_id"][answer_i].data["id"]
-                        answer = wq_data[question_i].data["wq_question_id"][answer_i].data["answer"]
+                    for answer_bundle in question_bundle.data["wq_question_id"]:
+                        a_id = answer_bundle.data["id"]
+                        answer = answer_bundle.data["answer"]
                         q_id_a_id = "%s_a_%s" % (q_id, a_id)
-                        response = wq_data[question_i].data["wq_question_id"][answer_i].data["response"]
+                        response = answer_bundle.data["response"]
                         choices.append([q_id_a_id, answer])
 
-                        if wq_data[question_i].data["id"] == last_question_id:
+                        if question_bundle.data["id"] == last_question_id:
                             next = "main_menu"
                         else:
-                            next = "q_%s" % (wq_data[question_i].data["id"] + 1)
+                            next = "q_%s" % (question_bundle.data["id"] + 1)
 
                         answers[q_id_a_id] = {"response": response, "next": next}
 
-                    questions[q_id] = {"question": wq_data[question_i].data["question"],
+                    questions[q_id] = {"question": question_bundle.data["question"],
                                        "choices": choices}
 
                 data_dict['quiz'] = {"start": "q_%s" % first_question_id,
