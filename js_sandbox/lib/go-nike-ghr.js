@@ -231,11 +231,11 @@ function GoNikeGHR() {
         return p2;
     };
 
-    self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text) {
+    self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
          return function(state_name, im) {
             var choices = items.map(function(item) {
-                var value = prefix + "_" + self.clean_state_name(item) + "_0";
-                // console.log("Name:" + name);
+                var value = prefix + "_" + self.clean_state_name(item);
+                if (to_sub_nav) value+="_0"
                 var name = item;
                 return new Choice(value, name);
             });
@@ -269,7 +269,7 @@ function GoNikeGHR() {
             }
 
             self.add_creator(navigation_page_name,
-                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text));
+                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, true));
         }
     };
 
@@ -285,6 +285,26 @@ function GoNikeGHR() {
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
         }, question, choices);
+    };
+
+    self.make_booklet_state = function(end_state, content_array) {
+        return function(state_name, im) {
+            var next_page = function(page_number) {
+                return content_array[page_number];
+            };
+
+            return new BookletState(
+                state_name, {
+                    next: end_state,
+                    pages: (content_array.length-1),
+                    page_text: next_page,
+                    buttons: {
+                        "1": -1, "2": +1, "0": "exit"
+                    },
+                    footer_text: "\n1 for prev, 2 for next, 0 to end."
+                }
+            );
+        };
     };
 
     self.make_navigation_and_content_states = function(prefix, question, items, max_items, parent, parent_text) {
@@ -306,7 +326,20 @@ function GoNikeGHR() {
                 continue;
             }
             self.add_creator(navigation_page_name,
-                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text));
+                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, false));
+        }
+        for (var cat_name in items){
+            var sub_cat = items[cat_name];
+            var content = Object.keys(sub_cat).map(function (key) {
+                return sub_cat[key];
+            });
+            var category_details_name = prefix + "_" + self.clean_state_name(cat_name);
+            // Make sure it doesn't exist
+            if(self.state_creators.hasOwnProperty(category_details_name)) {
+                continue;
+            }
+            self.add_creator(category_details_name,
+                                    self.make_booklet_state('end_state', content));
         }
     };
 
