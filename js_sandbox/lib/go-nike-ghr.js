@@ -99,29 +99,11 @@ function GoNikeGHR() {
     };
 
     self.crm_mandl_quizzes_get = function(im) {
-        var url = im.config.crm_api_root + "mandl/all/";
-        var p = im.api_request("http.get", {
-            url: url,
-            headers: self.headers
-        });
-        p.add_callback(function(result) {
-            var json = self.check_reply(result, url, 'GET', false);
-            return json;
-        });
-        return p;
+        return self.crm_get(im, 'mandl/all/');
     };
 
     self.crm_mandl_quiz_get = function(im, quiz_id) {
-        var url = im.config.crm_api_root + "mandl/" + quiz_id;
-        var p = im.api_request("http.get", {
-            url: url,
-            headers: self.headers
-        });
-        p.add_callback(function(result) {
-            var json = self.check_reply(result, url, 'GET', false);
-            return json;
-        });
-        return p;
+        return self.crm_get(im, 'mandl/' + quiz_id);
     };
 
     self.check_reply = function(reply, url, method, data, ignore_error) {
@@ -340,7 +322,6 @@ function GoNikeGHR() {
             if (!result.success) {
                 return self.error_state();
             }
-
             if (result.contact["extras-ghr_questions"] === undefined) {
                 return self.error_state();
             }

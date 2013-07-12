@@ -29,11 +29,30 @@ describe("When using the USSD line", function() {
         var fixtures = [
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
-            'test/fixtures/mandl_all.json',
+            'test/fixtures/mandl_all.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
             custom_setup: function (api) {
+
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
+                };
+
+                api.add_contact(dummy_contact);
+
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
@@ -146,7 +165,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
             'test/fixtures/mandl_quiz.json',
-            'test/fixtures/mandl_all.json',
+            'test/fixtures/mandl_all.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -161,75 +180,36 @@ describe("When using the USSD line", function() {
                     api.load_http_fixture(f);
                 });
 
-                api._dummy_contacts = {
-                    "f953710a2472447591bd59e906dc2c26": {
-                        key: "f953710a2472447591bd59e906dc2c26",
-                        surname: "Trotter",
-                        user_account: "test-0-user",
-                        bbm_pin: null,
-                        msisdn: "1234567",
-                        created_at: "2013-04-24 14:01:41.803693",
-                        gtalk_id: null,
-                        dob: null,
-                        groups: null,
-                        facebook_id: null,
-                        twitter_handle: null,
-                        email_address: null,
-                        name: "Rodney",
-                        "extras-ghr_reg_complete": "true",
-                        "extras-ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                        "extras-ghr_questions": '[]',
-                        "extras-ghr_gender": "Male",
-                        "extras-ghr_age": "25-35",
-                        "extras-ghr_sector": "Test"
-                    }
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
                 };
 
-                api._handle_contacts_get_or_create = function(cmd, reply) {
-                    var reply_contact = false;
-                    for (var contact_key in api._dummy_contacts){
-                        if (api._dummy_contacts[contact_key].msisdn == cmd.addr){
-                            reply_contact = api._dummy_contacts[contact_key];
-                        }
-                    }
-                    if (reply_contact){
-                        reply({
-                            success: true,
-                            created: false,
-                            contact: reply_contact
-                        });
-                    } else {
-                        api._dummy_contacts['contact-key'] = api._new_contact;
-                        api._dummy_contacts['contact-key'].msisdn = cmd.addr;
-                        reply({
-                            success: true,
-                            created: true,
-                            contact: api._new_contact
-                        });
-                    }
-                };
-
-                api._handle_contacts_update = function(cmd, reply) {
-                    api._dummy_contacts[cmd.key] = cmd.fields;
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
-
-                // TODO: This will break when contacts api gets changed to newer format
-                api._handle_contacts_update_extras = function(cmd, reply) {
-                    for (var k in cmd.fields) { api._dummy_contacts[cmd.key]['extras-'+k] = cmd.fields[k]; }
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
+                api.add_contact(dummy_contact);
+                api.update_contact_extras(dummy_contact, {
+                    "ghr_reg_complete": "true",
+                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                    "ghr_questions": '[]',
+                    "ghr_gender": "Male",
+                    "ghr_age": "25-35",
+                    "ghr_sector": "Test"
+                });
             },
             async: true
         });
 
-        it("completed core registation details should ask M&L questions", function (done) {
+        it("completed core registration details should ask M&L questions", function (done) {
             var user = {
                 current_state: 'reg_thanks',
                 answers: {
@@ -258,7 +238,7 @@ describe("When using the USSD line", function() {
         var fixtures = [
             'test/fixtures/mandl.json',
             'test/fixtures/article.json',
-            'test/fixtures/mandl_all.json',
+            'test/fixtures/mandl_all.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -273,70 +253,32 @@ describe("When using the USSD line", function() {
                     api.load_http_fixture(f);
                 });
 
-                api._dummy_contacts = {
-                    "f953710a2472447591bd59e906dc2c26": {
-                        key: "f953710a2472447591bd59e906dc2c26",
-                        surname: "Trotter",
-                        user_account: "test-0-user",
-                        bbm_pin: null,
-                        msisdn: "1234567",
-                        created_at: "2013-04-24 14:01:41.803693",
-                        gtalk_id: null,
-                        dob: null,
-                        groups: null,
-                        facebook_id: null,
-                        twitter_handle: null,
-                        email_address: null,
-                        name: "Rodney",
-                        "extras-ghr_reg_complete": "true",
-                        "extras-ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                        "extras-ghr_questions": '["1"]',
-                        "extras-ghr_gender": "Male",
-                        "extras-ghr_age": "25-35",
-                        "extras-ghr_sector": "Test"
-                    }
+
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
                 };
 
-                api._handle_contacts_get_or_create = function(cmd, reply) {
-                    var reply_contact = false;
-                    for (var contact_key in api._dummy_contacts){
-                        if (api._dummy_contacts[contact_key].msisdn == cmd.addr){
-                            reply_contact = api._dummy_contacts[contact_key];
-                        }
-                    }
-                    if (reply_contact){
-                        reply({
-                            success: true,
-                            created: false,
-                            contact: reply_contact
-                        });
-                    } else {
-                        api._dummy_contacts['contact-key'] = api._new_contact;
-                        api._dummy_contacts['contact-key'].msisdn = cmd.addr;
-                        reply({
-                            success: true,
-                            created: true,
-                            contact: api._new_contact
-                        });
-                    }
-                };
-
-                api._handle_contacts_update = function(cmd, reply) {
-                    api._dummy_contacts[cmd.key] = cmd.fields;
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
-
-                // TODO: This will break when contacts api gets changed to newer format
-                api._handle_contacts_update_extras = function(cmd, reply) {
-                    for (var k in cmd.fields) { api._dummy_contacts[cmd.key]['extras-'+k] = cmd.fields[k]; }
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
+                api.add_contact(dummy_contact);
+                api.update_contact_extras(dummy_contact, {
+                    "ghr_reg_complete": "true",
+                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                    "ghr_questions": '["1"]',
+                    "ghr_gender": "Male",
+                    "ghr_age": "25-35",
+                    "ghr_sector": "Test"
+                });
             },
             async: true
         });
@@ -377,70 +319,31 @@ describe("When using the USSD line", function() {
                     api.load_http_fixture(f);
                 });
 
-                api._dummy_contacts = {
-                    "f953710a2472447591bd59e906dc2c26": {
-                        key: "f953710a2472447591bd59e906dc2c26",
-                        surname: "Trotter",
-                        user_account: "test-0-user",
-                        bbm_pin: null,
-                        msisdn: "1234567",
-                        created_at: "2013-04-24 14:01:41.803693",
-                        gtalk_id: null,
-                        dob: null,
-                        groups: null,
-                        facebook_id: null,
-                        twitter_handle: null,
-                        email_address: null,
-                        name: "Rodney",
-                        "extras-ghr_reg_complete": "true",
-                        "extras-ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                        "extras-ghr_questions": '["1", "2", "3", "4", "5"]',
-                        "extras-ghr_gender": "Male",
-                        "extras-ghr_age": "25-35",
-                        "extras-ghr_sector": "Test"
-                    }
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
                 };
 
-                api._handle_contacts_get_or_create = function(cmd, reply) {
-                    var reply_contact = false;
-                    for (var contact_key in api._dummy_contacts){
-                        if (api._dummy_contacts[contact_key].msisdn == cmd.addr){
-                            reply_contact = api._dummy_contacts[contact_key];
-                        }
-                    }
-                    if (reply_contact){
-                        reply({
-                            success: true,
-                            created: false,
-                            contact: reply_contact
-                        });
-                    } else {
-                        api._dummy_contacts['contact-key'] = api._new_contact;
-                        api._dummy_contacts['contact-key'].msisdn = cmd.addr;
-                        reply({
-                            success: true,
-                            created: true,
-                            contact: api._new_contact
-                        });
-                    }
-                };
-
-                api._handle_contacts_update = function(cmd, reply) {
-                    api._dummy_contacts[cmd.key] = cmd.fields;
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
-
-                // TODO: This will break when contacts api gets changed to newer format
-                api._handle_contacts_update_extras = function(cmd, reply) {
-                    for (var k in cmd.fields) { api._dummy_contacts[cmd.key]['extras-'+k] = cmd.fields[k]; }
-                    reply({
-                        success: true,
-                        contact: api._dummy_contacts[cmd.key]
-                    });
-                };
+                api.add_contact(dummy_contact);
+                api.update_contact_extras(dummy_contact, {
+                    "ghr_reg_complete": "true",
+                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                    "ghr_questions": '["1", "2", "3", "4", "5"]',
+                    "ghr_gender": "Male",
+                    "ghr_age": "25-35",
+                    "ghr_sector": "Test"
+                });
             },
             async: true
         });
