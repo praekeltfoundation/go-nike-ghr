@@ -56,14 +56,15 @@ class WeeklyQuizIDResource(ModelResource):
                 last_question_id = []  # Variable to hold the max question id for menu endpoint
 
                 # Variable to hold the max question id for menu endpoint
-                last_question_id = max([wq_data[i].data["id"] for i in range(len(wq_data))])
+                question_ids = [bundle.data["id"] for bundle in wq_data]
+                first_question_id = min(question_ids)
+                last_question_id = max(question_ids)
 
                 # Looping through data and adding it to questions dict for final output
                 for question_i in range(len(wq_data)):
                     q_id = "q_%s" % wq_data[question_i].data["id"]
 
                     choices = []  # List to hold the final answer and the "next q_id"
-                    first_question_id.append(wq_data[question_i].data["id"])
 
                     # Looping through data and adding to choices list for final output
                     # Also adds the "next question"
@@ -84,8 +85,8 @@ class WeeklyQuizIDResource(ModelResource):
 
                     questions[q_id] = {"question": wq_data[question_i].data["question"],
                                        "choices": choices}
-                first_question_id_item = min(first_question_id)
-                data_dict['quiz'] = {"start": "q_%s" % first_question_id_item,
+
+                data_dict['quiz'] = {"start": "q_%s" % first_question_id,
                                      "quiz_details": {"questions": questions,
                                                       "answers": answers}}
                 del (data_dict['objects'])
