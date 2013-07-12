@@ -1,0 +1,138 @@
+[
+{
+    "pk": 1, 
+    "model": "opinions.opinionpollid", 
+    "fields": {
+        "active": true, 
+        "name": "Opinion 1"
+    }
+},
+{
+    "pk": 2, 
+    "model": "opinions.opinionpollid", 
+    "fields": {
+        "active": true, 
+        "name": "Opinion 2"
+    }
+},
+{
+    "pk": 3, 
+    "model": "opinions.opinionpollid", 
+    "fields": {
+        "active": false, 
+        "name": "Opinion 3"
+    }
+},
+{
+    "pk": 1, 
+    "model": "opinions.opinionpollopinion", 
+    "fields": {
+        "opinion": "O1A", 
+        "opinionpollid": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "opinions.opinionpollopinion", 
+    "fields": {
+        "opinion": "O2A", 
+        "opinionpollid": 2
+    }
+},
+{
+    "pk": 3, 
+    "model": "opinions.opinionpollopinion", 
+    "fields": {
+        "opinion": "O2B", 
+        "opinionpollid": 2
+    }
+},
+{
+    "pk": 4, 
+    "model": "opinions.opinionpollopinion", 
+    "fields": {
+        "opinion": "O3A", 
+        "opinionpollid": 3
+    }
+},
+{
+    "pk": 1, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C1Aa", 
+        "opinionpollopinion": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C1Ab", 
+        "opinionpollopinion": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C1Ac", 
+        "opinionpollopinion": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C2Aa", 
+        "opinionpollopinion": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C2Ab", 
+        "opinionpollopinion": 2
+    }
+},
+{
+    "pk": 6, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C2Ba", 
+        "opinionpollopinion": 3
+    }
+},
+{
+    "pk": 7, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C2Bb", 
+        "opinionpollopinion": 3
+    }
+},
+{
+    "pk": 8, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C2Bc", 
+        "opinionpollopinion": 3
+    }
+},
+{
+    "pk": 9, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C3Aa", 
+        "opinionpollopinion": 4
+    }
+},
+{
+    "pk": 10, 
+    "model": "opinions.opinionpollchoices", 
+    "fields": {
+        "choices": "C3Ab", 
+        "opinionpollopinion": 4
+    }
+}
+]
