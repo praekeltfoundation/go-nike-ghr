@@ -32,16 +32,12 @@ class NdabagaResource(ModelResource):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
-            if data_dict['objects'] == []:
-                data_dict['ndabaga'] = ("Sorry Ndabaga has nothing to say"
-                                        " this week, dial back soon!")
-                del (data_dict['objects'])
-            else:
+            if data_dict['objects'] != []:
                 a = []
                 a.append(data_dict['objects'][0].data["page_1"])
                 a.append(data_dict['objects'][0].data["page_2"])
                 a.append(data_dict['objects'][0].data["page_3"])
                 a.append(data_dict['objects'][0].data["page_4"])
                 data_dict['ndabaga'] = a
-                del (data_dict['objects'])
+            del data_dict['objects']
         return data_dict
