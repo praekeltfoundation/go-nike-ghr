@@ -1,7 +1,10 @@
+import json
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils import timezone
+
 from articles.models import Article
-import json
 
 
 class TestArticlesAPIWorks(TestCase):
@@ -13,6 +16,8 @@ class TestArticlesAPIWorks(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'article',
                       'api_name': 'api'})
+        articles = Article.objects.all()
+        articles.update(created_at=timezone.now(), publish_at=timezone.now())
         response = self.client.get(url)
         self.assertEqual("/api/article/", response.request["PATH_INFO"])
         self.assertEqual("application/json", response["Content-Type"])
