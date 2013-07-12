@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from ndabaga.models import Ndabaga
+from django.utils import timezone
 import json
 
 
@@ -13,6 +14,8 @@ class TestNdabagaAPIWorks(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'ndabaga',
                       'api_name': 'api'})
+        ndabaga = Ndabaga.objects.all()
+        ndabaga.update(created_at=timezone.now(), publish_at=timezone.now())
         response = self.client.get(url)
         self.assertEqual("/api/ndabaga/", response.request["PATH_INFO"])
         self.assertEqual("application/json", response["Content-Type"])
