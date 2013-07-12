@@ -98,12 +98,12 @@ function GoNikeGHR() {
         return p;
     };
 
-    self.crm_mandl_quizzes_get = function(im) {
-        return self.crm_get(im, 'mandl/all/');
+    self.crm_mandl_quizzes_get = function() {
+        return self.crm_get('mandl/all/');
     };
 
-    self.crm_mandl_quiz_get = function(im, quiz_id) {
-        return self.crm_get(im, 'mandl/' + quiz_id);
+    self.crm_mandl_quiz_get = function(quiz_id) {
+        return self.crm_get('mandl/' + quiz_id);
     };
 
     self.check_reply = function(reply, url, method, data, ignore_error) {
