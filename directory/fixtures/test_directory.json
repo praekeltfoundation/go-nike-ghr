@@ -1,0 +1,60 @@
+[
+{
+    "pk": 2, 
+    "model": "directory.category", 
+    "fields": {
+        "name": "C1"
+    }
+},
+{
+    "pk": 3, 
+    "model": "directory.category", 
+    "fields": {
+        "name": "C2"
+    }
+},
+{
+    "pk": 1, 
+    "model": "directory.subcategory", 
+    "fields": {
+        "category": 2, 
+        "content_3": "C1Ac", 
+        "name": "SC1A", 
+        "content_1": "C1Aa", 
+        "content_2": "C1Ab"
+    }
+},
+{
+    "pk": 2, 
+    "model": "directory.subcategory", 
+    "fields": {
+        "category": 2, 
+        "content_3": "C1Ba", 
+        "name": "SC1B", 
+        "content_1": "C1Ba", 
+        "content_2": "C1Ba"
+    }
+},
+{
+    "pk": 3, 
+    "model": "directory.subcategory", 
+    "fields": {
+        "category": 3, 
+        "content_3": "C2Ac", 
+        "name": "SC2A", 
+        "content_1": "C2Aa", 
+        "content_2": "C2Ab"
+    }
+},
+{
+    "pk": 4, 
+    "model": "directory.subcategory", 
+    "fields": {
+        "category": 3, 
+        "content_3": "C2Bc", 
+        "name": "SC2B", 
+        "content_1": "C2Ba", 
+        "content_2": "C2Bb"
+    }
+}
+]

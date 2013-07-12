@@ -1,24 +1,23 @@
 from tastypie.resources import ModelResource
-from articles.models import Article
+from ndabaga.models import Ndabaga
 from django.utils import timezone
 import datetime
-import copy
 
 
-class ArticleResource(ModelResource):
+class NdabagaResource(ModelResource):
     class Meta:
         # Setting the api meta attributes
-        resource_name = "article"
+        resource_name = "ndabaga"
         allowed_methods = ['get']
         excludes = ['publish', 'publish_at', 'created_at', 'id']
         include_resource_uri = False
 
-        queryset = Article.objects.all()
+        queryset = Ndabaga.objects.all()
 
     def get_object_list(self, request):
         # Filters the queryset in meta to get the specific Article required
         timedelta = timezone.now() - datetime.timedelta(days=7)
-        query = super(ArticleResource, self).get_object_list(request)
+        query = super(NdabagaResource, self).get_object_list(request)
         query = (query.filter(publish=True).
                  filter(publish_at__lte=timezone.now).
                  filter(publish_at__gte=timedelta).
@@ -33,16 +32,12 @@ class ArticleResource(ModelResource):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
-            if data_dict['objects'] == []:
-                data_dict['article'] = ("Sorry there's no article"
-                                        " this week, dial back soon!")
-                del (data_dict['objects'])
-            else:
+            if data_dict['objects']:
                 a = []
                 a.append(data_dict['objects'][0].data["page_1"])
                 a.append(data_dict['objects'][0].data["page_2"])
                 a.append(data_dict['objects'][0].data["page_3"])
                 a.append(data_dict['objects'][0].data["page_4"])
-                data_dict['article'] = a
-                del data_dict['objects']
+                data_dict['ndabaga'] = a
+            del data_dict['objects']
         return data_dict
