@@ -62,14 +62,14 @@ function GoNikeGHR() {
     self.make_question_state = function(prefix, question) {
          return function(state_name, im) {
             var choices = question.choices.map(function(choice) {
-                var name = "";
+                var value = "";
                 if (choice[0] == "main_menu"){
-                    name = "main_menu";
+                    value = "main_menu";
                 } else {
-                    name = prefix + "_" + choice[0];
+                    value = prefix + "_" + choice[0];
                 }
-                var value = choice[1];
-                return new Choice(name, value);
+                var name = choice[1];
+                return new Choice(value, name);
             });
 
             return new ChoiceState(state_name, function(choice) {
@@ -80,14 +80,14 @@ function GoNikeGHR() {
 
     self.make_initial_question_state = function(state_name, prefix, question) {
         var choices = question.choices.map(function(choice) {
-            var name = "";
+            var value = "";
             if (choice[0] == "main_menu"){
-                name = "main_menu";
+                value = "main_menu";
             } else {
-                name = prefix + "_" + choice[0];
+                value = prefix + "_" + choice[0];
             }
-            var value = choice[1];
-            return new Choice(name, value);
+            var name = choice[1];
+            return new Choice(value, name);
         });
 
         return new ChoiceState(state_name, function(choice) {
@@ -112,9 +112,9 @@ function GoNikeGHR() {
 
     self.make_initial_mandl_question_state = function(state_name, prefix, question) {
             var choices = question.choices.map(function(choice) {
-                var name = prefix + "_" + choice[0];
-                var value = choice[1];
-                return new Choice(name, value);
+                var value = prefix + "_" + choice[0];
+                var name = choice[1];
+                return new Choice(value, name);
             });
 
             return new ChoiceState(state_name, function(choice) {
@@ -125,14 +125,14 @@ function GoNikeGHR() {
     self.make_view_state = function(prefix, view) {
          return function(state_name, im) {
             var choices = view.choices.map(function(choice) {
-                var name = "";
+                var value = "";
                 if (choice[0] == "opinions"){
-                    name = "opinions";
+                    value = "opinions";
                 } else {
-                    name = prefix + "_" + choice[0];
+                    value = prefix + "_" + choice[0];
                 }
-                var value = choice[1];
-                return new Choice(name, value);
+                var name = choice[1];
+                return new Choice(value, name);
             });
 
             return new ChoiceState(state_name, function(choice) {
@@ -143,9 +143,9 @@ function GoNikeGHR() {
 
     self.make_initial_view_state = function(state_name, prefix, view) {
         var choices = view.choices.map(function(choice) {
-            var name = prefix + "_" + choice[0];
-            var value = choice[1];
-            return new Choice(name, value);
+            var value = prefix + "_" + choice[0];
+            var name = choice[1];
+            return new Choice(value, name);
         });
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
@@ -232,11 +232,13 @@ function GoNikeGHR() {
     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text) {
+        console.log("Name:" + prefix);
          return function(state_name, im) {
             var choices = items.map(function(item) {
-                var name = prefix + "_" + page + "_" + self.clean_state_name(item);
-                var value = item;
-                return new Choice(name, value);
+                var value = prefix + "_" + self.clean_state_name(item);
+                // console.log("Name:" + name);
+                var name = item;
+                return new Choice(value, name);
             });
             if (!first) choices.push(new Choice(prefix + "_" + (page-1), "Back"));
             if (!last) choices.push(new Choice(prefix + "_" + (page+1), "Next"));
@@ -262,6 +264,7 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
+            // console.log("Name:" + navigation_page_name);
             // Make sure it doesn't exist
             if(self.state_creators.hasOwnProperty(navigation_page_name)) {
                 continue;
@@ -273,9 +276,9 @@ function GoNikeGHR() {
 
     self.make_initial_navigation_state = function(state_name, prefix, question, items, last, parent, parent_text) {
         var choices = items.map(function(item) {
-                var name = prefix + "_1_" + item;
-                var value = item;
-                return new Choice(name, value);
+                var value = prefix + "_" + self.clean_state_name(item);
+                var name = item;
+                return new Choice(value, name);
         });
         if (!last) choices.push(new Choice(prefix + "_1", "Next"));
         if (parent) choices.push(new Choice(parent, parent_text));
@@ -283,6 +286,30 @@ function GoNikeGHR() {
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
         }, question, choices);
+    };
+
+    self.make_navigation_and_content_states = function(prefix, question, items, max_items, parent, parent_text) {
+        // Generates the navigation paging states and related booklet_states
+        var items_keys = Object.keys(items);
+        var total_pages = Math.ceil(items_keys.length / max_items);
+        var pages = [];
+        for (var i = 0; i < total_pages; i++){
+            start = i*max_items;
+            pages.push(items_keys.slice(start, start+max_items));
+        }
+        for (var p = 0; p < pages.length; p++){
+            var first = (p===0) ? true : false;
+            var last = (p==(pages.length-1)) ? true : false;
+            // Give the state a name
+            navigation_page_name = prefix + "_" + p;
+            // console.log("Nav page name: " + navigation_page_name);
+            // Make sure it doesn't exist
+            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
+                continue;
+            }
+            self.add_creator(navigation_page_name,
+                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text));
+        }
     };
 
     self.validate_sector = function(im, sector) {
@@ -647,10 +674,6 @@ function GoNikeGHR() {
             var prefix = "directory";
             var question = "Please select an option:";
             var items = Object.keys(directory);
-            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', "Main menu");
-            for (var sub_cat in items){
-                self.make_navigation_states(prefix, question, items, max_items, 'directory_start', "Back to categories");
-            }
             var last = (items.length <= max_items) ? true : false;
             return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last, 'main_menu', "Main menu");
         });
@@ -707,6 +730,12 @@ function GoNikeGHR() {
                     var question = "Please select an option:";
                     var items = Object.keys(directory);
                     self.make_navigation_states(prefix, question, items, max_items, 'main_menu', "Main menu" );
+                    for (var s=0; s<items.length;s++){
+                        var sub_question = "Please select an organization:";
+                        var sub_items = directory[items[s]];
+                        var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
+                        self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', "Back to categories");
+                    }
                 });
                 return p_directory;
             });
