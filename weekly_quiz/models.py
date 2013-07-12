@@ -11,7 +11,7 @@ class WeeklyQuizId(models.Model):
     active = models.BooleanField()
     completed = models.BooleanField(editable=False)
 
-    def __str__(self):
+    def __unicode__(self):
         # Provides a User friendly name
         return self.name
 
