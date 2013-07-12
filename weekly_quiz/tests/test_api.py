@@ -11,7 +11,6 @@ class TestWeeklyQuizApi(TestCase):
                       kwargs={'resource_name': 'weeklyquiz',
                       'api_name': 'api'})
         response = self.client.get(url)
-        self.assertEqual(response.request["PATH_INFO"], "/api/weeklyquiz/")
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
 
