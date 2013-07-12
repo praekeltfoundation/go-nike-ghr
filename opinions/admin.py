@@ -7,17 +7,6 @@ from django import forms
 from django.forms.models import BaseInlineFormSet
 
 
-class OpinionPollIdForms(forms.ModelForm):
-    pass
-
-
-class OpinionPollOpinionForms(forms.ModelForm):
-    """
-    The form that is used by OpinionPollIdAdmin
-    """
-    pass
-
-
 class OpinionPollChoicesFormset(BaseInlineFormSet):
     """
     This class handles data that has been cleaned by teh formset
@@ -72,7 +61,6 @@ class OpinionPollIdAdmin(admin.ModelAdmin):
 
 class OpinionPollOpinionAdmin(admin.ModelAdmin):
     inlines = [OpinionPollChoicesInline]
-    form = OpinionPollOpinionForms
     list_display = ["opinion"]
 
 # Registering the Opinion with the admin
