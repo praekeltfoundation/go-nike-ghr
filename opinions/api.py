@@ -73,35 +73,37 @@ class OpinionPollIdResource(ModelResource):
 
             else:
                 opinions = {}
-                for op_id_i in range(len(data_dict['objects'])):
+                for op_view_data in data_dict['objects']:
                     opinion_view_dict = {}
-                    op_view_data = data_dict['objects'][op_id_i]
-                    opinion_view_id = "opinion_view_%s" % op_view_data.data["id"]
+                    opinion_view_id = "opinion_view_%s" % (
+                        op_view_data.data["id"],)
                     op_opinions = op_view_data.data["opinionpollid"]
 
-                    start_opinion_id = min([op_opinions[i].data["id"]
-                                           for i in range(len(op_opinions))])
-                    exit_opinion_id = max([op_opinions[i].data["id"]
-                                          for i in range(len(op_opinions))])
+                    op_opinion_ids = [bundle.data["id"]
+                                      for bundle in op_opinions]
+                    start_opinion_id = min(op_opinion_ids)
+                    exit_opinion_id = max(op_opinion_ids)
 
                     opinion_opinions_dict = {}
-                    for op_op_i in range(len(op_opinions)):
-                        o_id = "o_%s" % op_opinions[op_op_i].data["id"]
-                        opinion_actual = op_opinions[op_op_i].data["opinion"]
+                    for op_opinion in op_opinions:
+                        o_id = "o_%s" % op_opinion.data["id"]
+                        opinion_actual = op_opinion.data["opinion"]
 
                         choices = []
-                        op_choices = op_opinions[op_op_i].data["opinionpollopinion"]
-                        for op_ch_i in range(len(op_choices)):
-                            if op_opinions[op_op_i].data["id"] == exit_opinion_id:
+                        op_choices = op_opinion.data["opinionpollopinion"]
+                        for op_choice in op_choices:
+                            if op_opinion.data["id"] == exit_opinion_id:
                                 next = "main_menu"
                             else:
-                                next = "o_%s" % (op_opinions[op_op_i].data["id"]+1)
+                                next = "o_%s" % (op_opinion.data["id"] + 1,)
 
-                            choice_actual = op_choices[op_ch_i].data["choices"]
+                            choice_actual = op_choice.data["choices"]
                             choices.append([next, choice_actual])
 
-                        opinion_opinions_dict[o_id] = {"opinions": opinion_actual,
-                                                       "choices": choices}
+                        opinion_opinions_dict[o_id] = {
+                            "opinions": opinion_actual,
+                            "choices": choices,
+                        }
 
                     opinion_view_dict["start"] = 'o_%s' % start_opinion_id
                     opinion_view_dict["views"] = opinion_opinions_dict
