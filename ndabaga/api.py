@@ -32,7 +32,7 @@ class NdabagaResource(ModelResource):
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
-            if data_dict['objects'] != []:
+            if data_dict['objects']:
                 a = []
                 a.append(data_dict['objects'][0].data["page_1"])
                 a.append(data_dict['objects'][0].data["page_2"])
