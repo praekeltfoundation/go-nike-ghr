@@ -21,4 +21,5 @@ urlpatterns = patterns('',
     url(r'^', include('articles.urls')),
     url(r'^', include('ndabaga.urls')),
     url(r'^', include('opinions.urls')),
+    url(r'^', include('weekly_quiz.urls')),
 )
