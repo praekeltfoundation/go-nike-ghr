@@ -31,7 +31,7 @@ class OpinionResource(ModelResource):
                 del(data_dict['meta'])
 
             data_dict['opinions'] = (copy.copy(data_dict['objects'][0]))
-            del (data_dict['objects'])
+            del data_dict['objects']
         return data_dict
 
 
@@ -65,10 +65,10 @@ class OpinionPollIdResource(ModelResource):
         """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:
-                del(data_dict['meta'])
+                del data_dict['meta']
             if data_dict["objects"] == []:
                 data_dict['quiz'] = False
-                del (data_dict['objects'])
+                del data_dict['objects']
 
             else:
                 opinions = {}
