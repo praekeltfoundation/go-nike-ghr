@@ -31,7 +31,7 @@ class CategoryResource(ModelResource):
             if 'meta' in data_dict:
                 del(data_dict['meta'])
 
-            if data_dict["objects"] != []:
+            if data_dict["objects"]:
                 directory = {}  # Variable to hold directory structure
                 category_obj = data_dict["objects"]
 
