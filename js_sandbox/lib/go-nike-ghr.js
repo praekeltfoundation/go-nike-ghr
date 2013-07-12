@@ -232,10 +232,9 @@ function GoNikeGHR() {
     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text) {
-        console.log("Name:" + prefix);
          return function(state_name, im) {
             var choices = items.map(function(item) {
-                var value = prefix + "_" + self.clean_state_name(item);
+                var value = prefix + "_" + self.clean_state_name(item) + "_0";
                 // console.log("Name:" + name);
                 var name = item;
                 return new Choice(value, name);
@@ -264,11 +263,11 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // console.log("Name:" + navigation_page_name);
             // Make sure it doesn't exist
             if(self.state_creators.hasOwnProperty(navigation_page_name)) {
                 continue;
             }
+
             self.add_creator(navigation_page_name,
                                     self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text));
         }
@@ -276,7 +275,7 @@ function GoNikeGHR() {
 
     self.make_initial_navigation_state = function(state_name, prefix, question, items, last, parent, parent_text) {
         var choices = items.map(function(item) {
-                var value = prefix + "_" + self.clean_state_name(item);
+                var value = prefix + "_" + self.clean_state_name(item) + "_0";
                 var name = item;
                 return new Choice(value, name);
         });
@@ -302,7 +301,6 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // console.log("Nav page name: " + navigation_page_name);
             // Make sure it doesn't exist
             if(self.state_creators.hasOwnProperty(navigation_page_name)) {
                 continue;
