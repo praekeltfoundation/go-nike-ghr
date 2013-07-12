@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     'ndabaga',
     'monitor_and_learn',
     'opinions',
+    'directory',
     #'celery_app',
 )
 
