@@ -4,6 +4,7 @@ from django import forms
 
 
 class ArticleAdmin(admin.ModelAdmin):
+
     def formfield_for_dbfield(self, db_field, **kwargs):
         # Overiding the page CharField widget to Text Area
         formfield = super(ArticleAdmin, self).formfield_for_dbfield(db_field, **kwargs)
