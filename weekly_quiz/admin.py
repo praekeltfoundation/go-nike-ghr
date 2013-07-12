@@ -14,8 +14,7 @@ class WeeklyQuizQuestionAdminForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super(WeeklyQuizQuestionAdminForm, self).__init__(*args, **kwargs)
-        choices = [self.fields["quiz_id"].choices.__iter__().next()]
-        choices.pop()  # Removing empty choice so it defaults to empty
+        choices = []
         query = (WeeklyQuizId.objects.all().
                  filter(completed=False).order_by('pk'))
 
