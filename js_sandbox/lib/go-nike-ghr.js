@@ -98,14 +98,6 @@ function GoNikeGHR() {
         return p;
     };
 
-    self.crm_mandl_quizzes_get = function() {
-        return self.crm_get('mandl/all/');
-    };
-
-    self.crm_mandl_quiz_get = function(quiz_id) {
-        return self.crm_get('mandl/' + quiz_id);
-    };
-
     self.check_reply = function(reply, url, method, data, ignore_error) {
         var error;
         if (reply.success && reply.code == 200) {
@@ -128,7 +120,7 @@ function GoNikeGHR() {
 
     self.make_mandl_or_mainmenu = function(state_name, contact){
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
-        var p2 = self.crm_mandl_quizzes_get(im);
+        var p2 = self.crm_get('mandl/all/');
         p2.add_callback(function(result) {
             // Strip out quizzes that we've done
             var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
