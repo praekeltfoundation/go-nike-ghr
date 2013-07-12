@@ -1,0 +1,7 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/mandl/all/",
+  "method": "GET",
+  "body": {
+    "quizzes": [1,2,3,4,5]
+  }
+}
