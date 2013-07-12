@@ -12,7 +12,6 @@ class TestQuizIdAdmin(TestCase):
     def test_admin_quiz_id_no_name(self):
         data = {"active": False}
         wqid = WeeklyQuizIdAdmin.form(data=data)
-        # print dir(wqid)
         self.assertIn(["This field is required."], wqid.errors.values())
 
     def test_admin_quiz_id_active(self):
