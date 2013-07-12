@@ -12,7 +12,9 @@ class ArticleResource(ModelResource):
         allowed_methods = ['get']
         excludes = ['publish', 'publish_at', 'created_at', 'id']
         include_resource_uri = False
-
+        filtering = {
+            'created_at': ['lte', 'gte'],
+        }
         queryset = Article.objects.all()
 
     def get_object_list(self, request):
