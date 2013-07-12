@@ -4,6 +4,7 @@ from models import (WeeklyQuizId,
                     WeeklyQuizAnswer)
 from django import forms
 from django.forms.models import BaseInlineFormSet
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class WeeklyQuizQuestionAdminForm(forms.ModelForm):
@@ -105,7 +106,7 @@ class WeeklyQuizAnswerFormset(BaseInlineFormSet):
                          get(pk=self.instance.quiz_id.id))
                 query.completed = True
                 query.save()
-        except:
+        except ObjectDoesNotExist:
             pass
 
 
