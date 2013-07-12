@@ -51,7 +51,7 @@ class CategoryResource(ModelResource):
                     directory[category_name] = sub_category_dict
                 data_dict['directory'] = directory
 
-            del (data_dict['objects'])
+            del data_dict['objects']
         return data_dict
 
 
