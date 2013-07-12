@@ -19,7 +19,7 @@ class SubCategoryFormset(BaseInlineFormSet):
             if ("name" in form.cleaned_data):
                 if not (form.cleaned_data["content_1"] or
                         form.cleaned_data["content_2"] or
-                        form.cleaned_data["content_2"]):
+                        form.cleaned_data["content_3"]):
                     raise forms.ValidationError("You need to enter at least one "
                                                 "screen of content to display")
 
