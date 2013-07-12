@@ -24,7 +24,7 @@ class OpinionPollChoicesFormset(BaseInlineFormSet):
                 continue
 
             if ("choices" not in form.cleaned_data and number_of_choices < 1):
-                raise forms.ValidationError("You need atleast one opinion")
+                raise forms.ValidationError("You need at least one opinion")
             else:
                 if ("choices" in form.cleaned_data):
                     char_lim_op = char_lim_op + len(form.cleaned_data['choices'])
