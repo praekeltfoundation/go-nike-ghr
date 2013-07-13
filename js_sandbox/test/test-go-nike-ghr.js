@@ -26,6 +26,7 @@ var test_fixtures_full = [
     'test/fixtures/mandl_all.json',
     'test/fixtures/ndabaga.json',
     'test/fixtures/opinions.json',
+    'test/fixtures/opinions_view.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -691,6 +692,58 @@ describe("When using the USSD line", function() {
                     "^Thank you and bye bye!$"
                 ),
                 continue_session: false
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from Opinions submenu should display an opinion to feedback on", function (done) {
+            var user = {
+                current_state: 'opinions'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions_view",
+                response: (
+                    "^I think something really clever[^]" +
+                    "1. Yes, I agree[^]"+
+                    "2. No way$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 in response to opinion displayed should display another opinion to feedback on", function (done) {
+            var user = {
+                current_state: 'opinions_view'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_view_1_o_2",
+                response: (
+                    "^I think something really stupid[^]" +
+                    "1. Yes, I agree[^]"+
+                    "2. No way$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 in response to last opinion available should display Opinions sub menu", function (done) {
+            var user = {
+                current_state: 'opinion_view_1_o_2'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions",
+                response: (
+                    "^Please choose an option:[^]" +
+                    "1. Popular opinions from SMS[^]" +
+                    "2. Leave your opinion[^]" +
+                    "3. Back$"
+                )
             });
             p.then(done, done);
         });
