@@ -62,7 +62,12 @@ function GoNikeGHR() {
     self.make_question_state = function(prefix, question) {
          return function(state_name, im) {
             var choices = question.choices.map(function(choice) {
-                var name = prefix + "_" + choice[0];
+                var name = "";
+                if (choice[0] == "main_menu"){
+                    name = "main_menu";
+                } else {
+                    name = prefix + "_" + choice[0];
+                }
                 var value = choice[1];
                 return new Choice(name, value);
             });
@@ -83,6 +88,36 @@ function GoNikeGHR() {
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
             }, question.question, choices);
+    };
+
+    self.make_view_state = function(prefix, view) {
+         return function(state_name, im) {
+            var choices = view.choices.map(function(choice) {
+                var name = "";
+                if (choice[0] == "opinions"){
+                    name = "opinions";
+                } else {
+                    name = prefix + "_" + choice[0];
+                }
+                var value = choice[1];
+                return new Choice(name, value);
+            });
+
+            return new ChoiceState(state_name, function(choice) {
+                return choice.value;
+            }, view.opinion, choices);
+        };
+    };
+
+    self.make_initial_view_state = function(state_name, prefix, view) {
+        var choices = view.choices.map(function(choice) {
+            var name = prefix + "_" + choice[0];
+            var value = choice[1];
+            return new Choice(name, value);
+        });
+        return new ChoiceState(state_name, function(choice) {
+            return choice.value;
+        }, view.opinion, choices);
     };
 
     self.crm_get = function(path) {
@@ -402,6 +437,38 @@ function GoNikeGHR() {
                 footer_text: "\n1 for prev, 2 for next, 0 to end."
             }
         );
+    });
+
+    self.add_creator('opinions_view', function(state_name, im) {
+        var p_opinion_view = self.crm_get('opinion/view/');
+        p_opinion_view.add_callback(function(result) {
+            var collection = result.opinions;
+            var first_view_prefix = false;
+            var first_view = false;
+            for (var opinion_view in collection){
+                if (!first_view_prefix) first_view_prefix = opinion_view;
+                var opinions = collection[opinion_view];
+                // Create the quiz
+                for (var view_name in opinions.views){
+                    var view = opinions.views[view_name];
+                    if (!first_view) first_view = view;
+                    var view_state_name = opinion_view + "_" + view_name;
+                    // do not recreate states that already exist.
+                    if(self.state_creators.hasOwnProperty(view_state_name)) {
+                        continue;
+                    }
+                    // construct a function using make_view_state()
+                    // to prevent getting a wrongly scoped 'view'
+                    self.add_creator(view_state_name,
+                        self.make_view_state(opinion_view, view));
+                }
+            }
+            return [first_view_prefix, first_view];
+        });
+        p_opinion_view.add_callback(function(payload) {
+            return self.make_initial_view_state(state_name, payload[0], payload[1]);
+        });
+        return p_opinion_view;
     });
 
     self.add_state(new EndState(
