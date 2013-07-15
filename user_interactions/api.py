@@ -1,9 +1,10 @@
 from models import UserInteraction
 from tastypie.resources import ModelResource
-from tastypie import http
-from tastypie.exceptions import TastypieError
+from tastypie import http, fields
+from tastypie.exceptions import TastypieError, BadRequest
 from tastypie.resources import csrf_exempt
 from django.utils.cache import patch_cache_control
+from django.core.exceptions import ValidationError
 
 
 class UserInteractionResource(ModelResource):
@@ -61,6 +62,14 @@ class UserInteractionResource(ModelResource):
                 return self.error_response(request,
                                            data,
                                            response_class=http.HttpBadRequest)
+
+            except (BadRequest, fields.ApiFieldError), e:
+                data = {"error": e.args[0] if getattr(e, 'args') else ''}
+                return self.error_response(request, data, response_class=http.HttpBadRequest)
+
+            except ValidationError, e:
+                data = {"error": e.messages}
+                return self.error_response(request, data, response_class=http.HttpBadRequest)
 
             except Exception, e:
                 if hasattr(e, 'response'):
