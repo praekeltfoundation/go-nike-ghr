@@ -27,6 +27,9 @@ var test_fixtures_full = [
     'test/fixtures/ndabaga.json',
     'test/fixtures/opinions.json',
     'test/fixtures/opinions_view.json',
+    'test/fixtures/userinteraction.json',
+    'test/fixtures/userinteraction_age.json',
+    'test/fixtures/userinteraction_sector.json',
 ];
 
 describe("When using the USSD line", function() {
