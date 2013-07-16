@@ -79,7 +79,14 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, question.question, choices);
+            }, question.question, choices, null,
+                        {
+                            on_enter: function() {
+                                var action = "MANDL;question;" + question.question;
+                                var p_log = self.interaction_log(action);
+                                return p_log;
+                            }
+                        });
         };
     };
 
@@ -92,7 +99,15 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, question.question, choices);
+            }, question.question, choices, null,
+                        {
+                            on_enter: function() {
+                                var action = "MANDL;question;" + question.question;
+                                var p_log = self.interaction_log(action);
+                                return p_log;
+                            }
+                        }
+            );
     };
 
     self.make_view_state = function(prefix, view) {
@@ -110,7 +125,14 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, view.opinion, choices);
+            }, view.opinion, choices, null,
+                        {
+                            on_enter: function() {
+                                var action = "OPINIONS;viewed;" + view.opinion;
+                                var p_log = self.interaction_log(action);
+                                return p_log;
+                            }
+                        });
         };
     };
 
@@ -432,7 +454,14 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var action = "ARTICLES;article;viewed";
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                }
             }
         );
     });
@@ -470,7 +499,14 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var action = "WWND;ndabaga;viewed";
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                }
             }
         );
     });
@@ -490,7 +526,14 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var action = "OPINIONS;popular;viewed";
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                }
             }
         );
     });
