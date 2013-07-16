@@ -1,0 +1,102 @@
+{
+    "url": "http://ghr.preview.westerncapelabs.com/api/weeklyquiz/",
+    "method": "GET",
+    "body": {
+        "quiz": {
+            "start": "q_1",
+            "quiz_details": {
+                "answers": {
+                    "q_1_a_1": {
+                        "response": "Yes -  Genius",
+                        "next": "q_2"
+                    },
+                    "q_1_a_2": {
+                        "response": "No - Dur",
+                        "next": "q_2"
+                    },
+                    "q_1_a_3": {
+                        "response": "No - Dur",
+                        "next": "q_2"
+                    },
+                    "q_2_a_1": {
+                        "response": "No - Dur",
+                        "next": "q_3"
+                    },
+                    "q_2_a_2": {
+                        "response": "Yes -  Genius",
+                        "next": "q_3"
+                    },
+                    "q_2_a_3": {
+                        "response": "No - Dur",
+                        "next": "q_3"
+                    },
+                    "q_3_a_1": {
+                        "response": "No - Dur",
+                        "next": "main_menu"
+                    },
+                    "q_3_a_2": {
+                        "response": "No - Dur",
+                        "next": "main_menu"
+                    },
+                    "q_3_a_3": {
+                        "response": "Yes - Genius",
+                        "next": "main_menu"
+                    }
+                },
+                "questions": {
+                    "q_1": {
+                        "question": "Am I fake question 1?",
+                        "choices": [
+                            [
+                                "q_1_a_1",
+                                "Yes!"
+                            ],
+                            [
+                                "q_1_a_2",
+                                "No!"
+                            ],
+                            [
+                                "q_1_a_3",
+                                "Maybe!"
+                            ]
+                        ]
+                    },
+                    "q_2": {
+                        "question": "Am I fake question 2?",
+                        "choices": [
+                            [
+                                "q_2_a_1",
+                                "Yes!"
+                            ],
+                            [
+                                "q_2_a_2",
+                                "No!"
+                            ],
+                            [
+                                "q_2_a_3",
+                                "Maybe!"
+                            ]
+                        ]
+                    },
+                    "q_3": {
+                        "question": "Am I fake question 3?",
+                        "choices": [
+                            [
+                                "q_3_a_1",
+                                "Yes!"
+                            ],
+                            [
+                                "q_3_a_2",
+                                "No!"
+                            ],
+                            [
+                                "q_3_a_3",
+                                "Maybe!"
+                            ]
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
