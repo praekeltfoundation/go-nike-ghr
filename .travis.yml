@@ -7,5 +7,4 @@ install:
 before_script:
   - psql -c 'create database ghr;' -U postgres
 script:
-    - 'python manage.py test'
-    - 'cd js_sandbox && npm install . && npm test && cd ..'
+    - run-tests.sh
