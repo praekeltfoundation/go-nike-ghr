@@ -567,22 +567,18 @@ function GoNikeGHR() {
                 var quiz = quizzes[quiz_name];
                 // Create the quiz
                 for (var question_name in quiz.questions){
-
                     var question = quiz.questions[question_name];
                     var question_state_name = quiz_name + "_" + question_name;
-
                     // do not recreate states that already exist.
                     if(self.state_creators.hasOwnProperty(question_state_name)) {
                         continue;
                     }
-
                     // construct a function using make_question_state()
                     // to prevent getting a wrongly scoped 'question'
                     self.add_creator(question_state_name,
                         self.make_question_state(quiz_name, question));
                 }
             }
-            return self.error_state();
         });
         p_mandl.add_callback(function(){
             var p_opinion = self.crm_get('opinion/');
