@@ -581,10 +581,56 @@ function GoNikeGHR() {
             }
         });
         p_mandl.add_callback(function(){
+            // Get 
             var p_opinion = self.crm_get('opinion/');
             p_opinion.add_callback(function(result){
                 im.config.opinions = result.opinions;
                 return true;
+            });
+            p_opinion.add_callback(function(){
+                // Build Weekly quiz
+                var p_weeklyquiz = self.crm_get('weeklyquiz/');
+                p_weeklyquiz.add_callback(function(result) {
+                    // This callback checks extras when contact is found
+                    var quiz = result.quiz;
+                    if (!quiz) {
+                        return self.error_state();
+                    }
+                    var quiz_name = "weekly_quiz";
+                    var first_view_prefix = false;
+                    var first_view = false;
+                    // Create the quiz
+                    for (var question_name in quiz.questions){
+
+                        var question = quiz.questions[question_name];
+                        var question_state_name = quiz_name + "_" + question_name;
+
+                        // do not recreate states that already exist.
+                        if(self.state_creators.hasOwnProperty(question_state_name)) {
+                            continue;
+                        }
+
+                        // construct a function using make_question_state()
+                        // to prevent getting a wrongly scoped 'question'
+                        self.add_creator(question_state_name,
+                            self.make_question_state(quiz_name, question));
+                    }
+
+                    // create the answer states
+                    for (var answer_name in quiz.quiz_details.answers){
+                        var answer = quiz.quiz_details.answers[answer_name];
+                        var answer_state_name = quiz_name + "_" + answer_name;
+
+                        if(self.state_creators.hasOwnProperty(answer_state_name)) {
+                            continue;
+                        }
+
+                        self.add_creator(answer_state_name,
+                            self.make_answer_state(quiz_name, answer));
+                    }
+                    // End of Build Weekly quiz
+                });
+                return p_weeklyquiz;
             });
             return p_opinion;
         });
