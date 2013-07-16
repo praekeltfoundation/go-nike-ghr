@@ -80,13 +80,13 @@ function GoNikeGHR() {
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
             }, question.question, choices, null,
-                        {
-                            on_enter: function() {
-                                var action = "MANDL;question;" + question.question;
-                                var p_log = self.interaction_log(action);
-                                return p_log;
-                            }
-                        });
+                {
+                    on_enter: function() {
+                        var action = "MANDL;question;" + question.question;
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                });
         };
     };
 
@@ -100,13 +100,13 @@ function GoNikeGHR() {
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
             }, question.question, choices, null,
-                        {
-                            on_enter: function() {
-                                var action = "MANDL;question;" + question.question;
-                                var p_log = self.interaction_log(action);
-                                return p_log;
-                            }
-                        }
+                {
+                    on_enter: function() {
+                        var action = "MANDL;question;" + question.question;
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                }
             );
     };
 
@@ -126,13 +126,13 @@ function GoNikeGHR() {
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
             }, view.opinion, choices, null,
-                        {
-                            on_enter: function() {
-                                var action = "OPINIONS;viewed;" + view.opinion;
-                                var p_log = self.interaction_log(action);
-                                return p_log;
-                            }
-                        });
+                {
+                    on_enter: function() {
+                        var action = "OPINIONS;viewed;" + view.opinion;
+                        var p_log = self.interaction_log(action);
+                        return p_log;
+                    }
+                });
         };
     };
 
