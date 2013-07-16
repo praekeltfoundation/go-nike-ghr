@@ -513,37 +513,6 @@ function GoNikeGHR() {
                 return self.error_state();
             }
             var quiz_name = "weekly_quiz";
-            var first_view_prefix = false;
-            var first_view = false;
-            // Create the quiz
-            for (var question_name in quiz.questions){
-
-                var question = quiz.questions[question_name];
-                var question_state_name = quiz_name + "_" + question_name;
-
-                // do not recreate states that already exist.
-                if(self.state_creators.hasOwnProperty(question_state_name)) {
-                    continue;
-                }
-
-                // construct a function using make_question_state()
-                // to prevent getting a wrongly scoped 'question'
-                self.add_creator(question_state_name,
-                    self.make_question_state(quiz_name, question));
-            }
-
-            // create the answer states
-            for (var answer_name in quiz.quiz_details.answers){
-                var answer = quiz.quiz_details.answers[answer_name];
-                var answer_state_name = quiz_name + "_" + answer_name;
-
-                if(self.state_creators.hasOwnProperty(answer_state_name)) {
-                    continue;
-                }
-
-                self.add_creator(answer_state_name,
-                    self.make_answer_state(quiz_name, answer));
-            }
             return self.make_initial_question_state(state_name, quiz_name, quiz.quiz_details.questions[quiz['start']]);
         });
         return p_weeklyquiz;
