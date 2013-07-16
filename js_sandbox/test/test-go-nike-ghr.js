@@ -30,6 +30,12 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction.json',
     'test/fixtures/userinteraction_age.json',
     'test/fixtures/userinteraction_sector.json',
+    'test/fixtures/userinteraction_mandl.json',
+    'test/fixtures/userinteraction_mandl_3.json',
+    'test/fixtures/userinteraction_articles.json',
+    'test/fixtures/userinteraction_wwnd.json',
+    'test/fixtures/userinteraction_opinions.json',
+    'test/fixtures/userinteraction_opinions_popular.json',
 ];
 
 describe("When using the USSD line", function() {
