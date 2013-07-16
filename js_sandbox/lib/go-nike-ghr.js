@@ -475,30 +475,9 @@ function GoNikeGHR() {
         var p_opinion_view = self.crm_get('opinion/view/');
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
-            var first_view_prefix = false;
-            var first_view = false;
-            for (var opinion_view in collection){
-                if (!first_view_prefix) first_view_prefix = opinion_view;
-                var opinions = collection[opinion_view];
-                // Create the quiz
-                for (var view_name in opinions.views){
-                    var view = opinions.views[view_name];
-                    if (!first_view) first_view = view;
-                    var view_state_name = opinion_view + "_" + view_name;
-                    // do not recreate states that already exist.
-                    if(self.state_creators.hasOwnProperty(view_state_name)) {
-                        continue;
-                    }
-                    // construct a function using make_view_state()
-                    // to prevent getting a wrongly scoped 'view'
-                    self.add_creator(view_state_name,
-                        self.make_view_state(opinion_view, view));
-                }
-            }
-            return [first_view_prefix, first_view];
-        });
-        p_opinion_view.add_callback(function(payload) {
-            return self.make_initial_view_state(state_name, payload[0], payload[1]);
+            var first_view_prefix = im.config.opinion_view[0];
+            var first_view = im.config.opinion_view[1];
+            return self.make_initial_view_state(state_name, first_view_prefix, first_view);
         });
         return p_opinion_view;
     });
@@ -598,6 +577,36 @@ function GoNikeGHR() {
                             self.make_answer_state(quiz_name, answer));
                     }
                     // End of Build Weekly quiz
+                });
+                p_weeklyquiz.add_callback(function(){
+                    // Build Opinion Viewing
+                    var p_opinion_view = self.crm_get('opinion/view/');
+                    p_opinion_view.add_callback(function(result) {
+                        var collection = result.opinions;
+                        var first_view_prefix = false;
+                        var first_view = false;
+                        for (var opinion_view in collection){
+                            if (!first_view_prefix) first_view_prefix = opinion_view;
+                            var opinions = collection[opinion_view];
+                            // Create the quiz
+                            for (var view_name in opinions.views){
+                                var view = opinions.views[view_name];
+                                if (!first_view) first_view = view;
+                                var view_state_name = opinion_view + "_" + view_name;
+                                // do not recreate states that already exist.
+                                if(self.state_creators.hasOwnProperty(view_state_name)) {
+                                    continue;
+                                }
+                                // construct a function using make_view_state()
+                                // to prevent getting a wrongly scoped 'view'
+                                self.add_creator(view_state_name,
+                                    self.make_view_state(opinion_view, view));
+                            }
+                        }
+                        im.config.opinion_view = [first_view_prefix, first_view];
+                        // End Build Opinion Viewing
+                    });
+                    return p_opinion_view;
                 });
                 return p_weeklyquiz;
             });
