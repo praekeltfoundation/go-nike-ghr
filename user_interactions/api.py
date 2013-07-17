@@ -25,16 +25,26 @@ class UserInteractionResource(ModelResource):
             raise TastypieError("msisdn Chars are too long, len = %s"
                                 % len(user_data['msisdn']))
 
-        if len(user_data['action']) > 200:
-            raise TastypieError("action Chars are too long, len = %s"
-                                % len(user_data['action']))
+        if len(user_data['feature']) > 30:
+            raise TastypieError("feature Chars are too long, len = %s"
+                                % len(user_data['feature']))
+
+        if len(user_data['key']) > 100:
+            raise TastypieError("key Chars are too long, len = %s"
+                                % len(user_data['key']))
+
+        if len(user_data['value']) > 200:
+            raise TastypieError("value Chars are too long, len = %s"
+                                % len(user_data['value']))
 
         if len(user_data['transport']) > 5:
             raise TastypieError("transport Chars are too long, len = %s"
                                 % len(user_data['transport']))
 
         userinteraction = UserInteraction(msisdn=user_data['msisdn'],
-                                          action=user_data['action'],
+                                          feature=user_data['feature'],
+                                          key=user_data['key'],
+                                          value=user_data['value'],
                                           transport=user_data['transport'])
         userinteraction.save()
 
