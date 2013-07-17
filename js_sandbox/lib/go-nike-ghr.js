@@ -236,7 +236,7 @@ function GoNikeGHR() {
             var first = (p===0) ? true : false;
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
-            navigation_page_name = prefix + "_" + p;
+            var navigation_page_name = prefix + "_" + p;
             // Make sure it doesn't exist
             if(self.state_creators.hasOwnProperty(navigation_page_name)) {
                 continue;
