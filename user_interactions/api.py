@@ -22,23 +22,23 @@ class UserInteractionResource(ModelResource):
         """
         user_data = request.POST.dict()
         if (len(user_data['msisdn']) > 20):
-            raise TastypieError("msisdn Chars are too long, len = %s"
+            raise TastypieError("'msisdn' is longer than the maximum allowed length of 20"
                                 % len(user_data['msisdn']))
 
         if len(user_data['feature']) > 30:
-            raise TastypieError("feature Chars are too long, len = %s"
+            raise TastypieError("'feature' is longer than the maximum allowed length of 30"
                                 % len(user_data['feature']))
 
         if len(user_data['key']) > 100:
-            raise TastypieError("key Chars are too long, len = %s"
+            raise TastypieError("'key' is longer than the maximum allowed length of 100"
                                 % len(user_data['key']))
 
         if len(user_data['value']) > 200:
-            raise TastypieError("value Chars are too long, len = %s"
+            raise TastypieError("'value' is longer than the maximum allowed length of 200"
                                 % len(user_data['value']))
 
         if len(user_data['transport']) > 5:
-            raise TastypieError("transport Chars are too long, len = %s"
+            raise TastypieError("'transport' is longer than the maximum allowed length of 20"
                                 % len(user_data['transport']))
 
         userinteraction = UserInteraction(msisdn=user_data['msisdn'],
