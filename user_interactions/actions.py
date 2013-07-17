@@ -2,7 +2,7 @@ import csv
 from django.http import HttpResponse
 
 
-def export_as_csv_action(description="Export selected objects as CSV file",
+def export_as_csv_action(description="Export selected records to CSV file",
                          fields=None, exclude=None, header=True):
     """
     This function returns an export csv action
