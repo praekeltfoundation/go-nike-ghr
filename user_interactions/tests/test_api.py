@@ -40,7 +40,7 @@ class TestUserInteraction(TestCase):
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
         self.assertEqual(json_item["error"],
-                         "transport Chars are too long, len = 20")
+                         "'transport' is longer than the maximum allowed length of 20")
 
     def test_bad_msisdn_data(self):
         url = reverse('api_dispatch_list',
@@ -57,7 +57,7 @@ class TestUserInteraction(TestCase):
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
         self.assertEqual(json_item["error"],
-                         "msisdn Chars are too long, len = 24")
+                         "'msisdn' is longer than the maximum allowed length of 20")
 
     def test_bad_feature_data(self):
         url = reverse('api_dispatch_list',
@@ -74,4 +74,4 @@ class TestUserInteraction(TestCase):
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
         self.assertEqual(json_item["error"],
-                         "feature Chars are too long, len = 38")
+                         "'feature' is longer than the maximum allowed length of 30")
