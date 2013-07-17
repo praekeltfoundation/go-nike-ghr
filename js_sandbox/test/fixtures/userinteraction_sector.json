@@ -2,6 +2,6 @@
     "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/",
     "method": "POST",
     "content_type": "application/x-www-form-urlencoded",
-    "data": "action=REGISTRATION%3Bsector%3BMareba&transport=ussd&msisdn=1234567",
+    "data": "feature=REGISTRATION&key=sector&value=Mareba&transport=ussd&msisdn=1234567",
     "body": {}
 }
