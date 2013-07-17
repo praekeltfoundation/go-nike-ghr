@@ -82,8 +82,7 @@ function GoNikeGHR() {
             }, question.question, choices, null,
                 {
                     on_enter: function() {
-                        var action = "MANDL;question;" + question.question;
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
                         return p_log;
                     }
                 });
@@ -134,8 +133,7 @@ function GoNikeGHR() {
             }, question.question, choices, null,
                 {
                     on_enter: function() {
-                        var action = "MANDL;question;" + question.question;
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
                         return p_log;
                     }
                 }
@@ -160,8 +158,7 @@ function GoNikeGHR() {
             }, view.opinion, choices, null,
                 {
                     on_enter: function() {
-                        var action = "OPINIONS;viewed;" + view.opinion;
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinion);
                         return p_log;
                     }
                 });
@@ -207,9 +204,11 @@ function GoNikeGHR() {
         return p;
     };
 
-    self.interaction_log = function(action) {
+    self.interaction_log = function(feature, key, value) {
         var data = {
-            action: action,
+            feature: feature,
+            key: key,
+            value: value,
             transport: 'ussd',
             msisdn: im.user_addr
         };
@@ -419,14 +418,11 @@ function GoNikeGHR() {
                         null,
                         {
                             on_enter: function() {
-                                var action = "REGISTRATION;gender;" + gender;
-                                var p_log = self.interaction_log(action);
+                                var p_log = self.interaction_log("REGISTRATION", "gender", gender);
                                 p_log.add_callback(function() {
-                                    var action2 = "REGISTRATION;age;" + age;
-                                    var p_log2 = self.interaction_log(action2);
+                                    var p_log2 = self.interaction_log("REGISTRATION", "age", age);
                                     p_log2.add_callback(function() {
-                                        var action3 = "REGISTRATION;sector;" + sector;
-                                        var p_log3 = self.interaction_log(action3);
+                                        var p_log3 = self.interaction_log("REGISTRATION", "sector", sector);
                                         return p_log3;
                                     });
                                     return p_log2;
@@ -489,8 +485,7 @@ function GoNikeGHR() {
                 footer_text: "\n1 for prev, 2 for next, 0 to end.",
                 handlers: {
                     on_enter: function() {
-                        var action = "ARTICLES;article;viewed";
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("ARTICLES", "article", "viewed");
                         return p_log;
                     }
                 }
@@ -534,8 +529,7 @@ function GoNikeGHR() {
                 footer_text: "\n1 for prev, 2 for next, 0 to end.",
                 handlers: {
                     on_enter: function() {
-                        var action = "WWND;ndabaga;viewed";
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
                         return p_log;
                     }
                 }
@@ -561,8 +555,7 @@ function GoNikeGHR() {
                 footer_text: "\n1 for prev, 2 for next, 0 to end.",
                 handlers: {
                     on_enter: function() {
-                        var action = "OPINIONS;popular;viewed";
-                        var p_log = self.interaction_log(action);
+                        var p_log = self.interaction_log("OPINIONS", "popular", "viewed");
                         return p_log;
                     }
                 }
