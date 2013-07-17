@@ -59,18 +59,23 @@ function GoNikeGHR() {
         return p;
     };
 
+    self.make_navigation_choices = function(choices, prefix, parent) {
+        var nav_choices = choices.map(function(choice) {
+            var value = "";
+            if (choice[0] == parent){
+                value = parent;
+            } else {
+                value = prefix + "_" + choice[0];
+            }
+            var name = choice[1];
+            return new Choice(value, name);
+        });
+        return nav_choices;
+    };
+
     self.make_question_state = function(prefix, question) {
          return function(state_name, im) {
-            var choices = question.choices.map(function(choice) {
-                var value = "";
-                if (choice[0] == "main_menu"){
-                    value = "main_menu";
-                } else {
-                    value = prefix + "_" + choice[0];
-                }
-                var name = choice[1];
-                return new Choice(value, name);
-            });
+            var choices = self.make_navigation_choices(question.choices, prefix, "main_menu");
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
@@ -79,16 +84,7 @@ function GoNikeGHR() {
     };
 
     self.make_initial_question_state = function(state_name, prefix, question) {
-        var choices = question.choices.map(function(choice) {
-            var value = "";
-            if (choice[0] == "main_menu"){
-                value = "main_menu";
-            } else {
-                value = prefix + "_" + choice[0];
-            }
-            var name = choice[1];
-            return new Choice(value, name);
-        });
+        var choices = self.make_navigation_choices(question.choices, prefix, "main_menu");
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
@@ -227,16 +223,17 @@ function GoNikeGHR() {
         // Generates the navigation paging states
         var total_pages = Math.ceil(items.length / max_items);
         var pages = [];
+        var start = null;
         for (var i = 0; i < total_pages; i++){
             start = i*max_items;
             pages.push(items.slice(start, start+max_items));
         }
-
+        var navigation_page_name = null;
         for (var p = 0; p < pages.length; p++){
             var first = (p===0) ? true : false;
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
-            var navigation_page_name = prefix + "_" + p;
+            navigation_page_name = prefix + "_" + p;
             // Make sure it doesn't exist
             if(self.state_creators.hasOwnProperty(navigation_page_name)) {
                 continue;
@@ -286,10 +283,12 @@ function GoNikeGHR() {
         var items_keys = Object.keys(items);
         var total_pages = Math.ceil(items_keys.length / max_items);
         var pages = [];
+        var start = null;
         for (var i = 0; i < total_pages; i++){
             start = i*max_items;
             pages.push(items_keys.slice(start, start+max_items));
         }
+        var navigation_page_name = null;
         for (var p = 0; p < pages.length; p++){
             var first = (p===0) ? true : false;
             var last = (p==(pages.length-1)) ? true : false;
