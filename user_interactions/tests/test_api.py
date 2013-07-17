@@ -12,14 +12,17 @@ class TestUserInteraction(TestCase):
                       'api_name': 'api'})
         response = self.client.post(url,
                                     format="json",
-                                    data={"msisdn": "msisdn",
-                                    "action": "action",
+                                    data={"msisdn": "post msisdn",
+                                    "feature": "post feature",
+                                    "key": "post key",
+                                    "value": "post value",
                                     "transport": "sms"})
-
         query = UserInteraction.objects.all()
         self.assertEqual(response.status_code, 204)
-        self.assertEqual(query[0].msisdn, "msisdn")
-        self.assertEqual(query[0].action, "action")
+        self.assertEqual(query[0].msisdn, "post msisdn")
+        self.assertEqual(query[0].feature, "post feature")
+        self.assertEqual(query[0].key, "post key")
+        self.assertEqual(query[0].value, "post value")
         self.assertEqual(query[0].transport, "sms")
 
     def test_bad_transport_data(self):
@@ -29,7 +32,9 @@ class TestUserInteraction(TestCase):
         response = self.client.post(url,
                                     format="json",
                                     data={"msisdn": "msisdn",
-                                    "action": "action",
+                                    "feature": "post feature",
+                                    "key": "post key",
+                                    "value": "post value",
                                     "transport": "This is way too long"})
         self.assertEqual(response.status_code, 400)
         json_item = json.loads(response.content)
@@ -44,10 +49,29 @@ class TestUserInteraction(TestCase):
         response = self.client.post(url,
                                     format="json",
                                     data={"msisdn": "msisdnmsisdnmsisdnmsisdn",
-                                    "action": "action",
+                                    "feature": "post feature",
+                                    "key": "post key",
+                                    "value": "post value",
                                     "transport": "sms"})
         self.assertEqual(response.status_code, 400)
         json_item = json.loads(response.content)
         self.assertIn("error", json_item)
         self.assertEqual(json_item["error"],
                          "msisdn Chars are too long, len = 24")
+
+    def test_bad_feature_data(self):
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'userinteraction',
+                      'api_name': 'api'})
+        response = self.client.post(url,
+                                    format="json",
+                                    data={"msisdn": "post msisdn",
+                                    "feature": "post feature post feature post feature",
+                                    "key": "post key",
+                                    "value": "post value",
+                                    "transport": "sms"})
+        self.assertEqual(response.status_code, 400)
+        json_item = json.loads(response.content)
+        self.assertIn("error", json_item)
+        self.assertEqual(json_item["error"],
+                         "feature Chars are too long, len = 38")
