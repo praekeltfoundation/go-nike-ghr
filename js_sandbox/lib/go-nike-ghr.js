@@ -107,29 +107,16 @@ function GoNikeGHR() {
     },
 
     self.make_initial_mandl_question_state = function(state_name, prefix, question) {
-            var choices = question.choices.map(function(choice) {
-                var value = prefix + "_" + choice[0];
-                var name = choice[1];
-                return new Choice(value, name);
-            });
+        var choices = self.make_navigation_choices(question.choices, prefix, null);
 
-            return new ChoiceState(state_name, function(choice) {
-                return choice.value;
-            }, question.question, choices);
+        return new ChoiceState(state_name, function(choice) {
+            return choice.value;
+        }, question.question, choices);
     };
 
     self.make_view_state = function(prefix, view) {
          return function(state_name, im) {
-            var choices = view.choices.map(function(choice) {
-                var value = "";
-                if (choice[0] == "opinions"){
-                    value = "opinions";
-                } else {
-                    value = prefix + "_" + choice[0];
-                }
-                var name = choice[1];
-                return new Choice(value, name);
-            });
+            var choices = self.make_navigation_choices(view.choices, prefix, "opinions");
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
@@ -138,11 +125,7 @@ function GoNikeGHR() {
     };
 
     self.make_initial_view_state = function(state_name, prefix, view) {
-        var choices = view.choices.map(function(choice) {
-            var value = prefix + "_" + choice[0];
-            var name = choice[1];
-            return new Choice(value, name);
-        });
+        var choices = self.make_navigation_choices(view.choices, prefix, null);
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
         }, view.opinion, choices);
