@@ -27,6 +27,11 @@ function GoNikeGHRError(msg) {
 
 function GoNikeGHR() {
     var self = this;
+
+    self.post_headers = {
+        'Content-Type': ['application/x-www-form-urlencoded']
+    };
+
     // The first state to enter
 
     StateCreator.call(self, 'initial_state');
@@ -79,7 +84,13 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, question.question, choices);
+            }, question.question, choices, null,
+                {
+                    on_enter: function() {
+                        var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
+                        return p_log;
+                    }
+                });
         };
     };
 
@@ -111,7 +122,14 @@ function GoNikeGHR() {
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, question.question, choices);
+        }, question.question, choices, null,
+            {
+                on_enter: function() {
+                    var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
+                    return p_log;
+                }
+            }
+        );
     };
 
     self.make_view_state = function(prefix, view) {
@@ -120,7 +138,13 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, view.opinion, choices);
+            }, view.opinion, choices, null,
+                {
+                    on_enter: function() {
+                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinion);
+                        return p_log;
+                    }
+                });
         };
     };
 
@@ -138,10 +162,45 @@ function GoNikeGHR() {
             headers: self.headers
         });
         p.add_callback(function(result) {
-            var json = self.check_reply(result, url, 'GET', false);
+            var json = self.check_reply(result, url, 'GET', null, false);
             return json;
         });
         return p;
+    };
+
+    self.crm_post = function(path, data) {
+        var url = im.config.crm_api_root + path;
+        data = self.url_encode(data);
+        var p = im.api_request("http.post", {
+            url: url,
+            headers: self.post_headers,
+            data: data
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'POST', data, false);
+            return json;
+        });
+        return p;
+    };
+
+    self.interaction_log = function(feature, key, value) {
+        var data = {
+            feature: feature,
+            key: key,
+            value: value,
+            transport: 'ussd',
+            msisdn: im.user_addr
+        };
+        return self.crm_post("userinteraction/", data);
+    };
+
+    self.url_encode = function(params) {
+        var items = [];
+        for (var key in params) {
+            items[items.length] = (encodeURIComponent(key) + '=' +
+                                   encodeURIComponent(params[key]));
+        }
+        return items.join('&');
     };
 
     self.check_reply = function(reply, url, method, data, ignore_error) {
@@ -423,6 +482,8 @@ function GoNikeGHR() {
 
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
+        var gender = im.get_user_answer('initial_state');
+        var age = im.get_user_answer('reg_age');
         if (self.validate_sector(im, sector)) {
             // Get the user
             var p = self.get_contact(im);
@@ -430,8 +491,6 @@ function GoNikeGHR() {
             p.add_callback(function(result) {
                 // This callback updates extras when contact is found
                 if (result.success){
-                    var gender = im.get_user_answer('initial_state');
-                    var age = im.get_user_answer('reg_age');
                     var fields = {
                         "ghr_reg_complete": "true",
                         "ghr_gender": gender,
@@ -457,7 +516,22 @@ function GoNikeGHR() {
                         "Thank you for registering",
                         [
                             new Choice("continue", "Continue")
-                        ]
+                        ],
+                        null,
+                        {
+                            on_enter: function() {
+                                var p_log = self.interaction_log("REGISTRATION", "gender", gender);
+                                p_log.add_callback(function() {
+                                    var p_log2 = self.interaction_log("REGISTRATION", "age", age);
+                                    p_log2.add_callback(function() {
+                                        var p_log3 = self.interaction_log("REGISTRATION", "sector", sector);
+                                        return p_log3;
+                                    });
+                                    return p_log2;
+                                });
+                                return p_log;
+                            }
+                        }
                     );
                 } else {
                     // Error saving contact extras
@@ -510,7 +584,13 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var p_log = self.interaction_log("ARTICLES", "article", "viewed");
+                        return p_log;
+                    }
+                }
             }
         );
     });
@@ -548,7 +628,13 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
+                        return p_log;
+                    }
+                }
             }
         );
     });
@@ -568,7 +654,13 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end."
+                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                handlers: {
+                    on_enter: function() {
+                        var p_log = self.interaction_log("OPINIONS", "popular", "viewed");
+                        return p_log;
+                    }
+                }
             }
         );
     });
