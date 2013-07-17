@@ -1,0 +1,97 @@
+{
+    "url": "http://ghr.preview.westerncapelabs.com/api/directory/",
+    "method": "GET",
+    "body": {
+        "directory": {
+            "category one": {
+                "sub category one": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category two": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                }
+            },
+            "category two": {
+                "sub category three": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category four": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category three": {
+                "sub category five": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category six": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category four": {
+                "sub category seven": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category eight": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category five": {
+                "sub category nine": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category ten": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category six": {
+                "sub category eleven": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category twelwe": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category seven": {
+                "sub category thirteen": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category fourteen": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            },
+            "category eight": {
+                "sub category fifteen": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details",
+                    "description_3": "third part of contact details"          
+                },
+                "sub category sixteen": {
+                    "description_1": "first part of contact details",
+                    "description_2": "second part of contact details with none extra"        
+                }
+            }
+        }
+    }
+}

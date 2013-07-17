@@ -37,6 +37,7 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_opinions.json',
     'test/fixtures/userinteraction_opinions_popular.json',
     'test/fixtures/weekly_quiz.json',
+    'test/fixtures/directory.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -788,6 +789,192 @@ describe("When using the USSD line", function() {
                     "^Yes -  Genius[^]" +
                     "1. Next$"
                 )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 5 from menu should show the directory category listing", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "5",
+                next_state: "directory_start",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category one[^]" +
+                    "2. category two[^]" +
+                    "3. category three[^]" +
+                    "4. Next[^]" +
+                    "5. Main menu$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 4 from directory should show the second page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "4",
+                next_state: "directory_1",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category four[^]" +
+                    "2. category five[^]" +
+                    "3. category six[^]" +
+                    "4. Back[^]" +
+                    "5. Next[^]" +
+                    "6. Main menu$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 4 from directory page 2 should show the 1st page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_1'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "4",
+                next_state: "directory_0",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category one[^]" +
+                    "2. category two[^]" +
+                    "3. category three[^]" +
+                    "4. Next[^]" +
+                    "5. Main menu$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 5 from directory page 2 should show the last page of directory category listing", function (done) {
+            var user = {
+                current_state: 'directory_1'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "5",
+                next_state: "directory_2",
+                response: (
+                    "^Please select an option:[^]" +
+                    "1. category seven[^]" +
+                    "2. category eight[^]" +
+                    "3. Back[^]" +
+                    "4. Main menu$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 from directory page 1 should show the first sub directory listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_0",
+                response: (
+                    "^Please select an organization:[^]" +
+                    "1. sub category one[^]" +
+                    "2. sub category two[^]" +
+                    "3. Back to categories$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from directory page 1 should show the second sub directory listing", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "directory_category_two_0",
+                response: (
+                    "^Please select an organization:[^]" +
+                    "1. sub category three[^]" +
+                    "2. sub category four[^]" +
+                    "3. Back to categories$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 from directory sub category one should show the first page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_0'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^first part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from page 1 of content in directory sub category one should show the second page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^second part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 from page 2 of content in directory sub category one should show the third page of content", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one',
+                pages: {
+                    directory_category_one_sub_category_one: 0
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "directory_category_one_sub_category_one",
+                response: (
+                    "^second part of contact details[^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 0 from page 2 of content in directory sub category one show end_state", function (done) {
+            var user = {
+                current_state: 'directory_category_one_sub_category_one',
+                pages: {
+                    directory_category_one_sub_category_one: 0
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "0",
+                next_state: "end_state",
+                response: (
+                    "^Thank you and bye bye!$"
+                ),
+                continue_session: false
             });
             p.then(done, done);
         });
