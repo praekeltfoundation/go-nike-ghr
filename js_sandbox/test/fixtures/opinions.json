@@ -1,0 +1,13 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/opinion/",
+  "method": "GET",
+  "body": {
+    "opinions": {
+        "opinion_1": "This is opinion one",
+        "opinion_2": "This is opinion two",
+        "opinion_3": "This is opinion three",
+        "opinion_4": "This is opinion four",
+        "opinion_5": "This is opinion five"
+    }
+  }
+}

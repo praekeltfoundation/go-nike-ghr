@@ -15,7 +15,13 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^celery/', include('celery_app.urls')),
 
+    # Monitoring and Learning urls
+    url(r'^', include('monitor_and_learn.urls')),
     # API links
     url(r'^', include('articles.urls')),
     url(r'^', include('user_interactions.urls')),
+    url(r'^', include('ndabaga.urls')),
+    url(r'^', include('opinions.urls')),
+    url(r'^', include('weekly_quiz.urls')),
+    url(r'^', include('directory.urls')),
 )
