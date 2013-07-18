@@ -149,6 +149,7 @@ INSTALLED_APPS = (
 
     # sample apps to explain usage
     'articles',
+    'user_interactions',
     'weekly_quiz',
     'ndabaga',
     'monitor_and_learn',
