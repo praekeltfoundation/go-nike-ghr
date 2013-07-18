@@ -28,8 +28,8 @@ DATABASES = {
         'NAME': 'ghr',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
