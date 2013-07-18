@@ -16,3 +16,4 @@ django-celery-email
 django-tastypie
 pep8
 pyflakes
+fabric
