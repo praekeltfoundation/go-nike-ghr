@@ -10,6 +10,8 @@ class TestUserInteraction(TestCase):
         url = reverse('api_dispatch_list',
                       kwargs={'resource_name': 'userinteraction',
                       'api_name': 'api'})
+        query = UserInteraction.objects.all()
+        self.assertEqual(query.count(), 0)
         response = self.client.post(url,
                                     format="json",
                                     data={"msisdn": "post msisdn",
@@ -17,7 +19,7 @@ class TestUserInteraction(TestCase):
                                     "key": "post key",
                                     "value": "post value",
                                     "transport": "sms"})
-        query = UserInteraction.objects.all()
+        self.assertEqual(query.count(), 1)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(query[0].msisdn, "post msisdn")
         self.assertEqual(query[0].feature, "post feature")
