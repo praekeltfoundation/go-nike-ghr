@@ -15,7 +15,7 @@ class CategoryResource(ModelResource):
 
     class Meta:
         # setting the resoucrce attributes
-        resource_name = "category"
+        resource_name = "directory"
         allowed_methods = ['get']
         excludes = ['completed', 'active']
         include_resource_uri = False
@@ -25,7 +25,7 @@ class CategoryResource(ModelResource):
         """
         Modifying the data to provide the Categories and Sub Categories.
         Structure is {dir: {cat: {sub_cat{c: "a", c2: "b", "c3: "c"}}}}
-        This function handles /api/category/
+        This function handles /api/directory/
         """
         if isinstance(data_dict, dict):
             if 'meta' in data_dict:

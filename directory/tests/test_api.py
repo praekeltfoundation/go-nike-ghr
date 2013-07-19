@@ -8,7 +8,7 @@ class TestCategoryApi(TestCase):
 
     def test_api_response(self):
         url = reverse('api_dispatch_list',
-                      kwargs={'resource_name': 'category',
+                      kwargs={'resource_name': 'directory',
                       'api_name': 'api'})
         response = self.client.get(url)
         json_item = json.loads(response.content)
