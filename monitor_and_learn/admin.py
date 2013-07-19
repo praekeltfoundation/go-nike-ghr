@@ -4,6 +4,7 @@ from models import (MonitorAndLearningQuizId,
                     MonitorAndLearningQuizAnswer)
 from django import forms
 from django.forms.models import BaseInlineFormSet
+from django.db.models.signals import post_save
 
 
 class QuestionAdminForm(forms.ModelForm):
@@ -93,19 +94,29 @@ class MonitorAndLearningQuizAnswerFormset(BaseInlineFormSet):
                                                     " please shorten questions"
                                                     " and/or answers")
 
-        try:
+
+def check_question_number(sender, instance, signal, *args, **kwargs):
+    """ Checks the number of questions after the save function and
+        makes sure its four
+    """
+    try:
         # Checking if Foreign ID has been included otherwise gives
         # an DoesNotExist exception, despite the validation been active
             query = (MonitorAndLearningQuizQuestion.objects.all().
-                     filter(quiz_id=self.instance.quiz_id))
+                     filter(quiz_id=instance.quiz_id))
 
-            if query.count() >= 3:
+            if query.count() >= 4:
                 query = (MonitorAndLearningQuizId.objects.
-                         get(pk=self.instance.quiz_id.id))
+                         get(pk=instance.quiz_id.id))
                 query.completed = True
                 query.save()
-        except:
-            pass
+    except MonitorAndLearningQuizQuestion.DoesNotExist:
+        pass
+
+
+post_save.connect(check_question_number,
+                  sender=MonitorAndLearningQuizQuestion)
+
 
 
 class MonitorAndLearningQuizAnswerInline(admin.StackedInline):
