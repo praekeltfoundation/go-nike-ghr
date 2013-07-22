@@ -73,7 +73,8 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com"
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -84,11 +85,45 @@ describe("When using the USSD line", function() {
 
         // first test should always start 'null, null' because we haven't
         // started interacting yet
-        it("first screen should ask us gender", function (done) {
+
+        it("first screen should ask us to accept T&Cs", function (done) {
             var p = tester.check_state({
                 user: null,
                 content: null,
                 next_state: "initial_state",
+                response: "^To proceed with registration, do you accept the Terms " +
+                    "and Conditions of Ni Nyampinga - faketermsurl.com:[^]" +
+                    "1. Yes[^]"+
+                    "2. No$"
+            });
+            p.then(done, done);
+        });
+
+        it("declining T&C's should thanks and exit", function (done) {
+            var user = {
+                current_state: 'initial_state'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "reg_noterms",
+                response: "^Sorry but we can't proceed with your registration " +
+                        "unless you accept the Terms & Conditions. Please redial " +
+                        "if you change your mind. Thanks!$",
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
+
+        it("accepting T&C's should ask us gender", function (done) {
+            var user = {
+                current_state: 'initial_state'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "reg_gender",
                 response: "^Please choose your gender:[^]" +
                     "1. Male[^]"+
                     "2. Female$"
@@ -96,9 +131,12 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("second screen should ask age", function (done) {
+        it("should ask age", function (done) {
             var user = {
-                current_state: 'initial_state'
+                current_state: 'reg_gender',
+                answers: {
+                    initial_state: 'reg_gender'
+                }
             };
             var p = tester.check_state({
                 user: user,
@@ -117,11 +155,12 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("third screen should ask sector lived in", function (done) {
+        it("should ask sector lived in", function (done) {
             var user = {
                 current_state: 'reg_age',
                 answers: {
-                    initial_state: 'Male'
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male'
                 }
             };
             var p = tester.check_state({
@@ -133,11 +172,12 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("forth screen with valid sector should thank user", function (done) {
+        it("entering valid sector should thank user", function (done) {
             var user = {
                 current_state: 'reg_sector',
                 answers: {
-                    initial_state: 'Male',
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
                     reg_age: '19-24'
                 }
             };
@@ -153,11 +193,12 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("forth screen with invalid sector should ask for reentry", function (done) {
+        it("entering invalid sector should ask for reentry", function (done) {
             var user = {
                 current_state: 'reg_sector',
                 answers: {
-                    initial_state: 'Male',
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
                     reg_age: '19-24'
                 }
             };
