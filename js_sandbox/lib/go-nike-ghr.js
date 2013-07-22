@@ -543,7 +543,7 @@ function GoNikeGHR() {
             return p;
         } else {
            return new FreeText(
-                "reg_sector_reenter",
+                "reg_sector",
                 "reg_thanks",
                 "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?"
             );

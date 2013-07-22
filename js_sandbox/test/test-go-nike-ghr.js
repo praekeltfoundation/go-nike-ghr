@@ -166,7 +166,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "Invalid sector",
-                next_state: "reg_sector_reenter",
+                next_state: "reg_sector",
                 response: (
                     "^Sorry, cannot find a match. Please try again.\n" +
                     "Which sector do you live in\\?$"
