@@ -741,7 +741,7 @@ function GoNikeGHR() {
         });
         p_mandl.add_callback(function(){
             // Get 
-            var p_opinion = self.crm_get('opinion/');
+            var p_opinion = self.crm_get('opinions/sms/');
             p_opinion.add_callback(function(result){
                 im.config.opinions = result.opinions;
                 return true;
