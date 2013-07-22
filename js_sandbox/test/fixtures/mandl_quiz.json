@@ -1,5 +1,5 @@
 {
-  "url": "http://ghr.preview.westerncapelabs.com/api/mandl/1",
+  "url": "http://ghr.preview.westerncapelabs.com/api/mandl/1?format=json",
   "method": "GET",
   "body": {
     "quiz": {

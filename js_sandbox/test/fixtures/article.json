@@ -1,5 +1,5 @@
 {
-  "url": "http://ghr.preview.westerncapelabs.com/api/article/",
+  "url": "http://ghr.preview.westerncapelabs.com/api/article/?format=json",
   "method": "GET",
   "body": {
     "article": ["Lorem ipsum dolor sit amet, consectetur adipiscing elit.","Proin a porta justo. Maecenas sem felis, sollicitudin vitae risus luctus, consectetur sollicitudin leo.", "Donec tincidunt lobortis erat eget malesuada. Cras cursus accumsan eleifend. Morbi ullamcorper pretium sollicitudin.", "Etiam tincidunt, sapien elementum pharetra dapibus, mi sem venenatis nulla, at interdum sapien augue eu elit."]
