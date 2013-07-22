@@ -1,5 +1,5 @@
 {
-    "url": "http://ghr.preview.westerncapelabs.com/api/weeklyquiz/",
+    "url": "http://ghr.preview.westerncapelabs.com/api/weeklyquiz/?format=json",
     "method": "GET",
     "body": {
         "quiz": {

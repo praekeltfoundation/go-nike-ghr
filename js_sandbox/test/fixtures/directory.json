@@ -1,5 +1,5 @@
 {
-    "url": "http://ghr.preview.westerncapelabs.com/api/directory/",
+    "url": "http://ghr.preview.westerncapelabs.com/api/directory/?format=json",
     "method": "GET",
     "body": {
         "directory": {

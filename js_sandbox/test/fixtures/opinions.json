@@ -1,5 +1,5 @@
 {
-  "url": "http://ghr.preview.westerncapelabs.com/api/opinion/",
+  "url": "http://ghr.preview.westerncapelabs.com/api/opinion/?format=json",
   "method": "GET",
   "body": {
     "opinions": {

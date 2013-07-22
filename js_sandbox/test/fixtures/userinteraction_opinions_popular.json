@@ -1,5 +1,5 @@
 {
-    "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/",
+    "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/?format=json",
     "method": "POST",
     "content_type": "application/x-www-form-urlencoded",
     "data": "feature=OPINIONS&key=popular&value=viewed&transport=ussd&msisdn=1234567",
