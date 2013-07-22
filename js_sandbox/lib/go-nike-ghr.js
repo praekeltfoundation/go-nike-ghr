@@ -513,7 +513,9 @@ function GoNikeGHR() {
                     return new ChoiceState(
                         state_name,
                         'mandl_builder',
-                        "Thank you for registering",
+                        "Welcome Ni Nyampinga club member! We want to know you better. " +
+                        "For each set of 4 questions you answer, you enter a lucky draw to " +
+                        "win XXX RwF weekly.",
                         [
                             new Choice("continue", "Continue")
                         ],
