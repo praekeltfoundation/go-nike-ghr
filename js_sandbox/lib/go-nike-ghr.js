@@ -668,7 +668,7 @@ function GoNikeGHR() {
     });
 
     self.add_creator('opinions_view', function(state_name, im) {
-        var p_opinion_view = self.crm_get('opinion/view/');
+        var p_opinion_view = self.crm_get('opinions/view/');
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
             var first_view_prefix = im.config.opinion_view[0];
@@ -791,7 +791,7 @@ function GoNikeGHR() {
                 });
                 p_weeklyquiz.add_callback(function(){
                     // Build Opinion Viewing
-                    var p_opinion_view = self.crm_get('opinion/view/');
+                    var p_opinion_view = self.crm_get('opinions/view/');
                     p_opinion_view.add_callback(function(result) {
                         var collection = result.opinions;
                         var first_view_prefix = false;
