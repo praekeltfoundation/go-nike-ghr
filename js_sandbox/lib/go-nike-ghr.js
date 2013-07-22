@@ -156,7 +156,7 @@ function GoNikeGHR() {
     };
 
     self.crm_get = function(path) {
-        var url = im.config.crm_api_root + path;
+        var url = im.config.crm_api_root + path + "?format=json";
         var p = im.api_request("http.get", {
             url: url,
             headers: self.headers
@@ -169,7 +169,7 @@ function GoNikeGHR() {
     };
 
     self.crm_post = function(path, data) {
-        var url = im.config.crm_api_root + path;
+        var url = im.config.crm_api_root + path + "?format=json";
         data = self.url_encode(data);
         var p = im.api_request("http.post", {
             url: url,
