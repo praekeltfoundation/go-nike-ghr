@@ -419,7 +419,8 @@ function GoNikeGHR() {
                     "ghr_questions": JSON.stringify([]),
                     "ghr_gender": "",
                     "ghr_age": "",
-                    "ghr_sector": ""
+                    "ghr_sector": "",
+                    "ghr_terms_accepted": "false"
                 };
                 // Run the extras update
                 return im.api_request('contacts.update_extras', {
@@ -439,11 +440,14 @@ function GoNikeGHR() {
                     // Did not finish registration and session state not found
                     return new ChoiceState(
                         state_name,
-                        "reg_age",
-                        "Please choose your gender:",
+                        function(choice) {
+                            return choice.value;
+                        },
+                        "To proceed with registration, do you accept the Terms " +
+                        "and Conditions of Ni Nyampinga - " + im.config.terms_url + ":",
                         [
-                            new Choice("Male", "Male"),
-                            new Choice("Female", "Female")
+                            new Choice("reg_gender", "Yes"),
+                            new Choice("reg_noterms", "No")
                         ]
                     );
                 } else {
@@ -457,6 +461,49 @@ function GoNikeGHR() {
             }
         });
         return p;  // return the promise
+    });
+
+    self.add_state(new EndState(
+        "reg_noterms",
+        "Sorry but we can't proceed with your registration unless you accept the " +
+        "Terms & Conditions. Please redial if you change your mind. Thanks!",
+        "initial_state"
+    ));
+
+    self.add_creator('reg_gender', function(state_name, im) {
+        // Check if they've already registered
+        var p = self.get_contact(im);
+
+        p.add_callback(function(result) {
+            // This callback updates extra to include terms accepted
+            // Accepted terms
+            var fields = {
+                "ghr_terms_accepted": "true"
+            };
+            // Run the extras update
+            return im.api_request('contacts.update_extras', {
+                key: result.contact.key,
+                fields: fields
+            });
+        });
+
+        p.add_callback(function(result) {
+            // This callback generates the state the user sees
+            if (result.success){
+                return new ChoiceState(
+                    state_name,
+                    "reg_age",
+                    "Please choose your gender:",
+                    [
+                        new Choice("Male", "Male"),
+                        new Choice("Female", "Female")
+                    ]
+                );
+            } else {
+                return self.error_state();
+            }
+        });
+        return p;
     });
 
     self.add_state(new ChoiceState(
@@ -482,7 +529,7 @@ function GoNikeGHR() {
 
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
-        var gender = im.get_user_answer('initial_state');
+        var gender = im.get_user_answer('reg_gender');
         var age = im.get_user_answer('reg_age');
         if (self.validate_sector(im, sector)) {
             // Get the user
