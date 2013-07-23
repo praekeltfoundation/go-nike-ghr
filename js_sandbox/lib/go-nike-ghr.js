@@ -205,7 +205,7 @@ function GoNikeGHR() {
 
     self.check_reply = function(reply, url, method, data, ignore_error) {
         var error;
-        if (reply.success && reply.code == 200) {
+        if (reply.success && (reply.code >= 200 && reply.code < 300))  {
             var json = JSON.parse(reply.body);
             return json;
         }
