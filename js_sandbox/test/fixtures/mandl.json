@@ -8,29 +8,11 @@
         "questions": {
           "q_1": {
             "question": "Is this fake question one?",
-            "choices": [
-                [
-                    "q_2",
-                    "Yes"
-                ],
-                [
-                    "q_2",
-                    "No"
-                ]
-            ]
+            "choices": ["Yes", "No"]
           },
           "q_2": {
             "question": "Is this fake question two?",
-            "choices": [
-                [
-                    "main_menu",
-                    "Of course"
-                ],
-                [
-                    "main_menu",
-                    "No way!"
-                ]
-            ]
+            "choices": ["Of course", "No way!"]
           }
         }
       },
@@ -39,29 +21,11 @@
         "questions": {
           "q_1": {
             "question": "Is this fake question three?",
-            "choices": [
-                [
-                    "q_2",
-                    "Yes"
-                ],
-                [
-                    "q_2",
-                    "No"
-                ]
-            ]
+            "choices": ["Yes", "No"]
           },
           "q_2": {
             "question": "Is this fake question four?",
-            "choices": [
-                [
-                    "main_menu",
-                    "Of course"
-                ],
-                [
-                    "main_menu",
-                    "No way!"
-                ]
-            ]
+            "choices": ["Of course", "No way!"]
           }          
         }
       }
