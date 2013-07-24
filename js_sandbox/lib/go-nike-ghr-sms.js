@@ -48,8 +48,7 @@ function GoNikeGHRSMS() {
     };
 
     // The first state to enter
-
-    StateCreator.call(self, 'initial_state');
+    StateCreator.call(self, 'start');
 
     self.get_today = function(im) {
         if (im.config.testing) {
@@ -146,34 +145,46 @@ function GoNikeGHRSMS() {
     };
 
     self.check_swear = function(text){
-        //TODO: check swearing
-        return false;
+        var swear_words = im.config.swear_words;
+        var swear = false;
+        // TODO - strip punctuation
+        text = text.toLowerCase().split(' ')
+        for(var i=0;i<swear_words.length;i++){
+            if (text.indexOf(swear_words[i]) !== -1){
+                swear = true;
+            }
+        }
+        return swear;
     };
 
-    self.add_creator('initial_state', function(state_name, im) {
-        // Check if they've already registered
-        var text = im.get_user_answer('initial_state');
-        var fields = {};
-        var includes_swear = self.check_swear(text);
-        if(includes_swear){
-            fields['ghr_rude'] = self.get_today();
-        }
-        if (Object.keys(fields).length > 0){
-            // update the extras with flags
-            var p = self.get_contact(im);
-            p.add_callback(function(result){
-                return im.api_request('contacts.update_extras', {
-                    key: result.contact.key,
-                    fields: fields
+    self.add_creator('start', function(state_name, im, content) {
+        // Expects to be used on SMS channel 
+        var fields = {}; // We'll populate if we need to update the extras
+        if (content !== undefined){
+            console.log("Hi: " + content);
+            var includes_swear = self.check_swear(content);
+            if(includes_swear){
+                fields['ghr_rude'] = self.get_today();
+            }
+            if (Object.keys(fields).length > 0){
+                // update the extras with flags
+                var p = self.get_contact(im);
+                p.add_callback(function(result){
+                    return im.api_request('contacts.update_extras', {
+                        key: result.contact.key,
+                        fields: fields
+                    });
                 });
-            });
-            p.add_callback(function(result){
+                p.add_callback(function(result){
+                    return self.make_thanks_state(state_name, "Hello naughty person");
+                });
+                return p;
+            } else {
+                // all clean
                 return self.make_thanks_state(state_name, "Hello SMSer");
-            });
-            return p;
+            }
         } else {
-            // all clean
-            return self.make_thanks_state(state_name, "Hello SMSer");
+            return self.make_thanks_state(state_name, "Nothing to say?");
         }
     });
 }

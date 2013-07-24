@@ -66,12 +66,25 @@ describe("When using the SMS line", function() {
             async: true
         });
 
-        it("sending text should say hello", function (done) {
+        it("sending good text should say hello", function (done) {
+            var user = {};
             var p = tester.check_state({
-                user: null,
+                user: user,
                 content: "Hi GHR!",
-                next_state: "initial_state",
+                next_state: "start",
                 response: "^Hello SMSer$",
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
+        it("sending bad text should say naughty", function (done) {
+            var user = {};
+            var p = tester.check_state({
+                user: user,
+                content: "Hi GHR you are poo",
+                next_state: "start",
+                response: "^Hello naughty person$",
                 continue_session: false
             });
             p.then(done, done);
