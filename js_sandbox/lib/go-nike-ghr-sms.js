@@ -171,34 +171,59 @@ function GoNikeGHRSMS() {
         // Expects to be used on SMS channel 
         var fields = {}; // We'll populate if we need to update the extras
         var content = im.get_user_answer('start');
-        if (content !== undefined){
-            var includes_swear = self.check_swear(content);
-            if(includes_swear){
-                fields['ghr_rude'] = self.get_today(im);
-            }
-            if (Object.keys(fields).length > 0){
-                // update the extras with flags
-                var p = self.get_contact(im);
-                p.add_callback(function(result){
-                    return im.api_request('contacts.update_extras', {
-                        key: result.contact.key,
-                        fields: fields
-                    });
+        var today = self.get_today(im);
+        var includes_swear = false;
+        var is_spammer = false;
+        if (content !== undefined) {
+            var p = self.get_contact(im);
+            p.add_callback(function(result){
+                var contact = result.contact;
+                // Swearing checks
+                includes_swear = self.check_swear(content);
+                if(includes_swear){
+                    fields['ghr_rude'] = self.get_today(im).toISOString();
+                }
+                // Spam checks
+                if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined' || content != contact["extras-ghr_sms_opinion_last"]) {
+                    // first time opinion or not same as last time
+                    fields['ghr_sms_opinion_last'] = content;
+                    fields['ghr_sms_opinion_first_seen'] = today.toISOString();
+                    fields['ghr_sms_opinion_seen_count'] = "1";
+                } else {
+                    // current content is same as last
+                    var seen_count = parseInt(contact["extras-ghr_sms_opinion_seen_count"])+1;
+                    var first_seen = new Date(contact["extras-ghr_sms_opinion_first_seen"]);
+                    var day = 1000*60*60*24;
+                    if (seen_count >= 5 && (today-first_seen) < day){
+                        // seen 5 or more times in last 24 hours
+                        fields['ghr_spammer'] = today.toISOString();
+                        is_spammer = true;
+                    } else {
+                        // just up the seen count - not spammer yet
+                        fields['ghr_sms_opinion_seen_count'] = seen_count.toString();
+                    }
+                }
+                return im.api_request('contacts.update_extras', {
+                    key: contact.key,
+                    fields: fields
                 });
-                p.add_callback(function(result){
+            });
+            p.add_callback(function(result){
+                if (includes_swear || is_spammer){
                     return self.make_thanks_state(state_name, "Thanks for your SMS opinion! " +
                         "Please try to keep messages clean!");
-                });
-                return p;
-            } else {
-                // all clean
-                return self.make_thanks_state(state_name, "Thanks for your SMS opinion!");
-            }
+                } else {
+                    // all clean
+                    return self.make_thanks_state(state_name, "Thanks for your SMS opinion!");
+                }
+            });
+            return p;
         } else {
             return self.make_thanks_state(state_name, "Nothing to say?");
         }
+
     });
-}
+};
 
 // launch app
 var states = new GoNikeGHRSMS();
