@@ -66,25 +66,25 @@ describe("When using the SMS line", function() {
             async: true
         });
 
-        it("sending good text should say hello", function (done) {
+        it("sending good text should say thanks", function (done) {
             var user = {};
             var p = tester.check_state({
                 user: user,
-                content: "Hi GHR!",
-                next_state: "start",
-                response: "^Hello SMSer$",
+                content: "This., -/ is #! an $ % ^ & * example ;: {} of a = -_ string with `~)() punctuation",
+                next_state: "process_sms",
+                response: "^Thanks for your SMS opinion!$",
                 continue_session: false
             });
             p.then(done, done);
         });
 
-        it("sending bad text should say naughty", function (done) {
+        it("sending bad text should warn", function (done) {
             var user = {};
             var p = tester.check_state({
                 user: user,
-                content: "Hi GHR you are poo",
-                next_state: "start",
-                response: "^Hello naughty person$",
+                content: "This., -/ is #! an $ % ^ & * example ;: {} of a = -_ poO with `~)() punctuation",
+                next_state: "process_sms",
+                response: "^Thanks for your SMS opinion! Please try to keep messages clean!$",
                 continue_session: false
             });
             p.then(done, done);

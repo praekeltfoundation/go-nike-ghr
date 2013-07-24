@@ -144,11 +144,16 @@ function GoNikeGHRSMS() {
             state_name);
     };
 
+    self.clean_string = function(text) {
+        var punctuation_less = text.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        return punctuation_less.replace(/\s{2,}/g," ");
+    };
+
     self.check_swear = function(text){
         var swear_words = im.config.swear_words;
         var swear = false;
-        // TODO - strip punctuation
-        text = text.toLowerCase().split(' ')
+        text = self.clean_string(text);
+        text = text.toLowerCase().split(' ');
         for(var i=0;i<swear_words.length;i++){
             if (text.indexOf(swear_words[i]) !== -1){
                 swear = true;
@@ -157,14 +162,20 @@ function GoNikeGHRSMS() {
         return swear;
     };
 
-    self.add_creator('start', function(state_name, im, content) {
+    self.add_state(new FreeText(
+            'start',
+            'process_sms',
+            "Should never be seen"
+    ));
+
+    self.add_creator('process_sms', function(state_name, im) {
         // Expects to be used on SMS channel 
         var fields = {}; // We'll populate if we need to update the extras
+        var content = im.get_user_answer('start');
         if (content !== undefined){
-            console.log("Hi: " + content);
             var includes_swear = self.check_swear(content);
             if(includes_swear){
-                fields['ghr_rude'] = self.get_today();
+                fields['ghr_rude'] = self.get_today(im);
             }
             if (Object.keys(fields).length > 0){
                 // update the extras with flags
@@ -176,12 +187,13 @@ function GoNikeGHRSMS() {
                     });
                 });
                 p.add_callback(function(result){
-                    return self.make_thanks_state(state_name, "Hello naughty person");
+                    return self.make_thanks_state(state_name, "Thanks for your SMS opinion! " +
+                        "Please try to keep messages clean!");
                 });
                 return p;
             } else {
                 // all clean
-                return self.make_thanks_state(state_name, "Hello SMSer");
+                return self.make_thanks_state(state_name, "Thanks for your SMS opinion!");
             }
         } else {
             return self.make_thanks_state(state_name, "Nothing to say?");
