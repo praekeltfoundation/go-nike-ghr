@@ -152,8 +152,7 @@ function GoNikeGHRSMS() {
     self.check_swear = function(text){
         var swear_words = im.config.swear_words;
         var swear = false;
-        text = self.clean_string(text);
-        text = text.toLowerCase().split(' ');
+        text = self.clean_string(text).toLowerCase().split(' ');
         for(var i=0;i<swear_words.length;i++){
             if (text.indexOf(swear_words[i]) !== -1){
                 swear = true;
