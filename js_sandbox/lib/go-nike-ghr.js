@@ -231,7 +231,7 @@ function GoNikeGHR() {
         var question_id = null;
         var inprog = false;
         var inprog_qid = null;
-        var inprog_completed = null;
+        var inprog_completed = [];
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
         if (typeof contact["extras-ghr_mandl_inprog"] !== 'undefined' && JSON.parse(contact["extras-ghr_mandl_inprog"])){
             // survey in progress - get ID
@@ -292,7 +292,7 @@ function GoNikeGHR() {
                     };
                 } else {
                     fields = {
-                        "ghr_mandl_inprog": "true",
+                        "ghr_mandl_inprog": JSON.stringify(quiz_id),
                         "ghr_mandl_inprog_qid": question_id,
                         "ghr_mandl_inprog_completed": JSON.stringify(inprog_completed)
                     };
