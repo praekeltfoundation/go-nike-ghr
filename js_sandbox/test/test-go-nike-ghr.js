@@ -411,7 +411,7 @@ describe("When using the USSD line", function() {
             async: true
         });
 
-        it.skip("answering second question should show main menu", function (done) {
+        it("answering second question should show main menu", function (done) {
             var user = {
                 current_state: 'mandl_builder',
                 answers: {
@@ -492,7 +492,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: null,
                 content: null,
-                next_state: "initial_state",
+                next_state: "mandl_builder",
                 response: "^Is this fake question three\\?[^]" +
                     "1. Yes[^]"+
                     "2. No$"

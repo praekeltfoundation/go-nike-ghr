@@ -308,7 +308,7 @@ function GoNikeGHR() {
                 if (!question_id){
                     return self.make_main_menu();
                 } else {
-                    return self.make_initial_mandl_question_state(state_name, quiz.questions[question_id]);
+                    return self.make_initial_mandl_question_state('mandl_builder', quiz.questions[question_id]);
                 }
             });
             return p;
