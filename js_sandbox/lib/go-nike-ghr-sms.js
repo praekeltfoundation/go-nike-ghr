@@ -154,7 +154,7 @@ function GoNikeGHRSMS() {
         var swear = false;
         text = self.clean_string(text).toLowerCase().split(' ');
         for(var i=0;i<swear_words.length;i++){
-            if (text.indexOf(swear_words[i]) !== -1){
+            if (text.indexOf(swear_words[i]) != -1){
                 swear = true;
             }
         }
@@ -168,7 +168,7 @@ function GoNikeGHRSMS() {
     ));
 
     self.add_creator('process_sms', function(state_name, im) {
-        // Expects to be used on SMS channel 
+        // Expects to be used on SMS channel
         var fields = {}; // We'll populate if we need to update the extras
         var content = im.get_user_answer('start');
         if (content !== undefined){
