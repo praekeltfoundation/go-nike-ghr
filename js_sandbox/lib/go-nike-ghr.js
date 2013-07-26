@@ -306,13 +306,21 @@ function GoNikeGHR() {
             p.add_callback(function(result){
                 // generate the state
                 if (!question_id){
-                    return self.make_main_menu();
+                    return self.make_buffer_state();
                 } else {
                     return self.make_initial_mandl_question_state('mandl_builder', quiz.questions[question_id]);
                 }
             });
             return p;
         }
+    };
+
+    self.make_buffer_state = function(){
+        return new FreeText(
+            "buffer_state",
+            "main_menu",
+            "Hi"
+        );
     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
@@ -449,6 +457,12 @@ function GoNikeGHR() {
                 new Choice("directory_start", "Directory")
             ]
         );
+    };
+
+    self.make_main_menu_state = function() {
+        return function(state_name, im) {
+            return self.make_main_menu();
+        };
     };
 
     self.array_parse_ints = function(target){
@@ -969,8 +983,13 @@ function GoNikeGHR() {
                 });
                 return p_opinion;
             });
-            return p_mandl_all;           
+            return p_mandl_all;
         });
+        if(!self.state_creators.hasOwnProperty('main_menu')) {
+            //console.log("hi");
+            self.add_creator('main_menu',
+                self.make_main_menu_state());
+        }
         return p_mandl;
     };
 }
