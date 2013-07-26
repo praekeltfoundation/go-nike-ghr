@@ -13,6 +13,10 @@
           "q_2": {
             "question": "Is this fake question two?",
             "choices": ["Of course", "No way!"]
+          },
+          "q_3": {
+            "question": "Is this fake question three?",
+            "choices": ["First", "Second"]
           }
         }
       },
