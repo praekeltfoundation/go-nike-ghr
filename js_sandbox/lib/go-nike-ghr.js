@@ -260,7 +260,9 @@ function GoNikeGHR() {
             if (inprog){
                 // get completed question and answer
                 var completed_question = quiz.questions[inprog_qid].question;
-                var completed_answer = im.get_user_answer(state_name);
+                // console.log(state_name);
+                var completed_answer = im.get_user_answer("mandl_builder");
+                // console.log(completed_answer);
                 inprog_completed.push(inprog_qid);
                 p = self.interaction_log("MANDL", completed_question, completed_answer);
             } else {
