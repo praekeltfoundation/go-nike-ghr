@@ -358,12 +358,8 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
-                continue;
-            }
 
-            self.add_creator(navigation_page_name,
+            self.add_creator_unless_exists(navigation_page_name,
                                     self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, true));
         }
     };
@@ -418,11 +414,8 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
-                continue;
-            }
-            self.add_creator(navigation_page_name,
+
+            self.add_creator_unless_exists(navigation_page_name,
                                     self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, false));
         }
         for (var cat_name in items){
@@ -431,11 +424,8 @@ function GoNikeGHR() {
                 return sub_cat[key];
             });
             var category_details_name = prefix + "_" + self.clean_state_name(cat_name);
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(category_details_name)) {
-                continue;
-            }
-            self.add_creator(category_details_name,
+
+            self.add_creator_unless_exists(category_details_name,
                                     self.make_booklet_state('end_state', content));
         }
     };
@@ -849,6 +839,14 @@ function GoNikeGHR() {
         "first_state"
     ));
 
+    self.add_creator_unless_exists = function(state_name, state) {
+        if(self.state_creators.hasOwnProperty(state_name)) {
+            return;
+        }
+
+        return self.add_creator(state_name, state);
+    };
+
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
 
@@ -863,13 +861,10 @@ function GoNikeGHR() {
                 for (var question_name in quiz.questions){
                     var question = quiz.questions[question_name];
                     var question_state_name = quiz_name + "_" + question_name;
-                    // do not recreate states that already exist.
-                    if(self.state_creators.hasOwnProperty(question_state_name)) {
-                        continue;
-                    }
+
                     // construct a function using make_question_state()
                     // to prevent getting a wrongly scoped 'question'
-                    self.add_creator(question_state_name,
+                    self.add_creator_unless_exists(question_state_name,
                         self.make_question_state(quiz_name, question));
                 }
             }
@@ -882,7 +877,7 @@ function GoNikeGHR() {
                 return true;
             });
             p_mandl_all.add_callback(function(){
-                // Get 
+                // Get
                 var p_opinion = self.crm_get('opinions/sms/');
                 p_opinion.add_callback(function(result){
                     im.config.opinions = result.opinions;
@@ -906,14 +901,9 @@ function GoNikeGHR() {
                             var question = quiz.questions[question_name];
                             var question_state_name = quiz_name + "_" + question_name;
 
-                            // do not recreate states that already exist.
-                            if(self.state_creators.hasOwnProperty(question_state_name)) {
-                                continue;
-                            }
-
                             // construct a function using make_question_state()
                             // to prevent getting a wrongly scoped 'question'
-                            self.add_creator(question_state_name,
+                            self.add_creator_unless_exists(question_state_name,
                                 self.make_question_state(quiz_name, question));
                         }
 
@@ -922,11 +912,7 @@ function GoNikeGHR() {
                             var answer = quiz.quiz_details.answers[answer_name];
                             var answer_state_name = quiz_name + "_" + answer_name;
 
-                            if(self.state_creators.hasOwnProperty(answer_state_name)) {
-                                continue;
-                            }
-
-                            self.add_creator(answer_state_name,
+                            self.add_creator_unless_exists(answer_state_name,
                                 self.make_answer_state(quiz_name, answer));
                         }
                         // End of Build Weekly quiz
@@ -946,13 +932,10 @@ function GoNikeGHR() {
                                     var view = opinions.views[view_name];
                                     if (!first_view) first_view = view;
                                     var view_state_name = opinion_view + "_" + view_name;
-                                    // do not recreate states that already exist.
-                                    if(self.state_creators.hasOwnProperty(view_state_name)) {
-                                        continue;
-                                    }
+
                                     // construct a function using make_view_state()
                                     // to prevent getting a wrongly scoped 'view'
-                                    self.add_creator(view_state_name,
+                                    self.add_creator_unless_exists(view_state_name,
                                         self.make_view_state(opinion_view, view));
                                 }
                             }
