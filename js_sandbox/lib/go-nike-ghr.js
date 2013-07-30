@@ -478,13 +478,12 @@ function GoNikeGHR() {
     };
 
     self.array_strip_duplicates = function(in_array, from_array){
-        for (var i = 0; i < in_array.length; i++) {
-            if (from_array.indexOf(in_array[i]) != -1) {
-                in_array.splice(i, 1);
-                i--;
+        return in_array.reduce(function(initial, each) {
+            if(from_array.indexOf(each) == -1) {
+                initial.push(each);
             }
-        }
-        return in_array;
+            return initial;
+        }, []);
     };
 
     self.add_creator('initial_state', function(state_name, im) {
