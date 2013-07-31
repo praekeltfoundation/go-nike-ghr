@@ -117,19 +117,14 @@ function GoNikeGHR() {
         };
     },
 
-    self.make_initial_mandl_question_state = function(state_name, prefix, question) {
-        var choices = self.make_navigation_choices(question.choices, prefix, null);
-
-        return new ChoiceState(state_name, function(choice) {
-            return choice.value;
-        }, question.question, choices, null,
-            {
-                on_enter: function() {
-                    var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
-                    return p_log;
-                }
-            }
-        );
+    self.make_initial_mandl_question_state = function(state_name, question) {
+        return new ChoiceState(
+            state_name,                             // the current state name
+            state_name,                             // the next state name
+            question.question,                      // the question text
+            question.choices.map(function(choice) { // the questions
+                return new Choice(choice, choice);
+            }));
     };
 
     self.make_view_state = function(prefix, view) {
@@ -227,31 +222,120 @@ function GoNikeGHR() {
         }
     };
 
+    self.survey_in_progress = function(contact) {
+        if (typeof contact["extras-ghr_mandl_inprog"] !== 'undefined' &&
+            JSON.parse(contact["extras-ghr_mandl_inprog"])) {
+            return true;
+        }
+        return false;
+    }
+
     self.make_mandl_or_mainmenu = function(state_name, contact){
+        var quiz_id = false;
+        var quiz_name = null;
+        var quiz = null;
+        var question_id = null;
+        var inprog = false;
+        var inprog_qid = null;
+        var inprog_completed = [];
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
-        var p2 = self.crm_get('mandl/all/');
-        p2.add_callback(function(result) {
-            // Strip out quizzes that we've done
-            var incomplete_mandl = self.array_strip_duplicates(result.quizzes, completed_mandl);
-            if (incomplete_mandl.length === 0){
-                // There's no M&L quizzes incomplete
-                return self.make_main_menu();
-            } else {
-                // Get's first incomplete quiz
-                var quiz_id = incomplete_mandl[0];
-                var quiz_name = "mandl_quiz_" + quiz_id;
-                var quiz = im.config.quizzes[quiz_name];
-                return self.make_initial_mandl_question_state(state_name, quiz_name, quiz.questions[quiz['start']]);
+        if (self.survey_in_progress(contact)){
+            // survey in progress - get ID
+            quiz_id = JSON.parse(contact["extras-ghr_mandl_inprog"]);
+            inprog_qid = contact["extras-ghr_mandl_inprog_qid"];
+            inprog_completed = JSON.parse(contact["extras-ghr_mandl_inprog_completed"]);
+            inprog = true;
+        } else {
+            // no survey in progress - check for incomplete
+            var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+            var incomplete_mandl = self.array_strip_duplicates(possible_mandl, completed_mandl);
+            if (incomplete_mandl.length !== 0){
+                quiz_id = incomplete_mandl[0];
             }
-        });
-        return p2;
+        }
+
+        if (!quiz_id) {
+            // No survey left to do
+            return self.make_main_menu();
+        } else {
+            // load survey
+            quiz_name = "mandl_quiz_" + quiz_id;
+            quiz = im.config.quizzes[quiz_name];
+            question_id = false;
+            var p = null;
+            if (inprog){
+                // get completed question and answer
+                var completed_question = quiz.questions[inprog_qid].question;
+                // console.log(state_name);
+                var completed_answer = im.get_user_answer("mandl_builder");
+                // console.log(completed_answer);
+                inprog_completed.push(inprog_qid);
+                p = self.interaction_log("MANDL", completed_question, completed_answer);
+            } else {
+                p = self.interaction_log("MANDL", "started", quiz_name);
+            }
+            p.add_callback(function(){
+                if (!inprog){
+                    // Load start question
+                    question_id = quiz['start'];
+                } else {
+                    // get next unanswered question
+                    var possible_questions = Object.keys(quiz.questions);
+                    var incomplete_questions = self.array_strip_duplicates(possible_questions, inprog_completed);
+                    if (incomplete_questions.length !== 0){
+                        question_id = incomplete_questions.pop();
+                    }
+                }
+                var fields = null;
+
+                if (!question_id){
+                    // TODO: Add random airtime winner
+                    // clear temp extras and show main menu
+                    completed_mandl.push(quiz_id);
+                    fields = {
+                        "ghr_mandl_inprog": "false",
+                        "ghr_mandl_inprog_qid": "false",
+                        "ghr_mandl_inprog_completed": "false",
+                        "ghr_questions": JSON.stringify(completed_mandl)
+                    };
+                } else {
+                    fields = {
+                        "ghr_mandl_inprog": JSON.stringify(quiz_id),
+                        "ghr_mandl_inprog_qid": question_id,
+                        "ghr_mandl_inprog_completed": JSON.stringify(inprog_completed)
+                    };
+                }
+                // Run the extras update
+                return im.api_request('contacts.update_extras', {
+                    key: contact.key,
+                    fields: fields
+                });
+            });
+            p.add_callback(function(result){
+                // generate the state
+                if (!question_id){
+                    return self.make_buffer_state();
+                } else {
+                    return self.make_initial_mandl_question_state('mandl_builder', quiz.questions[question_id]);
+                }
+            });
+            return p;
+        }
+    };
+
+    self.make_buffer_state = function(){
+        return new FreeText(
+            "buffer_state",
+            "main_menu",
+            "Hi"
+        );
     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
          return function(state_name, im) {
             var choices = items.map(function(item) {
                 var value = prefix + "_" + self.clean_state_name(item);
-                if (to_sub_nav) value+="_0"
+                if (to_sub_nav) value+="_0";
                 var name = item;
                 return new Choice(value, name);
             });
@@ -280,12 +364,8 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
-                continue;
-            }
 
-            self.add_creator(navigation_page_name,
+            self.add_creator_unless_exists(navigation_page_name,
                                     self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, true));
         }
     };
@@ -340,11 +420,8 @@ function GoNikeGHR() {
             var last = (p==(pages.length-1)) ? true : false;
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(navigation_page_name)) {
-                continue;
-            }
-            self.add_creator(navigation_page_name,
+
+            self.add_creator_unless_exists(navigation_page_name,
                                     self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, false));
         }
         for (var cat_name in items){
@@ -353,11 +430,8 @@ function GoNikeGHR() {
                 return sub_cat[key];
             });
             var category_details_name = prefix + "_" + self.clean_state_name(cat_name);
-            // Make sure it doesn't exist
-            if(self.state_creators.hasOwnProperty(category_details_name)) {
-                continue;
-            }
-            self.add_creator(category_details_name,
+
+            self.add_creator_unless_exists(category_details_name,
                                     self.make_booklet_state('end_state', content));
         }
     };
@@ -383,29 +457,33 @@ function GoNikeGHR() {
         );
     };
 
+    self.make_main_menu_state = function() {
+        return function(state_name, im) {
+            return self.make_main_menu();
+        };
+    };
+
     self.array_parse_ints = function(target){
-        for (var i = 0; i < target.length; i++) {
-            target[i] = parseInt(target[i],10);
-        }
-        return target;
+        return target.map(function(str) {
+            return parseInt(str, 10);
+        });
     };
 
     self.clean_state_name = function(target){
-        // 1) convert to lowercase
-        // 2) remove dashes and pluses
-        // 3) replace spaces with understore
-        // 4) remove everything but alphanumeric characters and underscores
-        return target.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        return target.toLowerCase(          // 1) convert to lowercase
+            ).replace(/-+/g, ''             // 2) remove dashes and pluses
+            ).replace(/\s+/g, '_'           // 3) replace spaces with understore
+            ).replace(/[^a-z0-9_]/g, ''     // 4) remove everything but alphanumeric characters and underscores
+            );
     };
 
     self.array_strip_duplicates = function(in_array, from_array){
-        for (var i = 0; i < in_array.length; i++) {
-            if (from_array.indexOf(in_array[i]) != -1) {
-                in_array.splice(i, 1);
-                i--;
+        return in_array.reduce(function(initial, each) {
+            if(from_array.indexOf(each) == -1) {
+                initial.push(each);
             }
-        }
-        return in_array;
+            return initial;
+        }, []);
     };
 
     self.add_creator('initial_state', function(state_name, im) {
@@ -765,10 +843,21 @@ function GoNikeGHR() {
         "first_state"
     ));
 
-    self.on_config_read = function(event){
-        // Run calls out to the APIs to load dynamic states
+    self.state_exists = function(state_name) {
+        return self.state_creators.hasOwnProperty(state_name);
+    }
 
+    self.add_creator_unless_exists = function(state_name, state) {
+        if(self.state_exists(state_name)) {
+            return;
+        }
+
+        return self.add_creator(state_name, state);
+    };
+
+    self.build_mandl_quiz_states = function() {
         var p_mandl = self.crm_get('mandl/');
+        // load the quizzes
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
             // Make the M&L quizzes available to other states too
@@ -779,122 +868,139 @@ function GoNikeGHR() {
                 for (var question_name in quiz.questions){
                     var question = quiz.questions[question_name];
                     var question_state_name = quiz_name + "_" + question_name;
-                    // do not recreate states that already exist.
-                    if(self.state_creators.hasOwnProperty(question_state_name)) {
-                        continue;
-                    }
+
                     // construct a function using make_question_state()
                     // to prevent getting a wrongly scoped 'question'
-                    self.add_creator(question_state_name,
+                    self.add_creator_unless_exists(question_state_name,
                         self.make_question_state(quiz_name, question));
                 }
             }
         });
-        p_mandl.add_callback(function(){
-            // Get 
-            var p_opinion = self.crm_get('opinions/sms/');
-            p_opinion.add_callback(function(result){
-                im.config.opinions = result.opinions;
-                return true;
-            });
-            p_opinion.add_callback(function(){
-                // Build Weekly quiz
-                var p_weeklyquiz = self.crm_get('weeklyquiz/');
-                p_weeklyquiz.add_callback(function(result) {
-                    // This callback checks extras when contact is found
-                    var quiz = result.quiz;
-                    if (!quiz) {
-                        return self.error_state();
-                    }
-                    var quiz_name = "weekly_quiz";
-                    var first_view_prefix = false;
-                    var first_view = false;
-                    // Create the quiz
-                    for (var question_name in quiz.questions){
-
-                        var question = quiz.questions[question_name];
-                        var question_state_name = quiz_name + "_" + question_name;
-
-                        // do not recreate states that already exist.
-                        if(self.state_creators.hasOwnProperty(question_state_name)) {
-                            continue;
-                        }
-
-                        // construct a function using make_question_state()
-                        // to prevent getting a wrongly scoped 'question'
-                        self.add_creator(question_state_name,
-                            self.make_question_state(quiz_name, question));
-                    }
-
-                    // create the answer states
-                    for (var answer_name in quiz.quiz_details.answers){
-                        var answer = quiz.quiz_details.answers[answer_name];
-                        var answer_state_name = quiz_name + "_" + answer_name;
-
-                        if(self.state_creators.hasOwnProperty(answer_state_name)) {
-                            continue;
-                        }
-
-                        self.add_creator(answer_state_name,
-                            self.make_answer_state(quiz_name, answer));
-                    }
-                    // End of Build Weekly quiz
-                });
-                p_weeklyquiz.add_callback(function(){
-                    // Build Opinion Viewing
-                    var p_opinion_view = self.crm_get('opinions/view/');
-                    p_opinion_view.add_callback(function(result) {
-                        var collection = result.opinions;
-                        var first_view_prefix = false;
-                        var first_view = false;
-                        for (var opinion_view in collection){
-                            if (!first_view_prefix) first_view_prefix = opinion_view;
-                            var opinions = collection[opinion_view];
-                            // Create the quiz
-                            for (var view_name in opinions.views){
-                                var view = opinions.views[view_name];
-                                if (!first_view) first_view = view;
-                                var view_state_name = opinion_view + "_" + view_name;
-                                // do not recreate states that already exist.
-                                if(self.state_creators.hasOwnProperty(view_state_name)) {
-                                    continue;
-                                }
-                                // construct a function using make_view_state()
-                                // to prevent getting a wrongly scoped 'view'
-                                self.add_creator(view_state_name,
-                                    self.make_view_state(opinion_view, view));
-                            }
-                        }
-                        im.config.opinion_view = [first_view_prefix, first_view];
-                        // End Build Opinion Viewing
-                    });
-                    p_opinion_view.add_callback(function(){
-                        // Build directory
-                        var p_directory = self.crm_get('directory/');
-                        p_directory.add_callback(function(result) {
-                            var directory = result.directory;
-                            var max_items = 3;
-                            var prefix = "directory";
-                            var question = "Please select an option:";
-                            var items = Object.keys(directory);
-                            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', "Main menu" );
-                            for (var s=0; s<items.length;s++){
-                                var sub_question = "Please select an organization:";
-                                var sub_items = directory[items[s]];
-                                var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
-                                self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', "Back to categories");
-                            }
-                            // End Build directory
-                        });
-                        return p_directory;
-                    });
-                    return p_opinion_view;
-                });
-                return p_weeklyquiz;
-            });
-            return p_opinion;
-        });
         return p_mandl;
+    }
+
+    self.load_quizzes_config = function() {
+        var p_mandl_all = self.crm_get('mandl/all/');
+        p_mandl_all.add_callback(function(result) {
+            // Load all mandl quiz IDs
+            im.config.mandl_quizzes = result.quizzes;
+            return true;
+        });
+        return p_mandl_all;
+    }
+
+    self.load_opinions_config = function() {
+        var p_opinion = self.crm_get('opinions/sms/');
+        p_opinion.add_callback(function(result){
+            im.config.opinions = result.opinions;
+            return true;
+        });
+        return p_opinion;
+    }
+
+    self.build_weekly_quiz_states = function() {
+        var p_weeklyquiz = self.crm_get('weeklyquiz/');
+        p_weeklyquiz.add_callback(function(result) {
+            // This callback checks extras when contact is found
+            var quiz = result.quiz;
+            if (!quiz) {
+                return self.error_state();
+            }
+            var quiz_name = "weekly_quiz";
+            var first_view_prefix = false;
+            var first_view = false;
+            // Create the quiz
+            for (var question_name in quiz.questions){
+
+                var question = quiz.questions[question_name];
+                var question_state_name = quiz_name + "_" + question_name;
+
+                // construct a function using make_question_state()
+                // to prevent getting a wrongly scoped 'question'
+                self.add_creator_unless_exists(question_state_name,
+                    self.make_question_state(quiz_name, question));
+            }
+
+            // create the answer states
+            for (var answer_name in quiz.quiz_details.answers){
+                var answer = quiz.quiz_details.answers[answer_name];
+                var answer_state_name = quiz_name + "_" + answer_name;
+
+                self.add_creator_unless_exists(answer_state_name,
+                    self.make_answer_state(quiz_name, answer));
+            }
+            // End of Build Weekly quiz
+        });
+        return p_weeklyquiz;
+    }
+
+    self.build_opinion_states = function() {
+        // Build Opinion Viewing
+        var p_opinion_view = self.crm_get('opinions/view/');
+        p_opinion_view.add_callback(function(result) {
+            var collection = result.opinions;
+            var first_view_prefix = false;
+            var first_view = false;
+            for (var opinion_view in collection){
+                if (!first_view_prefix) first_view_prefix = opinion_view;
+                var opinions = collection[opinion_view];
+                // Create the quiz
+                for (var view_name in opinions.views){
+                    var view = opinions.views[view_name];
+                    if (!first_view) first_view = view;
+                    var view_state_name = opinion_view + "_" + view_name;
+
+                    // construct a function using make_view_state()
+                    // to prevent getting a wrongly scoped 'view'
+                    self.add_creator_unless_exists(view_state_name,
+                        self.make_view_state(opinion_view, view));
+                }
+            }
+            im.config.opinion_view = [first_view_prefix, first_view];
+            // End Build Opinion Viewing
+        });
+        return p_opinion_view;
+    }
+
+    self.build_directory_states = function() {
+        // Build directory
+        var p_directory = self.crm_get('directory/');
+        p_directory.add_callback(function(result) {
+            var directory = result.directory;
+            var max_items = 3;
+            var prefix = "directory";
+            var question = "Please select an option:";
+            var items = Object.keys(directory);
+            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', "Main menu" );
+            for (var s=0; s<items.length;s++){
+                var sub_question = "Please select an organization:";
+                var sub_items = directory[items[s]];
+                var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
+                self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', "Back to categories");
+            }
+            // End Build directory
+        });
+        return p_directory;
+    }
+
+    self.on_config_read = function(event){
+        // Run calls out to the APIs to load dynamic states
+        var p = new Promise();
+        p.add_callback(self.build_mandl_quiz_states);
+        p.add_callback(self.load_quizzes_config);
+        p.add_callback(self.load_opinions_config);
+        p.add_callback(self.build_weekly_quiz_states);
+        p.add_callback(self.build_opinion_states);
+        p.add_callback(self.build_directory_states);
+
+        if(!self.state_exists('main_menu')) {
+            //console.log("hi");
+            self.add_creator('main_menu',
+                self.make_main_menu_state());
+        }
+
+        p.callback()
+        return p;
     };
 }
 

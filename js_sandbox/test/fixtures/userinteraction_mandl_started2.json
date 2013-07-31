@@ -2,6 +2,6 @@
     "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/?format=json",
     "method": "POST",
     "content_type": "application/x-www-form-urlencoded",
-    "data": "feature=MANDL&key=Is%20this%20fake%20question%20one%3F&value=Yes&transport=ussd&msisdn=1234567",
+    "data": "feature=MANDL&key=started&value=mandl_quiz_2&transport=ussd&msisdn=1234567",
     "body": {}
 }
