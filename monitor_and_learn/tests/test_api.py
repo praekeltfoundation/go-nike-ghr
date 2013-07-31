@@ -47,23 +47,19 @@ class TestMLAPI(TestCase):
         # Asserting Answers
         q_1 = json_item["quizzes"]["mandl_quiz_1"]["questions"]["q_1"]
         self.assertEqual(sorted(q_1["choices"]),
-                         sorted([["q_2", "A1Aa"], ["q_2", "A1Ab"],
-                                ["q_2", "A1Ac"]]))
+                         sorted(["A1Aa", "A1Ab", "A1Ac"]))
 
         q_2 = json_item["quizzes"]["mandl_quiz_1"]["questions"]["q_2"]
         self.assertEqual(sorted(q_2["choices"]),
-                         sorted([["q_3", "A1Ba"], ["q_3", "A1Bb"],
-                                ["q_3", "A1Bc"]]))
+                         sorted(["A1Ba", "A1Bb", "A1Bc"]))
 
         q_3 = json_item["quizzes"]["mandl_quiz_1"]["questions"]["q_3"]
         self.assertEqual(sorted(q_3["choices"]),
-                         sorted([["q_4", "A1Ca"], ["q_4", "A1Cb"],
-                                ["q_4", "A1Cc"]]))
+                         sorted(["A1Ca", "A1Cb", "A1Cc"]))
 
         q_4 = json_item["quizzes"]["mandl_quiz_1"]["questions"]["q_4"]
         self.assertEqual(sorted(q_4["choices"]),
-                         sorted([["main_menu", "A1Da"], ["main_menu", "A1Db"],
-                                ["main_menu", "A1Dc"]]))
+                         sorted(["A1Da", "A1Db", "A1Dc"]))
         # print json_item
 
     def test_invalid_address(self):
@@ -101,20 +97,16 @@ class TestMLAPI(TestCase):
 
         # Asserting the answers
         self.assertEqual(sorted(json_item["quiz"]["questions"]["q_1"]["choices"]),
-                         sorted([["q_2", "A1Aa"], ["q_2", "A1Ab"],
-                                ["q_2", "A1Ac"]]))
+                         sorted(["A1Aa", "A1Ab", "A1Ac"]))
 
         self.assertEqual(sorted(json_item["quiz"]["questions"]["q_2"]["choices"]),
-                         sorted([["q_3", "A1Ba"], ["q_3", "A1Bb"],
-                                ["q_3", "A1Bc"]]))
+                         sorted(["A1Ba", "A1Bb", "A1Bc"]))
 
         self.assertEqual(sorted(json_item["quiz"]["questions"]["q_3"]["choices"]),
-                         sorted([["q_4", "A1Ca"], ["q_4", "A1Cb"],
-                                ["q_4", "A1Cc"]]))
+                         sorted(["A1Ca", "A1Cb", "A1Cc"]))
 
         self.assertEqual(sorted(json_item["quiz"]["questions"]["q_4"]["choices"]),
-                         sorted([["main_menu", "A1Da"], ["main_menu", "A1Db"],
-                                ["main_menu", "A1Dc"]]))
+                         sorted(["A1Da", "A1Db", "A1Dc"]))
 
     def test_inactive_unique_quizzes(self):
         url = reverse('api_dispatch_detail',
