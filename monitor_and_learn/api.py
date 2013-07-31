@@ -49,7 +49,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
 
                 for questions_i in range(len(questions)):
                     q_id = "q_%s" % questions[questions_i].data["id"]  # question id
-                    choices = []  # A list do hold the answers 
+                    choices = []  # A list do hold the answers
 
                     answers = questions[questions_i].data["quiz_ids"]
                     for answer_i in range(len(answers)):
@@ -85,11 +85,6 @@ class MonitorAndLearningQuizIDResource(ModelResource):
             # Looping through data and adding to choices list for final output
             # Also adds the "next question" to go to
             for answer_i in range(len(quiz_ids[question_i].data["quiz_ids"])):
-                # if quiz_ids[question_i].data["id"] == last_question_id:
-                #     next = "main_menu"
-                # else:
-                #     next = "q_%s" % (quiz_ids[question_i].data["id"] + 1)
-
                 answer = (quiz_ids[question_i].
                           data["quiz_ids"][answer_i].data["answer"])
                 choices.append(answer)
