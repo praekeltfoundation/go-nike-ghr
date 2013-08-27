@@ -13,7 +13,9 @@ redis
 django-debug-toolbar
 django-celery
 django-celery-email
-django-tastypie
+# A migrations bug was introduce in Tastypie 0.10.0
+# see: https://github.com/toastdriven/django-tastypie/pull/997
+django-tastypie<0.10.0
 pep8
 pyflakes
 fabric
