@@ -133,10 +133,10 @@ function GoNikeGHR() {
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, view.opinion, choices, null,
+            }, view.opinions, choices, null,
                 {
                     on_enter: function() {
-                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinion);
+                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinions);
                         return p_log;
                     }
                 });
@@ -147,7 +147,7 @@ function GoNikeGHR() {
         var choices = self.make_navigation_choices(view.choices, prefix, null);
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, view.opinion, choices);
+        }, view.opinions, choices);
     };
 
     self.crm_get = function(path) {
