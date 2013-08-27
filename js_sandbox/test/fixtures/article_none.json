@@ -1,0 +1,7 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/article/?format=json",
+  "method": "GET",
+  "body": {
+    "article": "Sorry there's no article this week, dial back soon!"
+  }
+}
