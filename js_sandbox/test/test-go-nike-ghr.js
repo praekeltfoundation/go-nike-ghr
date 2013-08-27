@@ -81,7 +81,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -239,7 +239,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -312,7 +312,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -389,7 +389,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -466,7 +466,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -545,7 +545,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -610,7 +610,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -1327,7 +1327,7 @@ describe("When using the USSD line", function() {
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
-                    airtime_reward_change: 10,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);

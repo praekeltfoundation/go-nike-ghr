@@ -48,6 +48,16 @@ function GoNikeGHR() {
         }
     };
 
+    self.get_week_commencing = function(today) {
+        // today should be var today = new Date();
+        var date = today;
+        var day = date.getDay() || 7;
+        if (day !== 1)
+            date.setHours(-24 * (day - 1));
+        date.setHours(+2); // fixes crappy JS dates so we don't get Sunday
+        return date.toISOString().substring(0,10);
+    };
+
     self.error_state = function() {
         return new EndState(
             "end_state_error",
@@ -287,16 +297,23 @@ function GoNikeGHR() {
                     }
                 }
                 var fields = null;
-
                 if (!question_id){
-                    // TODO: Add random airtime winner
+                    // Check for random airtime winner
+                    var winner = "false";
+                    if (im.config.airtime_reward_active){
+                        if (Math.floor((Math.random()*im.config.airtime_reward_chance)) === 0){
+                            winner = self.get_week_commencing(self.get_today());
+                        }
+                    }
+
                     // clear temp extras and show main menu
                     completed_mandl.push(quiz_id);
                     fields = {
                         "ghr_mandl_inprog": "false",
                         "ghr_mandl_inprog_qid": "false",
                         "ghr_mandl_inprog_completed": "false",
-                        "ghr_questions": JSON.stringify(completed_mandl)
+                        "ghr_questions": JSON.stringify(completed_mandl),
+                        "ghr_airtime_winner": winner
                     };
                 } else {
                     fields = {
