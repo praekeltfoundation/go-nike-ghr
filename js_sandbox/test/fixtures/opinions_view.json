@@ -7,7 +7,7 @@
         "start": "o_1",
         "views": {
           "o_1": {
-            "opinion": "I think something really clever",
+            "opinions": "I think something really clever",
             "choices": [
                 [
                     "o_2",
@@ -20,7 +20,7 @@
             ]
           },
           "o_2": {
-            "opinion": "I think something really stupid",
+            "opinions": "I think something really stupid",
             "choices": [
                 [
                     "opinions",
@@ -38,7 +38,7 @@
         "start": "o_3",
         "views": {
           "o_3": {
-            "opinion": "I think something really ugly",
+            "opinions": "I think something really ugly",
             "choices": [
                 [
                     "o_2",
@@ -51,7 +51,7 @@
             ]
           },
           "o_4": {
-            "opinion": "I think something really pretty",
+            "opinions": "I think something really pretty",
             "choices": [
                 [
                     "opinions",
