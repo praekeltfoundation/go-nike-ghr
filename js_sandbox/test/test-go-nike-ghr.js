@@ -195,7 +195,7 @@ describe("When using the USSD line", function() {
                 response: (
                     "^Welcome Ni Nyampinga club member! We want to know you better. " +
                     "For each set of 4 questions you answer, you enter a lucky draw to " +
-                    "win XXX RwF weekly.[^]" +
+                    "win 100 RwF weekly.[^]" +
                     "1. Continue$"
                 )
             });

@@ -661,7 +661,7 @@ function GoNikeGHR() {
                         'mandl_builder',
                         "Welcome Ni Nyampinga club member! We want to know you better. " +
                         "For each set of 4 questions you answer, you enter a lucky draw to " +
-                        "win XXX RwF weekly.",
+                        "win " + im.config.airtime_reward_amount + " RwF weekly.",
                         [
                             new Choice("continue", "Continue")
                         ],
