@@ -749,6 +749,11 @@ function GoNikeGHR() {
         var next_page = function(page_number) {
             var p = self.crm_get("ndabaga/");
             p.add_callback(function(response) {
+                if (response.ndabaga === undefined){
+                    return "No new content this week";
+                } else {
+                    return response.ndabaga[page_number];
+                }
                 return response.ndabaga[page_number];
             });
             return p;
