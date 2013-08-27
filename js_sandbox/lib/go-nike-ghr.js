@@ -701,7 +701,7 @@ function GoNikeGHR() {
         var next_page = function(page_number) {
             var p = self.crm_get("article/");
             p.add_callback(function(response) {
-                if (response.article == "Sorry there's no article this week, dial back soon!"){
+                if (typeof(response.article) != "object"){
                     return response.article;
                 } else {
                     return response.article[page_number];
