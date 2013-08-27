@@ -698,11 +698,14 @@ function GoNikeGHR() {
     });
 
     self.add_creator('articles', function(state_name, im) {
-
         var next_page = function(page_number) {
             var p = self.crm_get("article/");
             p.add_callback(function(response) {
-                return response.article[page_number];
+                if (typeof(response.article) != "object"){
+                    return response.article;
+                } else {
+                    return response.article[page_number];
+                }
             });
             return p;
         };

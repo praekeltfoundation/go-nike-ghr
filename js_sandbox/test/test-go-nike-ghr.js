@@ -1248,5 +1248,98 @@ describe("When using the USSD line", function() {
         });
 
     });
+
+    describe("with no articles in system", function() {
+        // These are used to mock API reponses
+        // EXAMPLE: Response from google maps API
+        var fixtures = [
+            'test/fixtures/article_none.json',
+            'test/fixtures/mandl_all.json',
+            'test/fixtures/mandl.json',
+            'test/fixtures/opinions.json',
+            'test/fixtures/opinions_view.json',
+            'test/fixtures/weekly_quiz.json',
+            'test/fixtures/directory.json',
+            'test/fixtures/userinteraction_articles.json',
+        ];
+
+        var tester = new vumigo.test_utils.ImTester(app.api, {
+            custom_setup: function (api) {
+
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
+                };
+
+                api.add_contact(dummy_contact);
+                api.update_contact_extras(dummy_contact, {
+                    "ghr_reg_complete": "true",
+                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                    "ghr_questions": '["1", "2", "3", "4", "5"]',
+                    "ghr_gender": "Male",
+                    "ghr_age": "25-35",
+                    "ghr_sector": "Test"
+                });
+
+                api.config_store.config = JSON.stringify({
+                    testing: true,
+                    testing_mock_today: [2013,5,1,8,10],
+                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com"
+                });
+                fixtures.forEach(function (f) {
+                    api.load_http_fixture(f);
+                });
+            },
+            async: true
+        });
+
+        // first test should always start 'null, null' because we haven't
+        // started interacting yet
+
+        it("first screen should show us menu", function (done) {
+            var p = tester.check_state({
+                user: null,
+                content: null,
+                next_state: "main_menu",
+                response: "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Ndabaga do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 from menu should show no article available", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "articles",
+                response: (
+                    "^Sorry there's no article this week, dial back soon![^]" +
+                    "1 for prev, 2 for next, 0 to end.$"
+                )
+            });
+            p.then(done, done);
+        });
+    });
+
 });
 
