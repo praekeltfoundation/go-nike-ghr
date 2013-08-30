@@ -1249,11 +1249,12 @@ describe("When using the USSD line", function() {
 
     });
 
-    describe("with no articles in system", function() {
+    describe("with no articles or Ndabaga in system", function() {
         // These are used to mock API reponses
         // EXAMPLE: Response from google maps API
         var fixtures = [
             'test/fixtures/article_none.json',
+            'test/fixtures/ndabaga_none.json',
             'test/fixtures/mandl_all.json',
             'test/fixtures/mandl.json',
             'test/fixtures/opinions.json',
@@ -1261,6 +1262,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/weekly_quiz.json',
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
+            'test/fixtures/userinteraction_wwnd.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -1334,7 +1336,23 @@ describe("When using the USSD line", function() {
                 next_state: "articles",
                 response: (
                     "^Sorry there's no article this week, dial back soon![^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1. Main menu$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 3 from menu should show no Ndabaga available", function (done) {
+            var user = {
+                current_state: 'main_menu'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "3",
+                next_state: "wwnd",
+                response: (
+                    "^No new content this week[^]" +
+                    "1. Main menu$"
                 )
             });
             p.then(done, done);

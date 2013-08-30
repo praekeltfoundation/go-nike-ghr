@@ -698,35 +698,41 @@ function GoNikeGHR() {
     });
 
     self.add_creator('articles', function(state_name, im) {
-        var next_page = function(page_number) {
-            var p = self.crm_get("article/");
-            p.add_callback(function(response) {
-                if (typeof(response.article) != "object"){
-                    return response.article;
-                } else {
+        var p = self.crm_get("article/");
+        p.add_callback(function(response) {
+            if (typeof(response.article) != "object"){
+                return new ChoiceState(
+                    state_name,
+                    "main_menu",
+                    "Sorry there's no article this week, dial back soon!",
+                    [
+                        new Choice("main_menu", "Main menu")
+                    ]
+                );
+            } else {
+                var next_page = function(page_number) {
                     return response.article[page_number];
-                }
-            });
-            return p;
-        };
-
-        return new BookletState(
-            state_name, {
-                next: 'end_state',
-                pages: 4,
-                page_text: next_page,
-                buttons: {
-                    "1": -1, "2": +1, "0": "exit"
-                },
-                footer_text: "\n1 for prev, 2 for next, 0 to end.",
-                handlers: {
-                    on_enter: function() {
-                        var p_log = self.interaction_log("ARTICLES", "article", "viewed");
-                        return p_log;
+                };
+                return new BookletState(
+                    state_name, {
+                        next: 'end_state',
+                        pages: 4,
+                        page_text: next_page,
+                        buttons: {
+                            "1": -1, "2": +1, "0": "exit"
+                        },
+                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        handlers: {
+                            on_enter: function() {
+                                var p_log = self.interaction_log("ARTICLES", "article", "viewed");
+                                return p_log;
+                            }
+                        }
                     }
-                }
+                );
             }
-        );
+        });
+        return p;
     });
 
     self.add_state(new ChoiceState(
@@ -745,32 +751,42 @@ function GoNikeGHR() {
 
 
     self.add_creator('wwnd', function(state_name, im) {
-
-        var next_page = function(page_number) {
-            var p = self.crm_get("ndabaga/");
-            p.add_callback(function(response) {
-                return response.ndabaga[page_number];
-            });
-            return p;
-        };
-
-        return new BookletState(
-            state_name, {
-                next: 'end_state',
-                pages: 4,
-                page_text: next_page,
-                buttons: {
-                    "1": -1, "2": +1, "0": "exit"
-                },
-                footer_text: "\n1 for prev, 2 for next, 0 to end.",
-                handlers: {
-                    on_enter: function() {
-                        var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
-                        return p_log;
+        var p = self.crm_get("ndabaga/");
+        p.add_callback(function(response) {
+            if (response.ndabaga === undefined){
+                return new ChoiceState(
+                    state_name,
+                    "main_menu",
+                    "No new content this week",
+                    [
+                        new Choice("main_menu", "Main menu")
+                    ]
+                );
+            } else {
+                var next_page = function(page_number) {
+                    return response.ndabaga[page_number];
+                };
+                return new BookletState(
+                    state_name, {
+                        next: 'end_state',
+                        pages: 4,
+                        page_text: next_page,
+                        buttons: {
+                            "1": -1, "2": +1, "0": "exit"
+                        },
+                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        handlers: {
+                            on_enter: function() {
+                                var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
+                                return p_log;
+                            }
+                        }
                     }
-                }
+                );
             }
-        );
+            return response.ndabaga[page_number];
+        });
+        return p;
     });
 
     self.add_creator('opinions_popular', function(state_name, im) {
