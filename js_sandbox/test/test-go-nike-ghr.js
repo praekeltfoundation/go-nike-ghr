@@ -1336,7 +1336,7 @@ describe("When using the USSD line", function() {
                 next_state: "articles",
                 response: (
                     "^Sorry there's no article this week, dial back soon![^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1. Main menu$"
                 )
             });
             p.then(done, done);
@@ -1352,7 +1352,7 @@ describe("When using the USSD line", function() {
                 next_state: "wwnd",
                 response: (
                     "^No new content this week[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1. Main menu$"
                 )
             });
             p.then(done, done);
