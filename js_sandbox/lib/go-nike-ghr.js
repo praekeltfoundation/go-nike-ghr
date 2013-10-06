@@ -78,19 +78,78 @@ function GoNikeGHR() {
         return nav_choices;
     };
 
+    self.make_question_choices = function(choices) {
+        var nav_choices = choices.map(function(choice) {
+            return new Choice(choice, choice);
+        });
+        return nav_choices;
+    };
+
     self.make_question_state = function(prefix, question) {
          return function(state_name, im) {
             var choices = self.make_navigation_choices(question.choices, prefix, "main_menu");
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
-            }, question.question, choices, null,
+            }, question.question, choices);
+        };
+    };
+
+    self.make_mandl_question_state = function(state_name, prefix, next_state, question) {
+        return function() {
+            var choices = self.make_question_choices(question.choices);
+
+            return new ChoiceState(state_name, next_state, question.question, choices);
+        };
+    };
+
+    self.make_mandl_thanks_state = function(state_name, quiz, quiz_name) {
+         return function(state_name, im) {
+            return new ChoiceState(state_name, 'main_menu',
+                "Thanks! Carry on.",
+                [
+                    new Choice("completed", "Main menu")
+                ], null,
                 {
-                    on_enter: function() {
-                        var p_log = self.interaction_log("MANDL", "question_viewed", question.question);
-                        return p_log;
+                    on_enter: function(){
+                        var completed_question;
+                        var completed_answer;
+                        var p = new Promise();
+                        for (var question_name in quiz.questions){
+                            var question = quiz.questions[question_name].question;
+                            var question_state_name = quiz_name + "_" + question_name;
+                            completed_answer = im.get_user_answer(question_state_name);
+                            p.add_callback(self.make_interaction_log("MANDL", question, completed_answer));
+                        }
+                        p.add_callback(self.mark_mandl_complete);
+                        p.callback();
+                        return p;
                     }
                 });
+        };
+    };
+
+    self.mark_mandl_complete = function(){
+        return function(){
+            var p = self.get_contact(im);
+            p.add_callback(function(result) {
+                // This callback updates extras when quiz finished
+                if (result.contact["extras-ghr_mandl_inprog"] !== undefined){
+                    var quiz_id = parseInt(result.contact["extras-ghr_mandl_inprog"]);
+                    var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
+                    completed_mandl.push(quiz_id);
+                    var fields = {
+                        "ghr_mandl_inprog": "false",
+                        "ghr_questions": JSON.stringify(completed_mandl)
+                    };
+                    // Run the extras update
+                    return im.api_request('contacts.update_extras', {
+                        key: result.contact.key,
+                        fields: fields
+                    });
+                }
+            });
+            return p;
         };
     };
 
@@ -116,16 +175,6 @@ function GoNikeGHR() {
             );
         };
     },
-
-    self.make_initial_mandl_question_state = function(state_name, question) {
-        return new ChoiceState(
-            state_name,                             // the current state name
-            state_name,                             // the next state name
-            question.question,                      // the question text
-            question.choices.map(function(choice) { // the questions
-                return new Choice(choice, choice);
-            }));
-    };
 
     self.make_view_state = function(prefix, view) {
          return function(state_name, im) {
@@ -178,6 +227,12 @@ function GoNikeGHR() {
         return p;
     };
 
+    self.make_interaction_log = function(feature, key, value) {
+        return function() {
+            self.interaction_log(feature, key, value);
+        };
+    };
+
     self.interaction_log = function(feature, key, value) {
         var data = {
             feature: feature,
@@ -228,107 +283,36 @@ function GoNikeGHR() {
             return true;
         }
         return false;
-    }
+    };
 
     self.make_mandl_or_mainmenu = function(state_name, contact){
-        var quiz_id = false;
-        var quiz_name = null;
-        var quiz = null;
-        var question_id = null;
-        var inprog = false;
-        var inprog_qid = null;
-        var inprog_completed = [];
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
-        if (self.survey_in_progress(contact)){
-            // survey in progress - get ID
-            quiz_id = JSON.parse(contact["extras-ghr_mandl_inprog"]);
-            inprog_qid = contact["extras-ghr_mandl_inprog_qid"];
-            inprog_completed = JSON.parse(contact["extras-ghr_mandl_inprog_completed"]);
-            inprog = true;
-        } else {
-            // no survey in progress - check for incomplete
-            var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
-            var incomplete_mandl = self.array_strip_duplicates(possible_mandl, completed_mandl);
-            if (incomplete_mandl.length !== 0){
-                quiz_id = incomplete_mandl[0];
-            }
+        var quiz_id = false;
+        var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+        var incomplete_mandl = self.array_strip_duplicates(possible_mandl, completed_mandl);
+        if (incomplete_mandl.length !== 0){
+            quiz_id = incomplete_mandl[0];
         }
-
         if (!quiz_id) {
             // No survey left to do
             return self.make_main_menu();
         } else {
-            // load survey
-            quiz_name = "mandl_quiz_" + quiz_id;
-            quiz = im.config.quizzes[quiz_name];
-            question_id = false;
-            var p = null;
-            if (inprog){
-                // get completed question and answer
-                var completed_question = quiz.questions[inprog_qid].question;
-                // console.log(state_name);
-                var completed_answer = im.get_user_answer("mandl_builder");
-                // console.log(completed_answer);
-                inprog_completed.push(inprog_qid);
-                p = self.interaction_log("MANDL", completed_question, completed_answer);
-            } else {
-                p = self.interaction_log("MANDL", "started", quiz_name);
-            }
-            p.add_callback(function(){
-                if (!inprog){
-                    // Load start question
-                    question_id = quiz['start'];
-                } else {
-                    // get next unanswered question
-                    var possible_questions = Object.keys(quiz.questions);
-                    var incomplete_questions = self.array_strip_duplicates(possible_questions, inprog_completed);
-                    if (incomplete_questions.length !== 0){
-                        question_id = incomplete_questions.pop();
-                    }
-                }
-                var fields = null;
-
-                if (!question_id){
-                    // TODO: Add random airtime winner
-                    // clear temp extras and show main menu
-                    completed_mandl.push(quiz_id);
-                    fields = {
-                        "ghr_mandl_inprog": "false",
-                        "ghr_mandl_inprog_qid": "false",
-                        "ghr_mandl_inprog_completed": "false",
-                        "ghr_questions": JSON.stringify(completed_mandl)
-                    };
-                } else {
-                    fields = {
-                        "ghr_mandl_inprog": JSON.stringify(quiz_id),
-                        "ghr_mandl_inprog_qid": question_id,
-                        "ghr_mandl_inprog_completed": JSON.stringify(inprog_completed)
-                    };
-                }
-                // Run the extras update
-                return im.api_request('contacts.update_extras', {
-                    key: contact.key,
-                    fields: fields
-                });
+            // Mark contact with in progress quiz
+            var fields = {
+                "ghr_mandl_inprog": JSON.stringify(quiz_id),
+            };
+            // Run the extras update
+            var p_e = im.api_request('contacts.update_extras', {
+                key: contact.key,
+                fields: fields
             });
-            p.add_callback(function(result){
-                // generate the state
-                if (!question_id){
-                    return self.make_buffer_state();
-                } else {
-                    return self.make_initial_mandl_question_state('mandl_builder', quiz.questions[question_id]);
-                }
+            p_e.add_callback(function(){
+                // Show the first state for the next quiz
+                var quiz_name = "mandl_quiz_" + quiz_id + "_q_1";
+                return self.state_creators[quiz_name]();
             });
-            return p;
+            return p_e;
         }
-    };
-
-    self.make_buffer_state = function(){
-        return new FreeText(
-            "buffer_state",
-            "main_menu",
-            "Hi"
-        );
     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
@@ -613,18 +597,22 @@ function GoNikeGHR() {
         var sector = im.get_user_answer('reg_sector');
         var gender = im.get_user_answer('reg_gender');
         var age = im.get_user_answer('reg_age');
+        var next_state;
         if (self.validate_sector(im, sector)) {
             // Get the user
             var p = self.get_contact(im);
 
             p.add_callback(function(result) {
                 // This callback updates extras when contact is found
+                var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+                next_state = 'mandl_quiz_' + possible_mandl[0] + '_q_1';
                 if (result.success){
                     var fields = {
                         "ghr_reg_complete": "true",
                         "ghr_gender": gender,
                         "ghr_age": age,
-                        "ghr_sector": sector
+                        "ghr_sector": sector,
+                        "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
                     };
                     // Run the extras update
                     return im.api_request('contacts.update_extras', {
@@ -641,7 +629,7 @@ function GoNikeGHR() {
                 if (result.success){
                     return new ChoiceState(
                         state_name,
-                        'mandl_builder',
+                        next_state,
                         "Welcome Ni Nyampinga club member! We want to know you better. " +
                         "For each set of 4 questions you answer, you enter a lucky draw to " +
                         "win XXX RwF weekly.",
@@ -677,24 +665,6 @@ function GoNikeGHR() {
                 "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?"
             );
         }
-    });
-
-    self.add_creator('mandl_builder', function(state_name, im) {
-        // Get the user
-        var p = self.get_contact(im);
-
-        p.add_callback(function(result) {
-            // This callback checks extras when contact is found
-            if (!result.success) {
-                return self.error_state();
-            }
-            if (result.contact["extras-ghr_questions"] === undefined) {
-                return self.error_state();
-            }
-
-            return self.make_mandl_or_mainmenu(state_name, result.contact);
-        });
-        return p;
     });
 
     self.add_creator('articles', function(state_name, im) {
@@ -884,19 +854,34 @@ function GoNikeGHR() {
             for (var quiz_name in quizzes){
                 var quiz = quizzes[quiz_name];
                 // Create the quiz
+                var previous_question = false;
+                var previous_question_state_name = false;
+                var item = 0;
                 for (var question_name in quiz.questions){
+                    item++;
                     var question = quiz.questions[question_name];
                     var question_state_name = quiz_name + "_" + question_name;
-
-                    // construct a function using make_question_state()
+                    // construct a function using make_mandl_question_state()
                     // to prevent getting a wrongly scoped 'question'
-                    self.add_creator_unless_exists(question_state_name,
-                        self.make_question_state(quiz_name, question));
+                    if (item !== 1){
+                        self.add_creator_unless_exists(previous_question_state_name,
+                            self.make_mandl_question_state(previous_question_state_name, quiz_name, question_state_name, previous_question));
+                        if ((Object.keys(quiz.questions).length) == item){
+                            var thanks_state_name = quiz_name + "_thanks";
+                            // This is a buffer state that logs their responses
+                            self.add_creator_unless_exists(thanks_state_name,
+                                self.make_mandl_thanks_state(thanks_state_name, quiz, quiz_name));
+                            self.add_creator_unless_exists(question_state_name,
+                                self.make_mandl_question_state(question_state_name, quiz_name, thanks_state_name, question));
+                        }
+                    }
+                    previous_question = question;
+                    previous_question_state_name = question_state_name;
                 }
             }
         });
         return p_mandl;
-    }
+    };
 
     self.load_quizzes_config = function() {
         var p_mandl_all = self.crm_get('mandl/all/');
@@ -906,7 +891,7 @@ function GoNikeGHR() {
             return true;
         });
         return p_mandl_all;
-    }
+    };
 
     self.load_opinions_config = function() {
         var p_opinion = self.crm_get('opinions/sms/');
@@ -979,7 +964,7 @@ function GoNikeGHR() {
             // End Build Opinion Viewing
         });
         return p_opinion_view;
-    }
+    };
 
     self.build_directory_states = function() {
         // Build directory
@@ -1000,7 +985,7 @@ function GoNikeGHR() {
             // End Build directory
         });
         return p_directory;
-    }
+    };
 
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
@@ -1013,12 +998,11 @@ function GoNikeGHR() {
         p.add_callback(self.build_directory_states);
 
         if(!self.state_exists('main_menu')) {
-            //console.log("hi");
             self.add_creator('main_menu',
                 self.make_main_menu_state());
         }
 
-        p.callback()
+        p.callback();
         return p;
     };
 }
