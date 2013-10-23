@@ -81,7 +81,7 @@ class TestUserInteraction(TestCase):
 
 
 class TestU18Filter(TestCase):
-    fixtures = ["test_userinteraction.json"]
+    fixtures = ["test/test_userinteraction.json"]
 
     def test_fixture_loaded(self):
         users = UserInteraction.objects.filter(msisdn=27721231232).all()
@@ -107,8 +107,6 @@ class TestU18Filter(TestCase):
         response = self.client.get("%s?msisdn=27721231232&feature=REGISTRATION"% url)
         json_item = json.loads(response.content)
         self.assertEqual(json_item['U18'], True)
-
-        print "%s?msisdn=27721231232&feature=REGISTRATION"% url
 
     def test_unregistered_msisdn(self):
         """
