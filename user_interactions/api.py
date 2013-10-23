@@ -1,5 +1,5 @@
 from models import UserInteraction
-from tastypie.resources import ModelResource
+from tastypie.resources import ModelResource, ALL
 from tastypie import http, fields
 from tastypie.exceptions import TastypieError, BadRequest
 from tastypie.resources import csrf_exempt
@@ -8,11 +8,51 @@ from django.core.exceptions import ValidationError
 
 
 class UserInteractionResource(ModelResource):
+    """
+        To get specific filtering for age use
+            /api/userinteraction/?msisdn=27721231232&feature=REGISTRATION
+    """
     class Meta:
         resource_name = "userinteraction"
-        allowed_methods = ['post']
-        list_allowed_methods = ['post']  # POST is allowed for base URL
+        allowed_methods = ['post', 'get']
+        list_allowed_methods = ['post', 'get']  # POST is allowed for base URL
         include_resource_uri = False
+        queryset = UserInteraction.objects.all()
+        filtering = {
+            'msisdn': ALL,
+            'feature': ALL}
+
+
+    def alter_list_data_to_serialize(self, request, data_dict):
+        """
+        overiding tastypie function that returns data in required format
+        """
+        if isinstance(data_dict, dict):
+            if 'meta' in data_dict:
+                del data_dict['meta']
+            if data_dict["objects"] == []:
+                data_dict['U18'] = False
+                del data_dict['objects']
+            else:
+                female = ["Female", "female"]
+                age_range = ['12 or under', '12-15', '16-18']
+                output = []
+                for reg in data_dict['objects']:
+                    if reg.data["key"] == "gender":
+                        if reg.data["value"] in female:
+                            output.append(reg.data["value"])
+                    elif reg.data["key"] == "age":
+                        if reg.data["value"] in age_range:
+                            output.append(reg.data["value"])
+
+                if len(output) == 2:
+                    data_dict['U18'] = True
+                else:
+                    data_dict['U18'] = False
+
+                del data_dict['objects']
+        return data_dict
+
 
     def post_list(self, request, **kwargs):
         """
@@ -21,6 +61,7 @@ class UserInteractionResource(ModelResource):
         returns a huge annoying error)
         """
         user_data = request.POST.dict()
+
         if (len(user_data['msisdn']) > 20):
             raise TastypieError("'msisdn' is longer than the maximum allowed length of 20")
 
