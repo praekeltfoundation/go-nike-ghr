@@ -279,7 +279,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "mandl_builder",
+                next_state: "mandl_quiz_1_q_1",
                 response: (
                     "^Is this fake question one\\?[^]" +
                     "1. Yes[^]" +
@@ -289,70 +289,42 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-    });
-
-    describe("as a partially registered user - not completed any M&L questions - pt2", function() {
-        // These are used to mock API reponses
-        var fixtures = test_fixtures_full;
-
-        var tester = new vumigo.test_utils.ImTester(app.api, {
-            custom_setup: function (api) {
-                api.config_store.config = JSON.stringify({
-                    testing: true,
-                    testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
-                });
-                fixtures.forEach(function (f) {
-                    api.load_http_fixture(f);
-                });
-
-                var dummy_contact = {
-                    key: "f953710a2472447591bd59e906dc2c26",
-                    surname: "Trotter",
-                    user_account: "test-0-user",
-                    bbm_pin: null,
-                    msisdn: "+1234567",
-                    created_at: "2013-04-24 14:01:41.803693",
-                    gtalk_id: null,
-                    dob: null,
-                    groups: null,
-                    facebook_id: null,
-                    twitter_handle: null,
-                    email_address: null,
-                    name: "Rodney"
-                };
-
-                api.add_contact(dummy_contact);
-                api.update_contact_extras(dummy_contact, {
-                    "ghr_reg_complete": "true",
-                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                    "ghr_questions": '[]',
-                    "ghr_gender": "Male",
-                    "ghr_age": "25-35",
-                    "ghr_sector": "Test",
-                    "ghr_mandl_inprog": "1",
-                    "ghr_mandl_inprog_qid": "q_1",
-                    "ghr_mandl_inprog_completed": "[]"
-                });
-            },
-            async: true
-        });
-
         it("answering first question should ask second M&L questions", function (done) {
             var user = {
-                current_state: 'mandl_builder',
+                current_state: 'mandl_quiz_1_q_1',
                 answers: {
                     reg_gender: 'Male',
                     reg_age: '19-24',
-                    reg_sector: "Mareba",
-                    mandl_builder: 'Yes'
+                    reg_sector: "Mareba"
                 }
             };
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "mandl_builder",
+                next_state: "mandl_quiz_1_q_2",
+                response: (
+                    "^Is this fake question two?\\?[^]" +
+                    "1. Of course[^]" +
+                    "2. No way!$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("answering second question should show third question", function (done) {
+            var user = {
+                current_state: 'mandl_quiz_1_q_2',
+                answers: {
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: "Mareba",
+                    mandl_quiz_1_q_1: 'Yes'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "mandl_quiz_1_q_3",
                 response: (
                     "^Is this fake question three\\?[^]" +
                     "1. First[^]" +
@@ -362,137 +334,37 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-    });
-
-    describe("as a partially registered user - not completed any M&L questions - pt3", function() {
-        // These are used to mock API reponses
-        var fixtures = test_fixtures_full;
-
-        var tester = new vumigo.test_utils.ImTester(app.api, {
-            custom_setup: function (api) {
-                api.config_store.config = JSON.stringify({
-                    testing: true,
-                    testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
-                });
-                fixtures.forEach(function (f) {
-                    api.load_http_fixture(f);
-                });
-
-                var dummy_contact = {
-                    key: "f953710a2472447591bd59e906dc2c26",
-                    surname: "Trotter",
-                    user_account: "test-0-user",
-                    bbm_pin: null,
-                    msisdn: "+1234567",
-                    created_at: "2013-04-24 14:01:41.803693",
-                    gtalk_id: null,
-                    dob: null,
-                    groups: null,
-                    facebook_id: null,
-                    twitter_handle: null,
-                    email_address: null,
-                    name: "Rodney"
-                };
-
-                api.add_contact(dummy_contact);
-                api.update_contact_extras(dummy_contact, {
-                    "ghr_reg_complete": "true",
-                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                    "ghr_questions": '[]',
-                    "ghr_gender": "Male",
-                    "ghr_age": "25-35",
-                    "ghr_sector": "Test",
-                    "ghr_mandl_inprog": "1",
-                    "ghr_mandl_inprog_qid": "q_3",
-                    "ghr_mandl_inprog_completed": '["q_1"]'
-                });
-            },
-            async: true
-        });
-
-        it("answering second question should show third question", function (done) {
+        it("answering third question should show thanks", function (done) {
             var user = {
-                current_state: 'mandl_builder',
+                current_state: 'mandl_quiz_1_q_3',
                 answers: {
                     reg_gender: 'Male',
                     reg_age: '19-24',
                     reg_sector: "Mareba",
-                    mandl_builder: 'First'
+                    mandl_quiz_1_q_1: 'Yes',
+                    mandl_quiz_1_q_2: 'Of course'
                 }
             };
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "mandl_builder",
-                response: (
-                    "^Is this fake question two\\?[^]" +
-                    "1. Of course[^]" +
-                    "2. No way!$"
-                )
+                next_state: "mandl_quiz_1_thanks",
+                response: "^Thanks! Carry on.[^]" +
+                    "1. Main menu$"
             });
             p.then(done, done);
         });
 
-    });
-
-    describe("as a partially registered user - not completed any M&L questions - pt4", function() {
-        // These are used to mock API reponses
-        var fixtures = test_fixtures_full;
-
-        var tester = new vumigo.test_utils.ImTester(app.api, {
-            custom_setup: function (api) {
-                api.config_store.config = JSON.stringify({
-                    testing: true,
-                    testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
-                });
-                fixtures.forEach(function (f) {
-                    api.load_http_fixture(f);
-                });
-
-                var dummy_contact = {
-                    key: "f953710a2472447591bd59e906dc2c26",
-                    surname: "Trotter",
-                    user_account: "test-0-user",
-                    bbm_pin: null,
-                    msisdn: "+1234567",
-                    created_at: "2013-04-24 14:01:41.803693",
-                    gtalk_id: null,
-                    dob: null,
-                    groups: null,
-                    facebook_id: null,
-                    twitter_handle: null,
-                    email_address: null,
-                    name: "Rodney"
-                };
-
-                api.add_contact(dummy_contact);
-                api.update_contact_extras(dummy_contact, {
-                    "ghr_reg_complete": "true",
-                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
-                    "ghr_questions": '[]',
-                    "ghr_gender": "Male",
-                    "ghr_age": "25-35",
-                    "ghr_sector": "Test",
-                    "ghr_mandl_inprog": "1",
-                    "ghr_mandl_inprog_qid": "q_2",
-                    "ghr_mandl_inprog_completed": '["q_1", "q_3"]'
-                });
-            },
-            async: true
-        });
-
-        it("answering third question should show main menu", function (done) {
+        it("opting to continue should show main menu", function (done) {
             var user = {
-                current_state: 'mandl_builder',
+                current_state: 'mandl_quiz_1_thanks',
                 answers: {
                     reg_gender: 'Male',
                     reg_age: '19-24',
                     reg_sector: "Mareba",
-                    mandl_builder: 'Of course'
+                    mandl_quiz_1_q_1: 'Yes',
+                    mandl_quiz_1_q_2: 'Of course',
+                    mandl_quiz_1_q_3: 'First'
                 }
             };
             var p = tester.check_state({
@@ -564,7 +436,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: null,
                 content: null,
-                next_state: "mandl_builder",
+                next_state: "mandl_quiz_2_q_1",
                 response: "^Is this fake question three\\?[^]" +
                     "1. Yes[^]"+
                     "2. No$"
