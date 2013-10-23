@@ -207,7 +207,7 @@ function GoNikeGHRSMS() {
                 var contact = result.contact;
                 var p_c = new Promise();
                 // New contact metric
-                if (result.created || typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
+                if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
                     p_c.add_callback(self.increment_counter("ghr_sms_total_unique_users"));
                 }
                 // Swearing checks
