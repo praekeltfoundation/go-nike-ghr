@@ -36,7 +36,10 @@ function GoNikeGHR() {
 
     StateCreator.call(self, 'initial_state');
 
-    self.get_today = function(im) {
+    var SECONDS_IN_A_DAY = 24 * 60 * 60;
+    var MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
+
+    self.get_today = function() {
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
                              im.config.testing_mock_today[1],
@@ -46,6 +49,19 @@ function GoNikeGHR() {
         } else {
             return new Date();
         }
+    };
+
+    self.get_monday = function(today) {
+        // Monday is day 1
+        var offset = today.getDay() - 1;
+        var monday = today - (offset * MILLISECONDS_IN_A_DAY);
+        return new Date(monday);
+    };
+
+    self.get_week_commencing = function(today) {
+        // today should be var today = new Date();
+        var date = self.get_monday(today);
+        return date.toISOString().substring(0,10);
     };
 
     self.error_state = function() {
@@ -121,7 +137,7 @@ function GoNikeGHR() {
                             completed_answer = im.get_user_answer(question_state_name);
                             p.add_callback(self.make_interaction_log("MANDL", question, completed_answer));
                         }
-                        p.add_callback(self.mark_mandl_complete);
+                        p.add_callback(self.mark_mandl_complete());
                         p.callback();
                         return p;
                     }
@@ -135,12 +151,22 @@ function GoNikeGHR() {
             p.add_callback(function(result) {
                 // This callback updates extras when quiz finished
                 if (result.contact["extras-ghr_mandl_inprog"] !== undefined){
+                    
                     var quiz_id = parseInt(result.contact["extras-ghr_mandl_inprog"]);
-                    var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
+                    var completed_mandl = self.array_parse_ints(JSON.parse(result.contact["extras-ghr_questions"]));
                     completed_mandl.push(quiz_id);
+
+                    // Airtime winner verification
+                    var winner = "false";
+
+                    if (self.is_winner()){
+                        winner = self.get_week_commencing(self.get_today());
+                    }
+
                     var fields = {
                         "ghr_mandl_inprog": "false",
-                        "ghr_questions": JSON.stringify(completed_mandl)
+                        "ghr_questions": JSON.stringify(completed_mandl),
+                        "ghr_airtime_winner": winner
                     };
                     // Run the extras update
                     return im.api_request('contacts.update_extras', {
@@ -285,6 +311,19 @@ function GoNikeGHR() {
         return false;
     };
 
+    self.is_winner = function() {
+        if(im.config.testing) {
+            return true;
+        } else {
+            if (im.config.airtime_reward_active && Math.floor((Math.random()*im.config.airtime_reward_chance)) === 0){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
+
     self.make_mandl_or_mainmenu = function(state_name, contact){
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
         var quiz_id = false;
@@ -314,6 +353,97 @@ function GoNikeGHR() {
             return p_e;
         }
     };
+// >>>>>>> feature/issue-41-add-randomised-winner-check
+
+//     self.make_mandl_or_mainmenu = function(state_name, contact){
+//         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
+//         var quiz_id = false;
+//         var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+//         var incomplete_mandl = self.array_strip_duplicates(possible_mandl, completed_mandl);
+//         if (incomplete_mandl.length !== 0){
+//             quiz_id = incomplete_mandl[0];
+//         }
+//         if (!quiz_id) {
+//             // No survey left to do
+//             return self.make_main_menu();
+//         } else {
+// <<<<<<< HEAD
+//             // Mark contact with in progress quiz
+//             var fields = {
+//                 "ghr_mandl_inprog": JSON.stringify(quiz_id),
+//             };
+//             // Run the extras update
+//             var p_e = im.api_request('contacts.update_extras', {
+//                 key: contact.key,
+//                 fields: fields
+// =======
+//             // load survey
+//             quiz_name = "mandl_quiz_" + quiz_id;
+//             quiz = im.config.quizzes[quiz_name];
+//             question_id = false;
+//             var p = null;
+//             if (inprog){
+//                 // get completed question and answer
+//                 var completed_question = quiz.questions[inprog_qid].question;
+//                 // console.log(state_name);
+//                 var completed_answer = im.get_user_answer("mandl_builder");
+//                 // console.log(completed_answer);
+//                 inprog_completed.push(inprog_qid);
+//                 p = self.interaction_log("MANDL", completed_question, completed_answer);
+//             } else {
+//                 p = self.interaction_log("MANDL", "started", quiz_name);
+//             }
+//             p.add_callback(function(){
+//                 if (!inprog){
+//                     // Load start question
+//                     question_id = quiz['start'];
+//                 } else {
+//                     // get next unanswered question
+//                     var possible_questions = Object.keys(quiz.questions);
+//                     var incomplete_questions = self.array_strip_duplicates(possible_questions, inprog_completed);
+//                     if (incomplete_questions.length !== 0){
+//                         question_id = incomplete_questions.pop();
+//                     }
+//                 }
+//                 var fields = null;
+//                 if (!question_id){
+//                     // Check for random airtime winner
+//                     var winner = "false";
+//                     if (self.is_winner()){
+//                         winner = self.get_week_commencing(self.get_today());
+//                     }
+
+//                     // clear temp extras and show main menu
+//                     completed_mandl.push(quiz_id);
+//                     fields = {
+//                         "ghr_mandl_inprog": "false",
+//                         "ghr_mandl_inprog_qid": "false",
+//                         "ghr_mandl_inprog_completed": "false",
+//                         "ghr_questions": JSON.stringify(completed_mandl),
+//                         "ghr_airtime_winner": winner
+//                     };
+//                 } else {
+//                     fields = {
+//                         "ghr_mandl_inprog": JSON.stringify(quiz_id),
+//                         "ghr_mandl_inprog_qid": question_id,
+//                         "ghr_mandl_inprog_completed": JSON.stringify(inprog_completed)
+//                     };
+//                 }
+//                 // Run the extras update
+//                 return im.api_request('contacts.update_extras', {
+//                     key: contact.key,
+//                     fields: fields
+//                 });
+// >>>>>>> feature/issue-41-add-randomised-winner-check
+//             });
+//             p_e.add_callback(function(){
+//                 // Show the first state for the next quiz
+//                 var quiz_name = "mandl_quiz_" + quiz_id + "_q_1";
+//                 return self.state_creators[quiz_name]();
+//             });
+//             return p_e;
+//         }
+//     };
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
          return function(state_name, im) {
@@ -632,7 +762,7 @@ function GoNikeGHR() {
                         next_state,
                         "Welcome Ni Nyampinga club member! We want to know you better. " +
                         "For each set of 4 questions you answer, you enter a lucky draw to " +
-                        "win XXX RwF weekly.",
+                        "win " + im.config.airtime_reward_amount + " RwF weekly.",
                         [
                             new Choice("continue", "Continue")
                         ],
