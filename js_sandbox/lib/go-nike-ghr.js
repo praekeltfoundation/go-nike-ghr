@@ -39,7 +39,7 @@ function GoNikeGHR() {
     var SECONDS_IN_A_DAY = 24 * 60 * 60;
     var MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
 
-    self.get_today = function(im) {
+    self.get_today = function() {
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
                              im.config.testing_mock_today[1],
@@ -244,7 +244,19 @@ function GoNikeGHR() {
             return true;
         }
         return false;
-    }
+    };
+
+    self.is_winner = function() {
+        if(im.config.testing) {
+            return true;
+        } else {
+            if (im.config.airtime_reward_active && Math.floor((Math.random()*im.config.airtime_reward_chance)) === 0){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
 
     self.make_mandl_or_mainmenu = function(state_name, contact){
         var quiz_id = false;
@@ -306,10 +318,8 @@ function GoNikeGHR() {
                 if (!question_id){
                     // Check for random airtime winner
                     var winner = "false";
-                    if (im.config.airtime_reward_active){
-                        if (Math.floor((Math.random()*im.config.airtime_reward_chance)) === 0){
-                            winner = self.get_week_commencing(self.get_today());
-                        }
+                    if (self.is_winner()){
+                        winner = self.get_week_commencing(self.get_today());
                     }
 
                     // clear temp extras and show main menu

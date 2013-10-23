@@ -525,7 +525,10 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+              var updated_contact = tester.api.contact_store['f953710a2472447591bd59e906dc2c26'];
+              assert.equal(updated_contact['extras-ghr_airtime_winner'], "2013-05-27");
+            }).then(done, done);
         });
 
     });
