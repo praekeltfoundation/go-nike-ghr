@@ -78,7 +78,10 @@ describe("When using the USSD line", function() {
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
-                    terms_url: "faketermsurl.com"
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -192,7 +195,7 @@ describe("When using the USSD line", function() {
                 response: (
                     "^Welcome Ni Nyampinga club member! We want to know you better. " +
                     "For each set of 4 questions you answer, you enter a lucky draw to " +
-                    "win XXX RwF weekly.[^]" +
+                    "win 100 RwF weekly.[^]" +
                     "1. Continue$"
                 )
             });
@@ -232,7 +235,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -301,7 +308,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -374,7 +385,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -447,7 +462,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -522,7 +541,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -583,7 +606,11 @@ describe("When using the USSD line", function() {
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
-                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/"
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -1299,7 +1326,10 @@ describe("When using the USSD line", function() {
                     testing_mock_today: [2013,5,1,8,10],
                     sectors: JSON.parse(fs.readFileSync(sector_file)),
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
-                    terms_url: "faketermsurl.com"
+                    terms_url: "faketermsurl.com",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
