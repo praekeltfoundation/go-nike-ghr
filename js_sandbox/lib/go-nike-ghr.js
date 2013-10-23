@@ -36,6 +36,9 @@ function GoNikeGHR() {
 
     StateCreator.call(self, 'initial_state');
 
+    var SECONDS_IN_A_DAY = 24 * 60 * 60;
+    var MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
+
     self.get_today = function(im) {
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
@@ -48,13 +51,16 @@ function GoNikeGHR() {
         }
     };
 
+    self.get_monday = function(today) {
+        // Monday is day 1
+        var offset = today.getDay() - 1;
+        var monday = today - (offset * MILLISECONDS_IN_A_DAY);
+        return new Date(monday);
+    };
+
     self.get_week_commencing = function(today) {
         // today should be var today = new Date();
-        var date = today;
-        var day = date.getDay() || 7;
-        if (day !== 1)
-            date.setHours(-24 * (day - 1));
-        date.setHours(+2); // fixes crappy JS dates so we don't get Sunday
+        var date = self.get_monday(today);
         return date.toISOString().substring(0,10);
     };
 
