@@ -75,7 +75,10 @@ describe("When using the SMS line", function() {
                 response: "^Thanks for your SMS opinion!$",
                 continue_session: false
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_sms_total_unique_users'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("sending bad text should warn", function (done) {

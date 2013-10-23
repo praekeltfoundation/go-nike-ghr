@@ -161,6 +161,33 @@ function GoNikeGHRSMS() {
         return swear;
     };
 
+
+    // Creates a key like "2013-06-10_airtime"
+    self.get_week_airtime_key = function() {
+        var monday = self.get_monday(self.get_today(im));
+        var monday_date_str = monday.toISOString().substring(0,10);
+        return monday_date_str + '_airtime_committed';
+    };
+
+
+    self.increment_counter = function(metric_key) {
+        return function(){
+            return im.api_request('kv.incr', {
+                key: metric_key,
+                amount: 1
+            });
+        };
+    };
+
+    self.update_extras = function(contact_key, extras_fields) {
+        return function() {
+            return im.api_request('contacts.update_extras', {
+                key: contact_key,
+                fields: extras_fields
+            });
+        };
+    };
+
     self.add_state(new FreeText(
             'start',
             'process_sms',
@@ -178,6 +205,11 @@ function GoNikeGHRSMS() {
             var p = self.get_contact(im);
             p.add_callback(function(result){
                 var contact = result.contact;
+                var p_c = new Promise();
+                // New contact metric
+                if (result.created || typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
+                    p_c.add_callback(self.increment_counter("ghr_sms_total_unique_users"));
+                }
                 // Swearing checks
                 includes_swear = self.check_swear(content);
                 if(includes_swear){
@@ -203,10 +235,9 @@ function GoNikeGHRSMS() {
                         fields['ghr_sms_opinion_seen_count'] = seen_count.toString();
                     }
                 }
-                return im.api_request('contacts.update_extras', {
-                    key: contact.key,
-                    fields: fields
-                });
+                p_c.add_callback(self.update_extras(contact.key, fields));
+                p_c.callback();
+                return p_c;
             });
             p.add_callback(function(result){
                 if (includes_swear || is_spammer){
