@@ -77,3 +77,70 @@ class TestUserInteraction(TestCase):
         self.assertIn("error", json_item)
         self.assertEqual(json_item["error"],
                          "'feature' is longer than the maximum allowed length of 30")
+
+
+
+class TestU18Filter(TestCase):
+    fixtures = ["test/test_userinteraction.json"]
+
+    def test_fixture_loaded(self):
+        users = UserInteraction.objects.filter(msisdn=27721231232).all()
+        self.assertEqual(sorted([obj.value for obj in users]),
+                         sorted([u'Nairobi', u'Female', u'16-18', u'quiz_value']))
+
+        users_2 = UserInteraction.objects.filter(msisdn=27721231231).all()
+        self.assertEqual(sorted([obj.value for obj in users_2]),
+                         sorted([u'MWOGO', u'16-18', u'Male']))
+
+        users_3 = UserInteraction.objects.filter(msisdn=27721231233).all()
+        self.assertEqual(sorted([obj.value for obj in users_3]),
+                         sorted([u'25-35', u'CPT', u'Female', u'quiz_value']))
+
+    def test_registered_msisdn_good(self):
+        """
+        Testing registered MSISDN under 18
+        """
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'userinteraction',
+                      'api_name': 'api'})
+
+        response = self.client.get("%s?msisdn=27721231232&feature=REGISTRATION"% url)
+        json_item = json.loads(response.content)
+        self.assertEqual(json_item['U18'], True)
+
+    def test_unregistered_msisdn(self):
+        """
+        Testing unregistered MSISDN under 18
+        """
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'userinteraction',
+                      'api_name': 'api'})
+
+        response = self.client.get("%s?msisdn=27721231239&feature=REGISTRATION"% url)
+        json_item = json.loads(response.content)
+        self.assertEqual(json_item['U18'], False)
+
+    def test_registered_msisdn_over_age(self):
+        """
+        Testing unregistered MSISDN under 18
+        """
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'userinteraction',
+                      'api_name': 'api'})
+
+        response = self.client.get("%s?msisdn=27721231233&feature=REGISTRATION"% url)
+        json_item = json.loads(response.content)
+        self.assertEqual(json_item['U18'], False)
+
+
+    def test_registered_msisdn_under_age_male(self):
+        """
+        Testing unregistered MSISDN under 18
+        """
+        url = reverse('api_dispatch_list',
+                      kwargs={'resource_name': 'userinteraction',
+                      'api_name': 'api'})
+
+        response = self.client.get("%s?msisdn=27721231231&feature=REGISTRATION"% url)
+        json_item = json.loads(response.content)
+        self.assertEqual(json_item['U18'], False)
