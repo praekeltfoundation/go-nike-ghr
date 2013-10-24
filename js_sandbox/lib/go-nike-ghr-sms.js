@@ -233,6 +233,9 @@ function GoNikeGHRSMS() {
             p.add_callback(function(result){
                 var contact = result.contact;
                 var p_c = new Promise();
+                // Total messages recieved and send - this will probably be replace by native vumi counter
+                p_c.add_callback(self.increment_and_fire("ghr_sms_total_messages_received"));
+                p_c.add_callback(self.increment_and_fire("ghr_sms_total_messages_sent"));
                 // New contact metric
                 if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
                     p_c.add_callback(self.increment_and_fire("ghr_sms_total_unique_users"));

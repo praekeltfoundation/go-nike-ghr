@@ -217,6 +217,12 @@ describe("When using the SMS line", function() {
             p.then(function() {
                 var updated_kv = tester.api.kv_store['ghr_sms_total_registered_users'];
                 assert.equal(updated_kv, 1);
+            }).then(function() {
+                var updated_kv = tester.api.kv_store['ghr_sms_total_messages_received'];
+                assert.equal(updated_kv, 1);
+            }).then(function() {
+                var updated_kv = tester.api.kv_store['ghr_sms_total_messages_sent'];
+                assert.equal(updated_kv, 1);
             }).then(done, done);
         });
     });
