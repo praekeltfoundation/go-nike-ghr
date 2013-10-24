@@ -50,6 +50,9 @@ function GoNikeGHRSMS() {
     // The first state to enter
     StateCreator.call(self, 'start');
 
+    var SECONDS_IN_A_DAY = 24 * 60 * 60;
+    var MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
+
     self.get_today = function(im) {
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
@@ -161,12 +164,18 @@ function GoNikeGHRSMS() {
         return swear;
     };
 
+    self.get_monday = function(today) {
+        // Monday is day 1
+        var offset = today.getDay() - 1;
+        var monday = today - (offset * MILLISECONDS_IN_A_DAY);
+        return new Date(monday);
+    };
 
-    // Creates a key like "2013-06-10_airtime"
-    self.get_week_airtime_key = function() {
-        var monday = self.get_monday(self.get_today(im));
-        var monday_date_str = monday.toISOString().substring(0,10);
-        return monday_date_str + '_airtime_committed';
+    self.get_week_commencing = function(today) {
+        // today should be var today = new Date();
+        // Creates a value like "2013-06-10"
+        var date = self.get_monday(today);
+        return date.toISOString().substring(0,10);
     };
 
 
@@ -176,6 +185,24 @@ function GoNikeGHRSMS() {
                 key: metric_key,
                 amount: 1
             });
+        };
+    };
+
+    self.increment_and_fire = function(metric_key) {
+        return function(){
+            var p = im.api_request('kv.incr', {
+                key: metric_key,
+                amount: 1
+            });
+            p.add_callback(function(result) {
+                return im.api_request('metrics.fire', {
+                    store: 'ghr_metrics',
+                    metric: metric_key,
+                    value: result.value,
+                    agg: 'max'
+                });
+            });
+            return p;
         };
     };
 
@@ -208,13 +235,13 @@ function GoNikeGHRSMS() {
                 var p_c = new Promise();
                 // New contact metric
                 if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
-                    p_c.add_callback(self.increment_counter("ghr_sms_total_unique_users"));
+                    p_c.add_callback(self.increment_and_fire("ghr_sms_total_unique_users"));
                 }
                 // Total register users metric
                 if (contact["extras-ghr_reg_complete"] && typeof contact["extras-ghr_metric_sms_total_registered_users"] == 'undefined'){
                     // Mark the contact so we don't count them again
                     fields['ghr_metric_sms_total_registered_users'] = true;
-                    p_c.add_callback(self.increment_counter("ghr_sms_total_registered_users"));
+                    p_c.add_callback(self.increment_and_fire("ghr_sms_total_registered_users"));
                 }
                 // Swearing checks
                 includes_swear = self.check_swear(content);
