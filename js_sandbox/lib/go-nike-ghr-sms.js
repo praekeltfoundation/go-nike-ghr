@@ -209,9 +209,7 @@ function GoNikeGHRSMS() {
                 // New contact metric
                 if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
                     p_c.add_callback(self.increment_counter("ghr_sms_total_unique_users"));
-                } 
-
-                
+                }
                 // Total register users metric
                 if (contact["extras-ghr_reg_complete"] && typeof contact["extras-ghr_metric_sms_total_registered_users"] == 'undefined'){
                     // Mark the contact so we don't count them again
