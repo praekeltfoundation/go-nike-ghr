@@ -103,7 +103,10 @@ describe("When using the USSD line", function() {
                     "1. Yes[^]"+
                     "2. No$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_unique_users'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("declining T&C's should thanks and exit", function (done) {
