@@ -275,6 +275,7 @@ describe("When using the USSD line", function() {
                     "ghr_age": "25-35",
                     "ghr_sector": "Test",
                     "ghr_mandl_inprog": '1',
+                    "ghr_last_active_week": '2013-03-11',
                 });
             },
             async: true
@@ -394,9 +395,11 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
-
     });
 
 
@@ -506,7 +509,8 @@ describe("When using the USSD line", function() {
                     "ghr_questions": '["1", "2", "3", "4", "5"]',
                     "ghr_gender": "Male",
                     "ghr_age": "25-35",
-                    "ghr_sector": "Test"
+                    "ghr_sector": "Test",
+                    "ghr_last_active_week": '2013-05-27',
                 });
             },
             async: true
@@ -526,7 +530,10 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, undefined);
+            }).then(done, done);
         });
 
         it("selecting 1 from menu should show page one of article", function (done) {

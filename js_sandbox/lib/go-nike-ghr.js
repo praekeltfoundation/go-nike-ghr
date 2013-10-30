@@ -507,7 +507,41 @@ function GoNikeGHR() {
                 new Choice("wwnd", "What would Ndabaga do?"),
                 new Choice("quiz_start", "Weekly quiz"),
                 new Choice("directory_start", "Directory")
-            ]
+            ],
+            null,
+            {
+                on_enter: function() {
+                    // Metric counting and logging
+                    var wc = self.get_week_commencing(self.get_today());
+                    var contact_key;
+                    var update_req = false;
+                    
+                    var p_c = self.get_contact(im);
+                    p_c.add_callback(function(result){
+                        contact_key = result.contact.key;
+                        if (result.contact["extras-ghr_last_active_week"] !== undefined){
+                            if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
+                                update_req = true;
+                                return self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
+                            }
+                        } else { // for contacts somehow missing attribute
+                            update_req = true;
+                        }
+                    });
+                    p_c.add_callback(function(result){
+                        if (update_req){
+                            var fields = {
+                                "ghr_last_active_week": wc
+                            };
+                            return im.api_request('contacts.update_extras', {
+                                key: contact_key,
+                                fields: fields
+                            });
+                        }
+                    });
+                    return p_c;
+                }
+            }
         );
     };
 
@@ -549,6 +583,7 @@ function GoNikeGHR() {
             if (result.contact["extras-ghr_reg_complete"] === undefined){
                 // First visit - create extras
                 var today = self.get_today(im);
+                var week_commencing = self.get_week_commencing(today);
                 var fields = {
                     "ghr_reg_complete": "false",
                     "ghr_reg_started": today.toISOString(),
@@ -556,7 +591,8 @@ function GoNikeGHR() {
                     "ghr_gender": "",
                     "ghr_age": "",
                     "ghr_sector": "",
-                    "ghr_terms_accepted": "false"
+                    "ghr_terms_accepted": "false",
+                    "ghr_last_active_week": week_commencing
                 };
                 // Run the extras update
                 return im.api_request('contacts.update_extras', {
