@@ -834,7 +834,14 @@ function GoNikeGHR() {
                 new Choice("opinions_popular", "Popular opinions from SMS"),
                 new Choice("opinions_view", "Leave your opinion"),
                 new Choice("main_menu", "Back")
-            ]
+            ],
+            null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
+                    return p_log;
+                }
+            }
         )
     );
 
