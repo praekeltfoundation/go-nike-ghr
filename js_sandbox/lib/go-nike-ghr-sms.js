@@ -96,6 +96,19 @@ function GoNikeGHRSMS() {
         return p;
     };
 
+    self.crm_get = function(path) {
+        var url = im.config.crm_api_root + path;
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', null, false);
+            return json;
+        });
+        return p;
+    };
+
     self.interaction_log = function(feature, key, value) {
         var data = {
             feature: feature,
@@ -190,20 +203,36 @@ function GoNikeGHRSMS() {
 
     self.increment_and_fire = function(metric_key) {
         return function(){
-            var p = im.api_request('kv.incr', {
-                key: metric_key,
-                amount: 1
-            });
-            p.add_callback(function(result) {
-                return im.api_request('metrics.fire', {
-                    store: 'ghr_metrics',
-                    metric: metric_key,
-                    value: result.value,
-                    agg: 'max'
-                });
-            });
-            return p;
+            self.increment_and_fire_direct(metric_key);
         };
+    };
+
+    self.increment_and_fire_direct = function(metric_key) {
+        var p = im.api_request('kv.incr', {
+            key: metric_key,
+            amount: 1
+        });
+        p.add_callback(function(result) {
+            return im.api_request('metrics.fire', {
+                store: 'ghr_metrics',
+                metric: metric_key,
+                value: result.value,
+                agg: 'max'
+            });
+        });
+        return p;
+    };
+
+
+
+    self.check_u18_girl = function(){
+        var p = self.crm_get('userinteraction/?msisdn='+im.user_addr+'&feature=REGISTRATION&format=json');
+        p.add_callback(function(result){
+            if (result.U18){
+                return self.increment_and_fire_direct("ghr_sms_total_girl_registered_users");
+            }
+        });
+        return p;
     };
 
     self.update_extras = function(contact_key, extras_fields) {
@@ -245,6 +274,7 @@ function GoNikeGHRSMS() {
                     // Mark the contact so we don't count them again
                     fields['ghr_metric_sms_total_registered_users'] = true;
                     p_c.add_callback(self.increment_and_fire("ghr_sms_total_registered_users"));
+                    p_c.add_callback(self.check_u18_girl);
                 }
                 // Swearing checks
                 includes_swear = self.check_swear(content);

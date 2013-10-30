@@ -1,0 +1,7 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/?msisdn=1234567&feature=REGISTRATION&format=json",
+  "method": "GET",
+  "body": {
+    "U18": false
+  }
+}
