@@ -649,7 +649,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_ndabaga_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it('show page two of Ndabaga Opinions', function(done) {

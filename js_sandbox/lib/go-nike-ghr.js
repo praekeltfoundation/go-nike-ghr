@@ -876,7 +876,10 @@ function GoNikeGHR() {
                         footer_text: "\n1 for prev, 2 for next, 0 to end.",
                         handlers: {
                             on_enter: function() {
-                                var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
+                                var p_log = new Promise();
+                                p_log.add_callback(function(){self.interaction_log("WWND", "ndabaga", "viewed");});
+                                p_log.add_callback(self.increment_and_fire("ghr_ussd_ndabaga_views"));
+                                p_log.callback();
                                 return p_log;
                             }
                         }
