@@ -991,7 +991,10 @@ describe("When using the USSD line", function() {
                     "5. Main menu$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_directory_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 4 from directory should show the second page of directory category listing", function (done) {

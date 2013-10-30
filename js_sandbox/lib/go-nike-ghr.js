@@ -435,7 +435,14 @@ function GoNikeGHR() {
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, question, choices);
+        }, question, choices, null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_directory_views");
+                    return p_log;
+                }
+            }
+        );
     };
 
     self.make_booklet_state = function(end_state, content_array) {
