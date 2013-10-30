@@ -743,6 +743,7 @@ function GoNikeGHR() {
 
             p.add_callback(function(result) {
                 if (result.success){
+                    var girl = ["12 or under", "12-15", "16-18"];
                     return new ChoiceState(
                         state_name,
                         next_state,
@@ -760,6 +761,11 @@ function GoNikeGHR() {
                                 p_log.add_callback(function(){self.interaction_log("REGISTRATION", "age", age);});
                                 p_log.add_callback(function(){self.interaction_log("REGISTRATION", "sector", sector);});
                                 p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
+                                p_log.add_callback(function(){
+                                    if (gender == "Female" && girl.indexOf(age)){
+                                        return self.increment_and_fire("ghr_ussd_total_girl_registered_users");
+                                    }
+                                });
                                 p_log.callback();
                                 return p_log;
                             }
