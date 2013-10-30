@@ -723,6 +723,7 @@ function GoNikeGHR() {
                                 p_log.add_callback(function(){self.interaction_log("REGISTRATION", "gender", gender);});
                                 p_log.add_callback(function(){self.interaction_log("REGISTRATION", "age", age);});
                                 p_log.add_callback(function(){self.interaction_log("REGISTRATION", "sector", sector);});
+                                p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
                                 p_log.callback();
                                 return p_log;
                             }

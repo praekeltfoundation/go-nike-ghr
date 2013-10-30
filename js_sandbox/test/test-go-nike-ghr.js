@@ -202,7 +202,10 @@ describe("When using the USSD line", function() {
                     "1. Continue$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_registrations'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("entering invalid sector should ask for reentry", function (done) {
