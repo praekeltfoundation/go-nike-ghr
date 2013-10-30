@@ -955,7 +955,10 @@ describe("When using the USSD line", function() {
                     "3. Maybe!$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_quiz_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 1 from first weekly quiz question should give feedback", function (done) {

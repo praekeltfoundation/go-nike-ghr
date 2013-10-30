@@ -215,7 +215,14 @@ function GoNikeGHR() {
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, question.question, choices);
+        }, question.question, choices, null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_quiz_views");
+                    return p_log;
+                }
+            }
+        );
     };
 
     self.make_answer_state = function(prefix, answer) {
