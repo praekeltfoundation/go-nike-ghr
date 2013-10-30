@@ -719,15 +719,11 @@ function GoNikeGHR() {
                         null,
                         {
                             on_enter: function() {
-                                var p_log = self.interaction_log("REGISTRATION", "gender", gender);
-                                p_log.add_callback(function() {
-                                    var p_log2 = self.interaction_log("REGISTRATION", "age", age);
-                                    p_log2.add_callback(function() {
-                                        var p_log3 = self.interaction_log("REGISTRATION", "sector", sector);
-                                        return p_log3;
-                                    });
-                                    return p_log2;
-                                });
+                                var p_log = new Promise();
+                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "gender", gender);});
+                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "age", age);});
+                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "sector", sector);});
+                                p_log.callback();
                                 return p_log;
                             }
                         }
