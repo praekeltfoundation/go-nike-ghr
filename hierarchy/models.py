@@ -16,6 +16,7 @@ class District(models.Model):
     name = models.CharField(max_length=50,
                             verbose_name=u'Name of District')
     district_province = models.ForeignKey(Province,
+                                          related_name='district_province',
                                           verbose_name=u'Province')
 
     def __unicode__(self):
@@ -29,6 +30,7 @@ class District(models.Model):
 class Sector(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'Name of Zone')
     sector_district = models.ForeignKey(District,
+                                        related_name='sector_district',
                                         verbose_name=u'District')
 
     def __unicode__(self):
