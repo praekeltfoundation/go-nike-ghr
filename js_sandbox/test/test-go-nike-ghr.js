@@ -42,6 +42,7 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_opinions_popular.json',
     'test/fixtures/weekly_quiz.json',
     'test/fixtures/directory.json',
+    'test/fixtures/hierarchy_sectors.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -1151,6 +1152,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
             'test/fixtures/userinteraction_wwnd.json',
+            'test/fixtures/hierarchy_sectors.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
