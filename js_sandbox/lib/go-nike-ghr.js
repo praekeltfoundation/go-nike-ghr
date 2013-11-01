@@ -151,7 +151,7 @@ function GoNikeGHR() {
             p.add_callback(function(result) {
                 // This callback updates extras when quiz finished
                 if (result.contact["extras-ghr_mandl_inprog"] !== undefined){
-                    
+
                     var quiz_id = parseInt(result.contact["extras-ghr_mandl_inprog"]);
                     var completed_mandl = self.array_parse_ints(JSON.parse(result.contact["extras-ghr_questions"]));
                     completed_mandl.push(quiz_id);
@@ -1026,6 +1026,27 @@ function GoNikeGHR() {
         return p_directory;
     };
 
+    self.build_sectors_array = function(){
+        var p_sector = self.crm_get('sectors/');
+
+        var originals = [];
+        var duplicates = [];
+        p_sector.add_callback(function(result){
+            var sectors = result.objects;
+            for (var sector in sectors) {
+                if (originals.indexOf(sectors[sector].name) == -1) {
+                    originals.push(sectors[sector].name);
+                } else  {
+                    duplicates.push(sectors[sector].name);
+                }
+            }
+            im.config.sector = originals;
+            im.config.duplicates = duplicates;
+
+        });
+        return p_sector;
+    };
+
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
         var p = new Promise();
@@ -1035,6 +1056,7 @@ function GoNikeGHR() {
         p.add_callback(self.build_weekly_quiz_states);
         p.add_callback(self.build_opinion_states);
         p.add_callback(self.build_directory_states);
+        p.add_callback(self.build_sectors_array);
 
         if(!self.state_exists('main_menu')) {
             self.add_creator('main_menu',
