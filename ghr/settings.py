@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'monitor_and_learn',
     'opinions',
     'directory',
+    'hierarchy',
     #'celery_app',
 )
 
