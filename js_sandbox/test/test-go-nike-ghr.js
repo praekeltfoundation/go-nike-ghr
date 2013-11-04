@@ -43,6 +43,8 @@ var test_fixtures_full = [
     'test/fixtures/weekly_quiz.json',
     'test/fixtures/directory.json',
     'test/fixtures/hierarchy_sectors.json',
+    'test/fixtures/userinteraction_sector_duplicates.json',
+    'test/fixtures/userinteraction_sector_duplicates_district.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -224,6 +226,50 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("entering a duplicate sector should ask for district", function (done) {
+            var user = {
+                current_state: 'reg_sector',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "Remera",
+                next_state: "reg_district",
+                response: (
+                    "What district are you in?"
+                )
+            });
+                p.then(done, done);
+            });
+
+        it("should register a user successfully with duplicate district", function(done){
+            var user = {
+                current_state: 'reg_thanks',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: 'Remera'
+                }
+            };
+
+            var p = tester.check_state({
+                user: user,
+                content: "Gastibo",
+                next_state: "reg_thanks",
+                response: (
+                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
+                    "For each set of 4 questions you answer, you enter a lucky draw to " +
+                    "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+            p.then(done, done);
+        });
     });
 
     describe("as a partially registered user - not completed any M&L questions", function() {
@@ -1249,6 +1295,12 @@ describe("When using the USSD line", function() {
                 )
             });
             p.then(done, done);
+        });
+    });
+
+    describe("", function(){
+        it("", function(){
+
         });
     });
 
