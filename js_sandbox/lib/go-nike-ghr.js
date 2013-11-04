@@ -696,14 +696,12 @@ function GoNikeGHR() {
                                         var p_log2 = self.interaction_log("REGISTRATION", "age", age);
                                         p_log2.add_callback(function() {
                                             var p_log3 = self.interaction_log("REGISTRATION", "sector", sector);
-                                            //
-                                            if (district) {
+                                            if (district) {  // If not district this will not run
                                                     p_log3.add_callback(function(){
                                                     var p_log4 = self.interaction_log("REGISTRATION", "district", district);
                                                     return p_log4;
                                                 });
                                             }
-                                            //
                                             return p_log3;
                                         });
                                         return p_log2;
