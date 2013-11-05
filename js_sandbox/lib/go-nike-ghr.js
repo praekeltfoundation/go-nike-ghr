@@ -1066,7 +1066,7 @@ function GoNikeGHR() {
                     duplicates.push(sectors[sector].name.toLowerCase());
                 }
             }
-            im.config.sector = originals;
+            im.config.sectors = originals;
             im.config.duplicates = duplicates;
         });
         return p_sector;
