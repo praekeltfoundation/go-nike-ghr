@@ -18,7 +18,7 @@ describe("test_api", function() {
     });
 });
 
-var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
+// var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
 // for test fixtures where the data is all good
 var test_fixtures_full = [
     'test/fixtures/mandl.json',
@@ -79,7 +79,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
@@ -281,7 +281,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -450,7 +450,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -514,7 +514,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -1233,7 +1233,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
