@@ -1297,11 +1297,4 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
     });
-
-    describe("", function(){
-        it("", function(){
-
-        });
-    });
-
 });
