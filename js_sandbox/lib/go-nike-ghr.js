@@ -463,14 +463,9 @@ function GoNikeGHR() {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
 
-    /*************************************************************************************/
-
     self.unique_sector = function(im, sector) {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
-
-
-    /*************************************************************************************/
 
     self.make_main_menu = function(){
         return new ChoiceState(
