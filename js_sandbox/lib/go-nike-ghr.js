@@ -151,7 +151,7 @@ function GoNikeGHR() {
             p.add_callback(function(result) {
                 // This callback updates extras when quiz finished
                 if (result.contact["extras-ghr_mandl_inprog"] !== undefined){
-                    
+
                     var quiz_id = parseInt(result.contact["extras-ghr_mandl_inprog"]);
                     var completed_mandl = self.array_parse_ints(JSON.parse(result.contact["extras-ghr_questions"]));
                     completed_mandl.push(quiz_id);
@@ -473,7 +473,7 @@ function GoNikeGHR() {
             [
                 new Choice("articles", "Articles"),
                 new Choice("opinions", "Opinions"),
-                new Choice("wwnd", "What would Ndabaga do?"),
+                new Choice("wwnd", "What would Shangazi do?"),
                 new Choice("quiz_start", "Weekly quiz"),
                 new Choice("directory_start", "Directory")
             ]
@@ -760,9 +760,9 @@ function GoNikeGHR() {
 
 
     self.add_creator('wwnd', function(state_name, im) {
-        var p = self.crm_get("ndabaga/");
+        var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
-            if (response.ndabaga === undefined){
+            if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
                     "main_menu",
@@ -773,7 +773,7 @@ function GoNikeGHR() {
                 );
             } else {
                 var next_page = function(page_number) {
-                    return response.ndabaga[page_number];
+                    return response.shangazi[page_number];
                 };
                 return new BookletState(
                     state_name, {
@@ -786,14 +786,14 @@ function GoNikeGHR() {
                         footer_text: "\n1 for prev, 2 for next, 0 to end.",
                         handlers: {
                             on_enter: function() {
-                                var p_log = self.interaction_log("WWND", "ndabaga", "viewed");
+                                var p_log = self.interaction_log("WWND", "shangazi", "viewed");
                                 return p_log;
                             }
                         }
                     }
                 );
             }
-            return response.ndabaga[page_number];
+            return response.shangazi[page_number];
         });
         return p;
     });
