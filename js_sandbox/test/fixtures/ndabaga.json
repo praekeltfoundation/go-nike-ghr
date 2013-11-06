@@ -1,7 +1,0 @@
-{
-  "url": "http://ghr.preview.westerncapelabs.com/api/ndabaga/?format=json",
-  "method": "GET",
-  "body": {
-    "ndabaga": ["Ndabaga ipsum dolor sit amet, consectetur adipiscing elit.","Ndabaga a porta justo. Maecenas sem felis, sollicitudin vitae risus luctus, consectetur sollicitudin leo.", "Ndabaga tincidunt lobortis erat eget malesuada. Cras cursus accumsan eleifend. Morbi ullamcorper pretium sollicitudin.", "Ndabaga tincidunt, sapien elementum pharetra dapibus, mi sem venenatis nulla, at interdum sapien augue eu elit."]
-  }
-}

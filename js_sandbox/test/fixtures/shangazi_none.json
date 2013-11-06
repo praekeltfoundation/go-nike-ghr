@@ -1,0 +1,5 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/shangazi/?format=json",
+  "method": "GET",
+  "body": {}
+}
