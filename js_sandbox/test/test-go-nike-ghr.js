@@ -18,7 +18,6 @@ describe("test_api", function() {
     });
 });
 
-// var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
 // for test fixtures where the data is all good
 var test_fixtures_full = [
     'test/fixtures/mandl.json',
