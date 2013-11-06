@@ -24,7 +24,7 @@ var test_fixtures_full = [
     'test/fixtures/mandl.json',
     'test/fixtures/article.json',
     'test/fixtures/mandl_all.json',
-    'test/fixtures/ndabaga.json',
+    'test/fixtures/shangazi.json',
     'test/fixtures/opinions.json',
     'test/fixtures/opinions_view.json',
     'test/fixtures/userinteraction.json',
@@ -384,7 +384,7 @@ describe("When using the USSD line", function() {
                 response: "^[^]" +
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
-                    "3. What would Ndabaga do\\?[^]" +
+                    "3. What would Shangazi do\\?[^]" +
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
@@ -516,7 +516,7 @@ describe("When using the USSD line", function() {
                 response: "^[^]" +
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
-                    "3. What would Ndabaga do\\?[^]" +
+                    "3. What would Shangazi do\\?[^]" +
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
@@ -620,7 +620,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 3 from menu should show page one of Ndabaga Opinions", function (done) {
+        it("selecting 3 from menu should show page one of Shangazi Opinions", function (done) {
             var user = {
                 current_state: 'main_menu'
             };
@@ -629,28 +629,28 @@ describe("When using the USSD line", function() {
                 content: "3",
                 next_state: "wwnd",
                 response: (
-                    "^Ndabaga ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                    "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
             p.then(done, done);
         });
 
-        it('show page two of Ndabaga Opinions', function(done) {
+        it('show page two of Shangazi Opinions', function(done) {
             var p = tester.check_state({
                 user: {
                     current_state: 'wwnd'
                 },
                 content: "2",
                 next_state: 'wwnd',
-                response: "^Ndabaga a porta justo. Maecenas sem felis, sollicitudin vitae " +
+                response: "^Shangazi a porta justo. Maecenas sem felis, sollicitudin vitae " +
                           "risus luctus, consectetur sollicitudin leo.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
             });
             p.then(done, done);
         });
 
-        it('show page three of Ndabaga Opinions', function(done) {
+        it('show page three of Shangazi Opinions', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
@@ -660,14 +660,14 @@ describe("When using the USSD line", function() {
                 },
                 content: "2",
                 next_state: 'wwnd',
-                response: "^Ndabaga tincidunt lobortis erat eget malesuada. Cras cursus " +
+                response: "^Shangazi tincidunt lobortis erat eget malesuada. Cras cursus " +
                           "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
             });
             p.then(done, done);
         });
 
-        it('show page four of Ndabaga Opinions', function(done) {
+        it('show page four of Shangazi Opinions', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
@@ -677,14 +677,14 @@ describe("When using the USSD line", function() {
                 },
                 content: "2",
                 next_state: 'wwnd',
-                response: "^Ndabaga tincidunt, sapien elementum pharetra dapibus, " +
+                response: "^Shangazi tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
             });
             p.then(done, done);
         });
 
-        it('should continue to page 1 after page 4 of Ndabaga Opinions', function(done) {
+        it('should continue to page 1 after page 4 of Shangazi Opinions', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
@@ -694,14 +694,14 @@ describe("When using the USSD line", function() {
                 },
                 content: "2",
                 next_state: 'wwnd',
-                response: "^Ndabaga ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
+                response: "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
                           "1 for prev, 2 for next, 0 to end.$",
                 continue_session: true
             });
             p.then(done, done);
         });
 
-        it('should continue to end after Ndabaga Opinions finish', function(done) {
+        it('should continue to end after Shangazi Opinions finish', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
@@ -747,7 +747,7 @@ describe("When using the USSD line", function() {
                     "^[^]" +
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
-                    "3. What would Ndabaga do\\?[^]" +
+                    "3. What would Shangazi do\\?[^]" +
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
                 )
@@ -1137,12 +1137,12 @@ describe("When using the USSD line", function() {
 
     });
 
-    describe("with no articles or Ndabaga in system", function() {
+    describe("with no articles or Shangazi in system", function() {
         // These are used to mock API reponses
         // EXAMPLE: Response from google maps API
         var fixtures = [
             'test/fixtures/article_none.json',
-            'test/fixtures/ndabaga_none.json',
+            'test/fixtures/shangazi_none.json',
             'test/fixtures/mandl_all.json',
             'test/fixtures/mandl.json',
             'test/fixtures/opinions.json',
@@ -1210,7 +1210,7 @@ describe("When using the USSD line", function() {
                 response: "^[^]" +
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
-                    "3. What would Ndabaga do\\?[^]" +
+                    "3. What would Shangazi do\\?[^]" +
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
@@ -1233,7 +1233,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 3 from menu should show no Ndabaga available", function (done) {
+        it("selecting 3 from menu should show no Shangazi available", function (done) {
             var user = {
                 current_state: 'main_menu'
             };
