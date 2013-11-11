@@ -763,9 +763,9 @@ function GoNikeGHR() {
                         {
                             on_enter: function() {
                                 var p_log = new Promise();
-                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "gender", gender);});
-                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "age", age);});
-                                p_log.add_callback(function(){self.interaction_log("REGISTRATION", "sector", sector);});
+                                p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "gender", gender);});
+                                p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "age", age);});
+                                p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
                                 p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
                                 p_log.add_callback(function(){
                                     if (gender == "Female" && girl.indexOf(age)){
@@ -820,7 +820,7 @@ function GoNikeGHR() {
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
-                                p_log.add_callback(function(){self.interaction_log("ARTICLES", "article", "viewed");});
+                                p_log.add_callback(function(){return self.interaction_log("ARTICLES", "article", "viewed");});
                                 p_log.add_callback(self.increment_and_fire("ghr_ussd_articles_views"));
                                 p_log.callback();
                                 return p_log;
@@ -883,7 +883,7 @@ function GoNikeGHR() {
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
-                                p_log.add_callback(function(){self.interaction_log("WWND", "ndabaga", "viewed");});
+                                p_log.add_callback(function(){return self.interaction_log("WWND", "ndabaga", "viewed");});
                                 p_log.add_callback(self.increment_and_fire("ghr_ussd_ndabaga_views"));
                                 p_log.callback();
                                 return p_log;
@@ -916,7 +916,7 @@ function GoNikeGHR() {
                 handlers: {
                     on_enter: function() {
                         var p_log = new Promise();
-                        p_log.add_callback(function(){self.interaction_log("OPINIONS", "popular", "viewed");});
+                        p_log.add_callback(function(){return self.interaction_log("OPINIONS", "popular", "viewed");});
                         p_log.add_callback(self.increment_and_fire("ghr_ussd_opinions_popular_views"));
                         p_log.callback();
                         return p_log;
