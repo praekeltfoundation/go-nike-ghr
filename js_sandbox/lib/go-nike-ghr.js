@@ -634,10 +634,7 @@ function GoNikeGHR() {
                         {
                             on_enter: function() {
                                 // Metric counting and logging
-                                var p_c = new Promise();
-                                p_c.add_callback(self.increment_and_fire("ghr_ussd_total_unique_users"));
-                                p_c.callback();
-                                return p_c;
+                                return self.increment_and_fire_direct("ghr_ussd_total_unique_users");
                             }
                         }
                     );
