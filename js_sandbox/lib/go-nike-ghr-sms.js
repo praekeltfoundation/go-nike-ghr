@@ -217,7 +217,8 @@ function GoNikeGHRSMS() {
 
 
     self.check_u18_girl = function(){
-        var p = self.crm_get('userinteraction/?msisdn='+im.user_addr+'&feature=REGISTRATION&format=json');
+        var p = self.crm_get('userinteraction/?' +
+            self.url_encode({msisdn: im.user_addr, feature: 'REGISTRATION', format: 'json'}));
         p.add_callback(function(result){
             if (result.U18){
                 return self.increment_and_fire_direct("ghr_sms_total_girl_registered_users");
