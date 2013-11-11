@@ -50,6 +50,9 @@ function GoNikeGHRSMS() {
     // The first state to enter
     StateCreator.call(self, 'start');
 
+    var SECONDS_IN_A_DAY = 24 * 60 * 60;
+    var MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
+
     self.get_today = function(im) {
         if (im.config.testing) {
             return new Date(im.config.testing_mock_today[0],
@@ -88,6 +91,19 @@ function GoNikeGHRSMS() {
         });
         p.add_callback(function(result) {
             var json = self.check_reply(result, url, 'POST', data, false);
+            return json;
+        });
+        return p;
+    };
+
+    self.crm_get = function(path) {
+        var url = im.config.crm_api_root + path;
+        var p = im.api_request("http.get", {
+            url: url,
+            headers: self.headers
+        });
+        p.add_callback(function(result) {
+            var json = self.check_reply(result, url, 'GET', null, false);
             return json;
         });
         return p;
@@ -161,6 +177,65 @@ function GoNikeGHRSMS() {
         return swear;
     };
 
+    self.get_monday = function(today) {
+        // Monday is day 1
+        var offset = today.getDay() - 1;
+        var monday = today - (offset * MILLISECONDS_IN_A_DAY);
+        return new Date(monday);
+    };
+
+    self.get_week_commencing = function(today) {
+        // today should be var today = new Date();
+        // Creates a value like "2013-06-10"
+        var date = self.get_monday(today);
+        return date.toISOString().substring(0,10);
+    };
+
+
+    self.increment_and_fire = function(metric_key) {
+        return function(){
+            self.increment_and_fire_direct(metric_key);
+        };
+    };
+
+    self.increment_and_fire_direct = function(metric_key) {
+        var p = im.api_request('kv.incr', {
+            key: metric_key,
+            amount: 1
+        });
+        p.add_callback(function(result) {
+            return im.api_request('metrics.fire', {
+                store: 'ghr_metrics',
+                metric: metric_key,
+                value: result.value,
+                agg: 'max'
+            });
+        });
+        return p;
+    };
+
+
+
+    self.check_u18_girl = function(){
+        var p = self.crm_get('userinteraction/?' +
+            self.url_encode({msisdn: im.user_addr, feature: 'REGISTRATION', format: 'json'}));
+        p.add_callback(function(result){
+            if (result.U18){
+                return self.increment_and_fire_direct("ghr_sms_total_girl_registered_users");
+            }
+        });
+        return p;
+    };
+
+    self.update_extras = function(contact_key, extras_fields) {
+        return function() {
+            return im.api_request('contacts.update_extras', {
+                key: contact_key,
+                fields: extras_fields
+            });
+        };
+    };
+
     self.add_state(new FreeText(
             'start',
             'process_sms',
@@ -178,6 +253,21 @@ function GoNikeGHRSMS() {
             var p = self.get_contact(im);
             p.add_callback(function(result){
                 var contact = result.contact;
+                var p_c = new Promise();
+                // Total messages recieved and send - this will probably be replace by native vumi counter
+                p_c.add_callback(self.increment_and_fire("ghr_sms_total_messages_received"));
+                p_c.add_callback(self.increment_and_fire("ghr_sms_total_messages_sent"));
+                // New contact metric
+                if (typeof contact["extras-ghr_sms_opinion_last"] == 'undefined') {
+                    p_c.add_callback(self.increment_and_fire("ghr_sms_total_unique_users"));
+                }
+                // Total register users metric
+                if (contact["extras-ghr_reg_complete"] && typeof contact["extras-ghr_metric_sms_total_registered_users"] == 'undefined'){
+                    // Mark the contact so we don't count them again
+                    fields['ghr_metric_sms_total_registered_users'] = true;
+                    p_c.add_callback(self.increment_and_fire("ghr_sms_total_registered_users"));
+                    p_c.add_callback(self.check_u18_girl);
+                }
                 // Swearing checks
                 includes_swear = self.check_swear(content);
                 if(includes_swear){
@@ -203,10 +293,9 @@ function GoNikeGHRSMS() {
                         fields['ghr_sms_opinion_seen_count'] = seen_count.toString();
                     }
                 }
-                return im.api_request('contacts.update_extras', {
-                    key: contact.key,
-                    fields: fields
-                });
+                p_c.add_callback(self.update_extras(contact.key, fields));
+                p_c.callback();
+                return p_c;
             });
             p.add_callback(function(result){
                 if (includes_swear || is_spammer){
