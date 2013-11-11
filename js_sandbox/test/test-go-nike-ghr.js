@@ -103,7 +103,10 @@ describe("When using the USSD line", function() {
                     "1. Yes[^]"+
                     "2. No$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_unique_users'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("declining T&C's should thanks and exit", function (done) {
@@ -199,7 +202,10 @@ describe("When using the USSD line", function() {
                     "1. Continue$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_registrations'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("entering invalid sector should ask for reentry", function (done) {
@@ -269,6 +275,7 @@ describe("When using the USSD line", function() {
                     "ghr_age": "25-35",
                     "ghr_sector": "Test",
                     "ghr_mandl_inprog": '1',
+                    "ghr_last_active_week": '2013-03-11',
                 });
             },
             async: true
@@ -388,9 +395,11 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
-
     });
 
 
@@ -500,7 +509,8 @@ describe("When using the USSD line", function() {
                     "ghr_questions": '["1", "2", "3", "4", "5"]',
                     "ghr_gender": "Male",
                     "ghr_age": "25-35",
-                    "ghr_sector": "Test"
+                    "ghr_sector": "Test",
+                    "ghr_last_active_week": '2013-05-27',
                 });
             },
             async: true
@@ -520,7 +530,10 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, undefined);
+            }).then(done, done);
         });
 
         it("selecting 1 from menu should show page one of article", function (done) {
@@ -536,7 +549,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_articles_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it('show page two of article', function(done) {
@@ -633,7 +649,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_ndabaga_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it('show page two of Ndabaga Opinions', function(done) {
@@ -732,7 +751,10 @@ describe("When using the USSD line", function() {
                     "3. Back$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_opinions_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 3 from Opinions submenu should return to the main menu", function (done) {
@@ -768,7 +790,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_opinions_popular_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 2 viewing 1st Opinion should display 2nd of 5 opinions", function (done) {
@@ -930,7 +955,10 @@ describe("When using the USSD line", function() {
                     "3. Maybe!$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_quiz_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 1 from first weekly quiz question should give feedback", function (done) {
@@ -966,7 +994,10 @@ describe("When using the USSD line", function() {
                     "5. Main menu$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_directory_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 4 from directory should show the second page of directory category listing", function (done) {
