@@ -527,7 +527,11 @@ function GoNikeGHR() {
                         if (result.contact["extras-ghr_last_active_week"] !== undefined){
                             if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
                                 update_req = true;
-                                return self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
+                                var piafd = self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
+                                piafd.add_callback(function(result) {
+                                    return true;
+                                });
+                                return piafd;
                             }
                         } else { // for contacts somehow missing attribute
                             update_req = true;
