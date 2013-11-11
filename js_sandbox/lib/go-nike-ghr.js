@@ -72,6 +72,28 @@ function GoNikeGHR() {
         );
     };
 
+    self.increment_and_fire = function(metric_key) {
+        return function(){
+            self.increment_and_fire_direct(metric_key);
+        };
+    };
+
+    self.increment_and_fire_direct = function(metric_key) {
+        var p = im.api_request('kv.incr', {
+            key: metric_key,
+            amount: 1
+        });
+        p.add_callback(function(result) {
+            return im.api_request('metrics.fire', {
+                store: 'ghr_metrics',
+                metric: metric_key,
+                value: result.value,
+                agg: 'max'
+            });
+        });
+        return p;
+    };
+
     self.get_contact = function(im){
         var p = im.api_request('contacts.get_or_create', {
             delivery_class: 'ussd',
@@ -184,7 +206,14 @@ function GoNikeGHR() {
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, question.question, choices);
+        }, question.question, choices, null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_quiz_views");
+                    return p_log;
+                }
+            }
+        );
     };
 
     self.make_answer_state = function(prefix, answer) {
@@ -404,7 +433,14 @@ function GoNikeGHR() {
 
         return new ChoiceState(state_name, function(choice) {
             return choice.value;
-        }, question, choices);
+        }, question, choices, null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_directory_views");
+                    return p_log;
+                }
+            }
+        );
     };
 
     self.make_booklet_state = function(end_state, content_array) {
@@ -463,6 +499,10 @@ function GoNikeGHR() {
         return im.config.sectors.indexOf(sector.toLowerCase()) != -1;
     };
 
+    self.unique_sector = function(im, sector) {
+        return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
+    };
+
     self.make_main_menu = function(){
         return new ChoiceState(
             "main_menu",
@@ -473,10 +513,48 @@ function GoNikeGHR() {
             [
                 new Choice("articles", "Articles"),
                 new Choice("opinions", "Opinions"),
-                new Choice("wwnd", "What would Shangazi do?"),
+                new Choice("wwsd", "What would Shangazi do?"),
                 new Choice("quiz_start", "Weekly quiz"),
                 new Choice("directory_start", "Directory")
-            ]
+            ],
+            null,
+            {
+                on_enter: function() {
+                    // Metric counting and logging
+                    var wc = self.get_week_commencing(self.get_today());
+                    var contact_key;
+                    
+                    var p_c = self.get_contact(im);
+                    p_c.add_callback(function(result){
+                        contact_key = result.contact.key;
+                        if (result.contact["extras-ghr_last_active_week"] !== undefined){
+                            if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
+                                var piafd = self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
+                                piafd.add_callback(function(result) {
+                                    return true;
+                                });
+                                return piafd;
+                            } else {
+                                return false;
+                            }
+                        } else { // for contacts somehow missing attribute
+                            return true;
+                        }
+                    });
+                    p_c.add_callback(function(result){
+                        if (result){
+                            var fields = {
+                                "ghr_last_active_week": wc
+                            };
+                            return im.api_request('contacts.update_extras', {
+                                key: contact_key,
+                                fields: fields
+                            });
+                        }
+                    });
+                    return p_c;
+                }
+            }
         );
     };
 
@@ -518,6 +596,7 @@ function GoNikeGHR() {
             if (result.contact["extras-ghr_reg_complete"] === undefined){
                 // First visit - create extras
                 var today = self.get_today(im);
+                var week_commencing = self.get_week_commencing(today);
                 var fields = {
                     "ghr_reg_complete": "false",
                     "ghr_reg_started": today.toISOString(),
@@ -525,7 +604,8 @@ function GoNikeGHR() {
                     "ghr_gender": "",
                     "ghr_age": "",
                     "ghr_sector": "",
-                    "ghr_terms_accepted": "false"
+                    "ghr_terms_accepted": "false",
+                    "ghr_last_active_week": week_commencing
                 };
                 // Run the extras update
                 return im.api_request('contacts.update_extras', {
@@ -553,7 +633,14 @@ function GoNikeGHR() {
                         [
                             new Choice("reg_gender", "Yes"),
                             new Choice("reg_noterms", "No")
-                        ]
+                        ],
+                        null,
+                        {
+                            on_enter: function() {
+                                // Metric counting and logging
+                                return self.increment_and_fire_direct("ghr_ussd_total_unique_users");
+                            }
+                        }
                     );
                 } else {
                     // Registration complete so check for questions
@@ -636,67 +723,82 @@ function GoNikeGHR() {
         var sector = im.get_user_answer('reg_sector');
         var gender = im.get_user_answer('reg_gender');
         var age = im.get_user_answer('reg_age');
+        var district = im.get_user_answer("reg_district");
         var next_state;
+
         if (self.validate_sector(im, sector)) {
             // Get the user
-            var p = self.get_contact(im);
+            if (self.unique_sector(im, sector) || (!self.unique_sector(im, sector) && district)) {
+                var p = self.get_contact(im);
 
-            p.add_callback(function(result) {
-                // This callback updates extras when contact is found
-                var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
-                next_state = 'mandl_quiz_' + possible_mandl[0] + '_q_1';
-                if (result.success){
-                    var fields = {
-                        "ghr_reg_complete": "true",
-                        "ghr_gender": gender,
-                        "ghr_age": age,
-                        "ghr_sector": sector,
-                        "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
-                    };
-                    // Run the extras update
-                    return im.api_request('contacts.update_extras', {
-                        key: result.contact.key,
-                        fields: fields
-                    });
-                } else {
-                    // Error finding contact
-                    return self.error_state();
-                }
-            });
-
-            p.add_callback(function(result) {
-                if (result.success){
-                    return new ChoiceState(
-                        state_name,
-                        next_state,
-                        "Welcome Ni Nyampinga club member! We want to know you better. " +
-                        "For each set of 4 questions you answer, you enter a lucky draw to " +
-                        "win " + im.config.airtime_reward_amount + " RwF weekly.",
-                        [
-                            new Choice("continue", "Continue")
-                        ],
-                        null,
-                        {
-                            on_enter: function() {
-                                var p_log = self.interaction_log("REGISTRATION", "gender", gender);
-                                p_log.add_callback(function() {
-                                    var p_log2 = self.interaction_log("REGISTRATION", "age", age);
-                                    p_log2.add_callback(function() {
-                                        var p_log3 = self.interaction_log("REGISTRATION", "sector", sector);
-                                        return p_log3;
+                p.add_callback(function(result) {
+                    // This callback updates extras when contact is found
+                    var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+                    next_state = 'mandl_quiz_' + possible_mandl[0] + '_q_1';
+                    if (result.success){
+                        var fields = {
+                            "ghr_reg_complete": "true",
+                            "ghr_gender": gender,
+                            "ghr_age": age,
+                            "ghr_sector": sector,
+                            "ghr_district": district,
+                            "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
+                        };
+                        // Run the extras update
+                        return im.api_request('contacts.update_extras', {
+                            key: result.contact.key,
+                            fields: fields
+                        });
+                    } else {
+                        // Error finding contact
+                        return self.error_state();
+                    }
+                });
+                p.add_callback(function(result) {
+                    if (result.success){
+                        var girl = ["12 or under", "12-15", "16-18"];
+                        return new ChoiceState(
+                            state_name,
+                            next_state,
+                            "Welcome Ni Nyampinga club member! We want to know you better. " +
+                            "For each set of 4 questions you answer, you enter a lucky draw to " +
+                            "win " + im.config.airtime_reward_amount + " RwF weekly.",
+                            [
+                                new Choice("continue", "Continue")
+                            ],
+                            null,
+                            {
+                                on_enter: function() {
+                                    var p_log = new Promise();
+                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "gender", gender);});
+                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "age", age);});
+                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
+                                    if (district) {  // If not district this will not run
+                                        p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "district", district);});
+                                    }
+                                    p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
+                                    p_log.add_callback(function(){
+                                        if (gender == "Female" && girl.indexOf(age)){
+                                            return self.increment_and_fire("ghr_ussd_total_girl_registered_users");
+                                        }
                                     });
-                                    return p_log2;
-                                });
-                                return p_log;
-                            }
-                        }
-                    );
-                } else {
-                    // Error saving contact extras
-                    return self.error_state();
-                }
-            });
-            return p;
+                                    p_log.callback();
+                                    return p_log;
+                                }
+                            });
+                    } else {
+                        // Error saving contact extras
+                        return self.error_state();
+                    }
+                });
+                return p;
+            } else {
+                return new FreeText(
+                    "reg_district",
+                    "reg_thanks",
+                    "What district are you in?"
+                );
+            }
         } else {
            return new FreeText(
                 "reg_sector",
@@ -733,7 +835,10 @@ function GoNikeGHR() {
                         footer_text: "\n1 for prev, 2 for next, 0 to end.",
                         handlers: {
                             on_enter: function() {
-                                var p_log = self.interaction_log("ARTICLES", "article", "viewed");
+                                var p_log = new Promise();
+                                p_log.add_callback(function(){return self.interaction_log("ARTICLES", "article", "viewed");});
+                                p_log.add_callback(self.increment_and_fire("ghr_ussd_articles_views"));
+                                p_log.callback();
                                 return p_log;
                             }
                         }
@@ -754,12 +859,19 @@ function GoNikeGHR() {
                 new Choice("opinions_popular", "Popular opinions from SMS"),
                 new Choice("opinions_view", "Leave your opinion"),
                 new Choice("main_menu", "Back")
-            ]
+            ],
+            null,
+            {
+                on_enter: function() {
+                    var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
+                    return p_log;
+                }
+            }
         )
     );
 
 
-    self.add_creator('wwnd', function(state_name, im) {
+    self.add_creator('wwsd', function(state_name, im) {
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
             if (response.shangazi === undefined){
@@ -786,7 +898,10 @@ function GoNikeGHR() {
                         footer_text: "\n1 for prev, 2 for next, 0 to end.",
                         handlers: {
                             on_enter: function() {
-                                var p_log = self.interaction_log("WWND", "shangazi", "viewed");
+                                var p_log = new Promise();
+                                p_log.add_callback(function(){return self.interaction_log("WWSD", "shangazi", "viewed");});
+                                p_log.add_callback(self.increment_and_fire("ghr_ussd_ndabaga_views"));
+                                p_log.callback();
                                 return p_log;
                             }
                         }
@@ -816,7 +931,10 @@ function GoNikeGHR() {
                 footer_text: "\n1 for prev, 2 for next, 0 to end.",
                 handlers: {
                     on_enter: function() {
-                        var p_log = self.interaction_log("OPINIONS", "popular", "viewed");
+                        var p_log = new Promise();
+                        p_log.add_callback(function(){return self.interaction_log("OPINIONS", "popular", "viewed");});
+                        p_log.add_callback(self.increment_and_fire("ghr_ussd_opinions_popular_views"));
+                        p_log.callback();
                         return p_log;
                     }
                 }
@@ -1026,6 +1144,26 @@ function GoNikeGHR() {
         return p_directory;
     };
 
+    self.build_sectors_array = function(){
+        var p_sector = self.crm_get('sectors/');
+
+        var originals = [];
+        var duplicates = [];
+        p_sector.add_callback(function(result){
+            var sectors = result.objects;
+            for (var sector in sectors) {
+                if (originals.indexOf(sectors[sector].name.toLowerCase()) == -1) {
+                    originals.push(sectors[sector].name.toLowerCase());
+                } else  {
+                    duplicates.push(sectors[sector].name.toLowerCase());
+                }
+            }
+            im.config.sectors = originals;
+            im.config.duplicates = duplicates;
+        });
+        return p_sector;
+    };
+
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
         var p = new Promise();
@@ -1035,6 +1173,7 @@ function GoNikeGHR() {
         p.add_callback(self.build_weekly_quiz_states);
         p.add_callback(self.build_opinion_states);
         p.add_callback(self.build_directory_states);
+        p.add_callback(self.build_sectors_array);
 
         if(!self.state_exists('main_menu')) {
             self.add_creator('main_menu',

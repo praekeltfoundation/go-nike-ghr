@@ -18,7 +18,6 @@ describe("test_api", function() {
     });
 });
 
-var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
 // for test fixtures where the data is all good
 var test_fixtures_full = [
     'test/fixtures/mandl.json',
@@ -37,11 +36,14 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_mandl_3.json',
     'test/fixtures/userinteraction_mandl_4.json',
     'test/fixtures/userinteraction_articles.json',
-    'test/fixtures/userinteraction_wwnd.json',
+    'test/fixtures/userinteraction_wwsd.json',
     'test/fixtures/userinteraction_opinions.json',
     'test/fixtures/userinteraction_opinions_popular.json',
     'test/fixtures/weekly_quiz.json',
     'test/fixtures/directory.json',
+    'test/fixtures/hierarchy_sectors.json',
+    'test/fixtures/userinteraction_sector_duplicates.json',
+    'test/fixtures/userinteraction_sector_duplicates_district.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -76,7 +78,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
@@ -103,7 +105,10 @@ describe("When using the USSD line", function() {
                     "1. Yes[^]"+
                     "2. No$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_unique_users'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("declining T&C's should thanks and exit", function (done) {
@@ -199,7 +204,10 @@ describe("When using the USSD line", function() {
                     "1. Continue$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_registrations'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("entering invalid sector should ask for reentry", function (done) {
@@ -223,6 +231,50 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("entering a duplicate sector should ask for district", function (done) {
+            var user = {
+                current_state: 'reg_sector',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "Remera",
+                next_state: "reg_district",
+                response: (
+                    "What district are you in?"
+                )
+            });
+                p.then(done, done);
+            });
+
+        it("should register a user successfully with duplicate district", function(done){
+            var user = {
+                current_state: 'reg_thanks',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: 'Remera'
+                }
+            };
+
+            var p = tester.check_state({
+                user: user,
+                content: "Gastibo",
+                next_state: "reg_thanks",
+                response: (
+                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
+                    "For each set of 4 questions you answer, you enter a lucky draw to " +
+                    "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+            p.then(done, done);
+        });
     });
 
     describe("as a partially registered user - not completed any M&L questions", function() {
@@ -234,7 +286,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -269,6 +321,7 @@ describe("When using the USSD line", function() {
                     "ghr_age": "25-35",
                     "ghr_sector": "Test",
                     "ghr_mandl_inprog": '1',
+                    "ghr_last_active_week": '2013-03-11',
                 });
             },
             async: true
@@ -388,9 +441,11 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
-
     });
 
 
@@ -403,7 +458,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -467,7 +522,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -500,7 +555,8 @@ describe("When using the USSD line", function() {
                     "ghr_questions": '["1", "2", "3", "4", "5"]',
                     "ghr_gender": "Male",
                     "ghr_age": "25-35",
-                    "ghr_sector": "Test"
+                    "ghr_sector": "Test",
+                    "ghr_last_active_week": '2013-05-27',
                 });
             },
             async: true
@@ -520,7 +576,10 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                assert.equal(updated_kv, undefined);
+            }).then(done, done);
         });
 
         it("selecting 1 from menu should show page one of article", function (done) {
@@ -536,7 +595,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_articles_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it('show page two of article', function(done) {
@@ -627,22 +689,25 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "3",
-                next_state: "wwnd",
+                next_state: "wwsd",
                 response: (
                     "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_ndabaga_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it('show page two of Shangazi Opinions', function(done) {
             var p = tester.check_state({
                 user: {
-                    current_state: 'wwnd'
+                    current_state: 'wwsd'
                 },
                 content: "2",
-                next_state: 'wwnd',
+                next_state: 'wwsd',
                 response: "^Shangazi a porta justo. Maecenas sem felis, sollicitudin vitae " +
                           "risus luctus, consectetur sollicitudin leo.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
@@ -654,12 +719,12 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: {
                     pages: {
-                        wwnd: 1
+                        wwsd: 1
                     },
-                    current_state: 'wwnd'
+                    current_state: 'wwsd'
                 },
                 content: "2",
-                next_state: 'wwnd',
+                next_state: 'wwsd',
                 response: "^Shangazi tincidunt lobortis erat eget malesuada. Cras cursus " +
                           "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
@@ -671,12 +736,12 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: {
                     pages: {
-                        wwnd: 2
+                        wwsd: 2
                     },
-                    current_state: 'wwnd'
+                    current_state: 'wwsd'
                 },
                 content: "2",
-                next_state: 'wwnd',
+                next_state: 'wwsd',
                 response: "^Shangazi tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
                           "1 for prev, 2 for next, 0 to end.$"
@@ -688,12 +753,12 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: {
                     pages: {
-                        wwnd: 3
+                        wwsd: 3
                     },
-                    current_state: 'wwnd'
+                    current_state: 'wwsd'
                 },
                 content: "2",
-                next_state: 'wwnd',
+                next_state: 'wwsd',
                 response: "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
                           "1 for prev, 2 for next, 0 to end.$",
                 continue_session: true
@@ -705,9 +770,9 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: {
                     pages: {
-                        wwnd: 2
+                        wwsd: 2
                     },
-                    current_state: 'wwnd'
+                    current_state: 'wwsd'
                 },
                 content: "0",
                 next_state: 'end_state',
@@ -732,7 +797,10 @@ describe("When using the USSD line", function() {
                     "3. Back$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_opinions_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 3 from Opinions submenu should return to the main menu", function (done) {
@@ -768,7 +836,10 @@ describe("When using the USSD line", function() {
                     "1 for prev, 2 for next, 0 to end.$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_opinions_popular_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 2 viewing 1st Opinion should display 2nd of 5 opinions", function (done) {
@@ -930,7 +1001,10 @@ describe("When using the USSD line", function() {
                     "3. Maybe!$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_quiz_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 1 from first weekly quiz question should give feedback", function (done) {
@@ -966,7 +1040,10 @@ describe("When using the USSD line", function() {
                     "5. Main menu$"
                 )
             });
-            p.then(done, done);
+            p.then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_directory_views'];
+                assert.equal(updated_kv, 1);
+            }).then(done, done);
         });
 
         it("selecting 4 from directory should show the second page of directory category listing", function (done) {
@@ -1150,7 +1227,8 @@ describe("When using the USSD line", function() {
             'test/fixtures/weekly_quiz.json',
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
-            'test/fixtures/userinteraction_wwnd.json',
+            'test/fixtures/userinteraction_wwsd.json',
+            'test/fixtures/hierarchy_sectors.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -1185,7 +1263,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
@@ -1240,7 +1318,7 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "3",
-                next_state: "wwnd",
+                next_state: "wwsd",
                 response: (
                     "^No new content this week[^]" +
                     "1. Main menu$"
@@ -1249,5 +1327,4 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
     });
-
 });
