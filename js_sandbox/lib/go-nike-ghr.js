@@ -519,26 +519,26 @@ function GoNikeGHR() {
                     // Metric counting and logging
                     var wc = self.get_week_commencing(self.get_today());
                     var contact_key;
-                    var update_req = false;
                     
                     var p_c = self.get_contact(im);
                     p_c.add_callback(function(result){
                         contact_key = result.contact.key;
                         if (result.contact["extras-ghr_last_active_week"] !== undefined){
                             if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
-                                update_req = true;
                                 var piafd = self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
                                 piafd.add_callback(function(result) {
                                     return true;
                                 });
                                 return piafd;
+                            } else {
+                                return false;
                             }
                         } else { // for contacts somehow missing attribute
-                            update_req = true;
+                            return true;
                         }
                     });
                     p_c.add_callback(function(result){
-                        if (update_req){
+                        if (result){
                             var fields = {
                                 "ghr_last_active_week": wc
                             };
