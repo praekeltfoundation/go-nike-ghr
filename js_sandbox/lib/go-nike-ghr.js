@@ -72,15 +72,6 @@ function GoNikeGHR() {
         );
     };
 
-    self.increment_counter = function(metric_key) {
-        return function(){
-            return im.api_request('kv.incr', {
-                key: metric_key,
-                amount: 1
-            });
-        };
-    };
-
     self.increment_and_fire = function(metric_key) {
         return function(){
             self.increment_and_fire_direct(metric_key);
