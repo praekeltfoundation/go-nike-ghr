@@ -151,7 +151,7 @@ INSTALLED_APPS = (
     'articles',
     'user_interactions',
     'weekly_quiz',
-    'ndabaga',
+    'shangazi',
     'monitor_and_learn',
     'opinions',
     'directory',

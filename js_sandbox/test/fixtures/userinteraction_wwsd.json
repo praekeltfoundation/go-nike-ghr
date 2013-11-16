@@ -2,6 +2,6 @@
     "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/?format=json",
     "method": "POST",
     "content_type": "application/x-www-form-urlencoded",
-    "data": "feature=WWND&key=ndabaga&value=viewed&transport=ussd&msisdn=1234567",
+    "data": "feature=WWSD&key=shangazi&value=viewed&transport=ussd&msisdn=1234567",
     "body": {}
 }

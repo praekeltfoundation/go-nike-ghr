@@ -1,23 +1,23 @@
 from tastypie.resources import ModelResource
-from ndabaga.models import Ndabaga
+from shangazi.models import Shangazi
 from django.utils import timezone
 import datetime
 
 
-class NdabagaResource(ModelResource):
+class ShangaziResource(ModelResource):
     class Meta:
         # Setting the api meta attributes
-        resource_name = "ndabaga"
+        resource_name = "shangazi"
         allowed_methods = ['get']
         excludes = ['publish', 'publish_at', 'created_at', 'id']
         include_resource_uri = False
 
-        queryset = Ndabaga.objects.all()
+        queryset = Shangazi.objects.all()
 
     def get_object_list(self, request):
         # Filters the queryset in meta to get the specific Article required
         timedelta = timezone.now() - datetime.timedelta(days=7)
-        query = super(NdabagaResource, self).get_object_list(request)
+        query = super(ShangaziResource, self).get_object_list(request)
         query = (query.filter(publish=True).
                  filter(publish_at__lte=timezone.now).
                  filter(publish_at__gte=timedelta).
@@ -38,6 +38,6 @@ class NdabagaResource(ModelResource):
                 a.append(data_dict['objects'][0].data["page_2"])
                 a.append(data_dict['objects'][0].data["page_3"])
                 a.append(data_dict['objects'][0].data["page_4"])
-                data_dict['ndabaga'] = a
+                data_dict['shangazi'] = a
             del data_dict['objects']
         return data_dict

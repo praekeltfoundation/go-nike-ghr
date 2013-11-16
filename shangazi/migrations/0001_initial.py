@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Ndabaga'
-        db.create_table(u'ndabaga_ndabaga', (
+        # Adding model 'Shangazi'
+        db.create_table(u'shangazi_shangazi', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('page_1', self.gf('django.db.models.fields.CharField')(max_length=125)),
             ('page_2', self.gf('django.db.models.fields.CharField')(max_length=125)),
@@ -19,17 +19,17 @@ class Migration(SchemaMigration):
             ('publish_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
         ))
-        db.send_create_signal(u'ndabaga', ['Ndabaga'])
+        db.send_create_signal(u'shangazi', ['Shangazi'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Ndabaga'
-        db.delete_table(u'ndabaga_ndabaga')
+        # Deleting model 'Shangazi'
+        db.delete_table(u'shangazi_shangazi')
 
 
     models = {
-        u'ndabaga.ndabaga': {
-            'Meta': {'object_name': 'Ndabaga'},
+        u'shangazi.shangazi': {
+            'Meta': {'object_name': 'Shangazi'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'page_1': ('django.db.models.fields.CharField', [], {'max_length': '125'}),
@@ -41,4 +41,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['ndabaga']
+    complete_apps = ['shangazi']

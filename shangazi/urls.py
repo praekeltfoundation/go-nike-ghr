@@ -1,12 +1,12 @@
 from django.conf.urls import patterns, url, include
-from ndabaga.api import NdabagaResource
+from shangazi.api import ShangaziResource
 from tastypie.api import Api
 
 
 # Setting the API base name and registering the API resources using
 # Tastypies API function
 api_resources = Api(api_name='api')
-api_resources.register(NdabagaResource())
+api_resources.register(ShangaziResource())
 api_resources.prepend_urls()
 
 # Setting the urlpatterns to hook into the api urls

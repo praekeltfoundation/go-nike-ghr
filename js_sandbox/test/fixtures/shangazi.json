@@ -1,0 +1,7 @@
+{
+  "url": "http://ghr.preview.westerncapelabs.com/api/shangazi/?format=json",
+  "method": "GET",
+  "body": {
+    "shangazi": ["Shangazi ipsum dolor sit amet, consectetur adipiscing elit.","Shangazi a porta justo. Maecenas sem felis, sollicitudin vitae risus luctus, consectetur sollicitudin leo.", "Shangazi tincidunt lobortis erat eget malesuada. Cras cursus accumsan eleifend. Morbi ullamcorper pretium sollicitudin.", "Shangazi tincidunt, sapien elementum pharetra dapibus, mi sem venenatis nulla, at interdum sapien augue eu elit."]
+  }
+}

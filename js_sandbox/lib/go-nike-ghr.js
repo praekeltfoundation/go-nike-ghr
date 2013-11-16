@@ -513,7 +513,7 @@ function GoNikeGHR() {
             [
                 new Choice("articles", "Articles"),
                 new Choice("opinions", "Opinions"),
-                new Choice("wwnd", "What would Ndabaga do?"),
+                new Choice("wwsd", "What would Shangazi do?"),
                 new Choice("quiz_start", "Weekly quiz"),
                 new Choice("directory_start", "Directory")
             ],
@@ -871,10 +871,10 @@ function GoNikeGHR() {
     );
 
 
-    self.add_creator('wwnd', function(state_name, im) {
-        var p = self.crm_get("ndabaga/");
+    self.add_creator('wwsd', function(state_name, im) {
+        var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
-            if (response.ndabaga === undefined){
+            if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
                     "main_menu",
@@ -885,7 +885,7 @@ function GoNikeGHR() {
                 );
             } else {
                 var next_page = function(page_number) {
-                    return response.ndabaga[page_number];
+                    return response.shangazi[page_number];
                 };
                 return new BookletState(
                     state_name, {
@@ -899,7 +899,7 @@ function GoNikeGHR() {
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
-                                p_log.add_callback(function(){return self.interaction_log("WWND", "ndabaga", "viewed");});
+                                p_log.add_callback(function(){return self.interaction_log("WWSD", "shangazi", "viewed");});
                                 p_log.add_callback(self.increment_and_fire("ghr_ussd_ndabaga_views"));
                                 p_log.callback();
                                 return p_log;
@@ -908,7 +908,7 @@ function GoNikeGHR() {
                     }
                 );
             }
-            return response.ndabaga[page_number];
+            return response.shangazi[page_number];
         });
         return p;
     });
