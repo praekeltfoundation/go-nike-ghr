@@ -19,3 +19,4 @@ django-tastypie<0.10.0
 pep8
 pyflakes
 fabric
+xlrd

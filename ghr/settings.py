@@ -155,6 +155,7 @@ INSTALLED_APPS = (
     'monitor_and_learn',
     'opinions',
     'directory',
+    'hierarchy',
     #'celery_app',
 )
 
@@ -224,3 +225,5 @@ RAVEN_CONFIG = {
     # DevOps will supply you with this.
     # 'dsn': 'http://public:secret@example.com/1',
 }
+
+API_LIMIT_PER_PAGE = 0

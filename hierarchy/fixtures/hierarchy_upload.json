@@ -1,0 +1,3597 @@
+[
+    {
+        "pk": 1,
+        "model": "hierarchy.province",
+        "fields": {
+            "name": "Eastern province"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Bugesera"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Gashora"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Juru"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Kamabuye"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Ntarama"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Mareba"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Mayange"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Musenyi"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Mwogo"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Ngeruka"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Nyamata"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Nyarugenge"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Rilima"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Ruhuha"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Rweru"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 1,
+            "name": "Shyara"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Gastibo"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Gasange"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Gastibo"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Gitoki"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Kabarore"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Kageyo"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Kiramuruzi"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Kiziguro"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "\u00a0Muhura"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Murambi"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Ngarama"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Nyagihanga"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Remera"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Rugarama"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 2,
+            "name": "Rwimbogo"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Kayonza"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Gahini"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Kabare"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Kabarondo"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Mukarange"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Murama"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Murundi"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Mwiri"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Ndego"
+        }
+    },
+    {
+        "pk": 38,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Nyamirama"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Rukara"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Ruramira"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 3,
+            "name": "Rwinkwavu"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Kirehe"
+        }
+    },
+    {
+        "pk": 42,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Gahara"
+        }
+    },
+    {
+        "pk": 43,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Gatore"
+        }
+    },
+    {
+        "pk": 44,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Kigina"
+        }
+    },
+    {
+        "pk": 45,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Kirehe"
+        }
+    },
+    {
+        "pk": 46,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Mahama"
+        }
+    },
+    {
+        "pk": 47,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Mpanga"
+        }
+    },
+    {
+        "pk": 48,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Musaza"
+        }
+    },
+    {
+        "pk": 49,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Mushikiri"
+        }
+    },
+    {
+        "pk": 50,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Nasho"
+        }
+    },
+    {
+        "pk": 51,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Nyamugari"
+        }
+    },
+    {
+        "pk": 52,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Nyarubuye"
+        }
+    },
+    {
+        "pk": 53,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 4,
+            "name": "Rusumo"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Ngoma"
+        }
+    },
+    {
+        "pk": 54,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Gashanda"
+        }
+    },
+    {
+        "pk": 55,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Jarama"
+        }
+    },
+    {
+        "pk": 56,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Karembo"
+        }
+    },
+    {
+        "pk": 57,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Kazo"
+        }
+    },
+    {
+        "pk": 58,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Kibungo"
+        }
+    },
+    {
+        "pk": 59,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Mugesera"
+        }
+    },
+    {
+        "pk": 60,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Murama"
+        }
+    },
+    {
+        "pk": 61,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Mutenderi"
+        }
+    },
+    {
+        "pk": 62,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Remera"
+        }
+    },
+    {
+        "pk": 63,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Rukira"
+        }
+    },
+    {
+        "pk": 64,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Rukumberi"
+        }
+    },
+    {
+        "pk": 65,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Rurenge"
+        }
+    },
+    {
+        "pk": 66,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Sake"
+        }
+    },
+    {
+        "pk": 67,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 5,
+            "name": "Zaza"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Nyagatare"
+        }
+    },
+    {
+        "pk": 68,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Gatunda"
+        }
+    },
+    {
+        "pk": 69,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Kiyombe"
+        }
+    },
+    {
+        "pk": 70,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Karama"
+        }
+    },
+    {
+        "pk": 71,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Karangazi"
+        }
+    },
+    {
+        "pk": 72,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Katabagemu"
+        }
+    },
+    {
+        "pk": 73,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Matimba"
+        }
+    },
+    {
+        "pk": 74,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Mimuli"
+        }
+    },
+    {
+        "pk": 75,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Mukama"
+        }
+    },
+    {
+        "pk": 76,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Musheli"
+        }
+    },
+    {
+        "pk": 77,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Nyagatare"
+        }
+    },
+    {
+        "pk": 78,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Rukomo"
+        }
+    },
+    {
+        "pk": 79,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Rwempasha"
+        }
+    },
+    {
+        "pk": 80,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Rwimiyaga"
+        }
+    },
+    {
+        "pk": 81,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 6,
+            "name": "Tabagwe"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 1,
+            "name": "Rwamagana"
+        }
+    },
+    {
+        "pk": 82,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Fumbwe"
+        }
+    },
+    {
+        "pk": 83,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Gahengeri"
+        }
+    },
+    {
+        "pk": 84,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Gishari"
+        }
+    },
+    {
+        "pk": 85,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Karenge"
+        }
+    },
+    {
+        "pk": 86,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Kigabiro"
+        }
+    },
+    {
+        "pk": 87,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Muhazi"
+        }
+    },
+    {
+        "pk": 88,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Munyaga"
+        }
+    },
+    {
+        "pk": 89,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Munyiginya"
+        }
+    },
+    {
+        "pk": 90,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Musha"
+        }
+    },
+    {
+        "pk": 91,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Muyumbu"
+        }
+    },
+    {
+        "pk": 92,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Mwulire"
+        }
+    },
+    {
+        "pk": 93,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Nyakariro"
+        }
+    },
+    {
+        "pk": 94,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Nzige"
+        }
+    },
+    {
+        "pk": 95,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 7,
+            "name": "Rubona"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "hierarchy.province",
+        "fields": {
+            "name": "Kigali"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 2,
+            "name": "Gasabo"
+        }
+    },
+    {
+        "pk": 96,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Bumbogo"
+        }
+    },
+    {
+        "pk": 97,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Gastata"
+        }
+    },
+    {
+        "pk": 98,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Jali"
+        }
+    },
+    {
+        "pk": 99,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Gikomero"
+        }
+    },
+    {
+        "pk": 100,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Gisozi"
+        }
+    },
+    {
+        "pk": 101,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Jabana"
+        }
+    },
+    {
+        "pk": 102,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Kinyinya"
+        }
+    },
+    {
+        "pk": 103,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Ndera"
+        }
+    },
+    {
+        "pk": 104,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Nduba"
+        }
+    },
+    {
+        "pk": 105,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Rusororo"
+        }
+    },
+    {
+        "pk": 106,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Rutunga"
+        }
+    },
+    {
+        "pk": 107,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Kacyiru"
+        }
+    },
+    {
+        "pk": 108,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Kimihurura"
+        }
+    },
+    {
+        "pk": 109,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Kimironko"
+        }
+    },
+    {
+        "pk": 110,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 8,
+            "name": "Remera"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 2,
+            "name": "Kicukiro"
+        }
+    },
+    {
+        "pk": 111,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Gahanga"
+        }
+    },
+    {
+        "pk": 112,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Gatenga"
+        }
+    },
+    {
+        "pk": 113,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Gikondo"
+        }
+    },
+    {
+        "pk": 114,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Kagarama"
+        }
+    },
+    {
+        "pk": 115,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Kanombe"
+        }
+    },
+    {
+        "pk": 116,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Kicukiro"
+        }
+    },
+    {
+        "pk": 117,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Kigarama"
+        }
+    },
+    {
+        "pk": 118,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Masaka"
+        }
+    },
+    {
+        "pk": 119,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Niboye"
+        }
+    },
+    {
+        "pk": 120,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 9,
+            "name": "Nyarugunga"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 2,
+            "name": "Nyarugenge"
+        }
+    },
+    {
+        "pk": 121,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Gitega"
+        }
+    },
+    {
+        "pk": 122,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Kanyinya"
+        }
+    },
+    {
+        "pk": 123,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Kigali"
+        }
+    },
+    {
+        "pk": 124,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Kimisagara"
+        }
+    },
+    {
+        "pk": 125,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Mageragere"
+        }
+    },
+    {
+        "pk": 126,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Muhima"
+        }
+    },
+    {
+        "pk": 127,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Nyakabanda"
+        }
+    },
+    {
+        "pk": 128,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Nyamirambo"
+        }
+    },
+    {
+        "pk": 129,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 10,
+            "name": "Rwezamenyo"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "hierarchy.province",
+        "fields": {
+            "name": "Northern province"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 3,
+            "name": "Burera"
+        }
+    },
+    {
+        "pk": 130,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Bungwe"
+        }
+    },
+    {
+        "pk": 131,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Butaro"
+        }
+    },
+    {
+        "pk": 132,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Cyanika"
+        }
+    },
+    {
+        "pk": 133,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Cyeru"
+        }
+    },
+    {
+        "pk": 134,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Gahunga"
+        }
+    },
+    {
+        "pk": 135,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Gatebe"
+        }
+    },
+    {
+        "pk": 136,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Gitovu"
+        }
+    },
+    {
+        "pk": 137,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Kagogo"
+        }
+    },
+    {
+        "pk": 138,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Kinoni"
+        }
+    },
+    {
+        "pk": 139,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Kinyababa"
+        }
+    },
+    {
+        "pk": 140,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Kivuye"
+        }
+    },
+    {
+        "pk": 141,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Nemba"
+        }
+    },
+    {
+        "pk": 142,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Rugarama"
+        }
+    },
+    {
+        "pk": 143,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Rugendabari"
+        }
+    },
+    {
+        "pk": 144,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Ruhunde"
+        }
+    },
+    {
+        "pk": 145,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Rusarabuge"
+        }
+    },
+    {
+        "pk": 146,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 11,
+            "name": "Rwerere"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 3,
+            "name": "Gakenke"
+        }
+    },
+    {
+        "pk": 147,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Busengo"
+        }
+    },
+    {
+        "pk": 148,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Coko"
+        }
+    },
+    {
+        "pk": 149,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Cyabingo"
+        }
+    },
+    {
+        "pk": 150,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Gakenke"
+        }
+    },
+    {
+        "pk": 151,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Gashenyi"
+        }
+    },
+    {
+        "pk": 152,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Mugunga"
+        }
+    },
+    {
+        "pk": 153,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Jania"
+        }
+    },
+    {
+        "pk": 154,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Kamubuga"
+        }
+    },
+    {
+        "pk": 155,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Karambo"
+        }
+    },
+    {
+        "pk": 156,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Kivuruga"
+        }
+    },
+    {
+        "pk": 157,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Mataba"
+        }
+    },
+    {
+        "pk": 158,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Minazi"
+        }
+    },
+    {
+        "pk": 159,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Muhondo"
+        }
+    },
+    {
+        "pk": 160,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Muyongwe"
+        }
+    },
+    {
+        "pk": 161,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Muzo"
+        }
+    },
+    {
+        "pk": 162,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Nemba"
+        }
+    },
+    {
+        "pk": 163,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Ruli"
+        }
+    },
+    {
+        "pk": 164,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Rusasa"
+        }
+    },
+    {
+        "pk": 165,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 12,
+            "name": "Rushashi"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 3,
+            "name": "Gicumbi"
+        }
+    },
+    {
+        "pk": 166,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Bukure"
+        }
+    },
+    {
+        "pk": 167,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Bwisige"
+        }
+    },
+    {
+        "pk": 168,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Byumba"
+        }
+    },
+    {
+        "pk": 169,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Cyumba"
+        }
+    },
+    {
+        "pk": 170,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Giti"
+        }
+    },
+    {
+        "pk": 171,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Kaniga"
+        }
+    },
+    {
+        "pk": 172,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Manyagiro"
+        }
+    },
+    {
+        "pk": 173,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Miyoye"
+        }
+    },
+    {
+        "pk": 174,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Kageyo"
+        }
+    },
+    {
+        "pk": 175,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Mukarange"
+        }
+    },
+    {
+        "pk": 176,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Muko"
+        }
+    },
+    {
+        "pk": 177,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Mutete"
+        }
+    },
+    {
+        "pk": 178,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Nyamiyaga"
+        }
+    },
+    {
+        "pk": 179,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Nyankenke"
+        }
+    },
+    {
+        "pk": 180,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Rubaya"
+        }
+    },
+    {
+        "pk": 181,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Rukomo"
+        }
+    },
+    {
+        "pk": 182,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Rushaki"
+        }
+    },
+    {
+        "pk": 183,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Rutare"
+        }
+    },
+    {
+        "pk": 184,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Ruvune"
+        }
+    },
+    {
+        "pk": 185,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Rwamiko"
+        }
+    },
+    {
+        "pk": 186,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 13,
+            "name": "Shangasha"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 3,
+            "name": "Musanze"
+        }
+    },
+    {
+        "pk": 187,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Busogo"
+        }
+    },
+    {
+        "pk": 188,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Cyuve"
+        }
+    },
+    {
+        "pk": 189,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Gacaca"
+        }
+    },
+    {
+        "pk": 190,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Gashaki"
+        }
+    },
+    {
+        "pk": 191,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Gataraga"
+        }
+    },
+    {
+        "pk": 192,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Kimonyi"
+        }
+    },
+    {
+        "pk": 193,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Kinigi"
+        }
+    },
+    {
+        "pk": 194,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Muhoza"
+        }
+    },
+    {
+        "pk": 195,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Muko"
+        }
+    },
+    {
+        "pk": 196,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Musanze"
+        }
+    },
+    {
+        "pk": 197,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Nkosti"
+        }
+    },
+    {
+        "pk": 198,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Nyange"
+        }
+    },
+    {
+        "pk": 199,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Remera"
+        }
+    },
+    {
+        "pk": 200,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Rwaza"
+        }
+    },
+    {
+        "pk": 201,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 14,
+            "name": "Shingiro"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 3,
+            "name": "Rulindo"
+        }
+    },
+    {
+        "pk": 202,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Base"
+        }
+    },
+    {
+        "pk": 203,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Burega"
+        }
+    },
+    {
+        "pk": 204,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Bushoki"
+        }
+    },
+    {
+        "pk": 205,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Buyoga"
+        }
+    },
+    {
+        "pk": 206,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Cyinzuzi"
+        }
+    },
+    {
+        "pk": 207,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Cyungo"
+        }
+    },
+    {
+        "pk": 208,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Kinihira"
+        }
+    },
+    {
+        "pk": 209,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Kisaro"
+        }
+    },
+    {
+        "pk": 210,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Masoro"
+        }
+    },
+    {
+        "pk": 211,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Mbogo"
+        }
+    },
+    {
+        "pk": 212,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Murambi"
+        }
+    },
+    {
+        "pk": 213,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Ngoma"
+        }
+    },
+    {
+        "pk": 214,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Ntarabana"
+        }
+    },
+    {
+        "pk": 215,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Rukozo"
+        }
+    },
+    {
+        "pk": 216,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Rusiga"
+        }
+    },
+    {
+        "pk": 217,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Shyorongi"
+        }
+    },
+    {
+        "pk": 218,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 15,
+            "name": "Tumba"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "hierarchy.province",
+        "fields": {
+            "name": "Southern province"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Gisagara"
+        }
+    },
+    {
+        "pk": 219,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Gikonko"
+        }
+    },
+    {
+        "pk": 220,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Gishubi"
+        }
+    },
+    {
+        "pk": 221,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Kansi"
+        }
+    },
+    {
+        "pk": 222,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Kibilizi"
+        }
+    },
+    {
+        "pk": 223,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Kigembe"
+        }
+    },
+    {
+        "pk": 224,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Mamba"
+        }
+    },
+    {
+        "pk": 225,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Muganza"
+        }
+    },
+    {
+        "pk": 226,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Mugombwa"
+        }
+    },
+    {
+        "pk": 227,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Mukindo"
+        }
+    },
+    {
+        "pk": 228,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Musha"
+        }
+    },
+    {
+        "pk": 229,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Ndora"
+        }
+    },
+    {
+        "pk": 230,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Nyanza"
+        }
+    },
+    {
+        "pk": 231,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 16,
+            "name": "Save"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Huye"
+        }
+    },
+    {
+        "pk": 232,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Gishamvu"
+        }
+    },
+    {
+        "pk": 233,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Karama"
+        }
+    },
+    {
+        "pk": 234,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Kigoma"
+        }
+    },
+    {
+        "pk": 235,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Kinazi"
+        }
+    },
+    {
+        "pk": 236,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Maraba"
+        }
+    },
+    {
+        "pk": 237,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Mbazi"
+        }
+    },
+    {
+        "pk": 238,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Mukura"
+        }
+    },
+    {
+        "pk": 239,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Ngoma"
+        }
+    },
+    {
+        "pk": 240,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Ruhashya"
+        }
+    },
+    {
+        "pk": 241,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Rusatira"
+        }
+    },
+    {
+        "pk": 242,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Rwaniro"
+        }
+    },
+    {
+        "pk": 243,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Simbi"
+        }
+    },
+    {
+        "pk": 244,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 17,
+            "name": "Tumba"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Kamonyi"
+        }
+    },
+    {
+        "pk": 245,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Gacurabwenge"
+        }
+    },
+    {
+        "pk": 246,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Karama"
+        }
+    },
+    {
+        "pk": 247,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Kayenzi"
+        }
+    },
+    {
+        "pk": 248,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Kayumbu"
+        }
+    },
+    {
+        "pk": 249,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Mugina"
+        }
+    },
+    {
+        "pk": 250,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Musambira"
+        }
+    },
+    {
+        "pk": 251,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Ngamba"
+        }
+    },
+    {
+        "pk": 252,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Nyamiyaga"
+        }
+    },
+    {
+        "pk": 253,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Nyarubaka"
+        }
+    },
+    {
+        "pk": 254,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Rugalika"
+        }
+    },
+    {
+        "pk": 255,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Rukoma"
+        }
+    },
+    {
+        "pk": 256,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 18,
+            "name": "Runda"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Muhanga"
+        }
+    },
+    {
+        "pk": 257,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Cyeza"
+        }
+    },
+    {
+        "pk": 258,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Kabacuzi"
+        }
+    },
+    {
+        "pk": 259,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Kibangu"
+        }
+    },
+    {
+        "pk": 260,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Kiyumba"
+        }
+    },
+    {
+        "pk": 261,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Muhanga"
+        }
+    },
+    {
+        "pk": 262,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Mushishiro"
+        }
+    },
+    {
+        "pk": 263,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Nyabinoni"
+        }
+    },
+    {
+        "pk": 264,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Nyamabuye"
+        }
+    },
+    {
+        "pk": 265,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Nyarusange"
+        }
+    },
+    {
+        "pk": 266,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Rongi"
+        }
+    },
+    {
+        "pk": 267,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Rugendabari"
+        }
+    },
+    {
+        "pk": 268,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 19,
+            "name": "Shyogwe"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Nyamagabe"
+        }
+    },
+    {
+        "pk": 269,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Buruhukiro"
+        }
+    },
+    {
+        "pk": 270,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Cyanika"
+        }
+    },
+    {
+        "pk": 271,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Gatare"
+        }
+    },
+    {
+        "pk": 272,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Kaduha"
+        }
+    },
+    {
+        "pk": 273,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Kamegeli"
+        }
+    },
+    {
+        "pk": 274,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Kibirizi"
+        }
+    },
+    {
+        "pk": 275,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Kibumbwe"
+        }
+    },
+    {
+        "pk": 276,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Kitabi"
+        }
+    },
+    {
+        "pk": 277,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Mbazi"
+        }
+    },
+    {
+        "pk": 278,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Mugano"
+        }
+    },
+    {
+        "pk": 279,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Musange"
+        }
+    },
+    {
+        "pk": 280,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Musebeya"
+        }
+    },
+    {
+        "pk": 281,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Mushubi"
+        }
+    },
+    {
+        "pk": 282,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Nkomane"
+        }
+    },
+    {
+        "pk": 283,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Gasaka"
+        }
+    },
+    {
+        "pk": 284,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Tare"
+        }
+    },
+    {
+        "pk": 285,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 20,
+            "name": "Uwinkingi"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Nyanza"
+        }
+    },
+    {
+        "pk": 286,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Busasamana"
+        }
+    },
+    {
+        "pk": 287,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Busoro"
+        }
+    },
+    {
+        "pk": 288,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Cyabakamyi"
+        }
+    },
+    {
+        "pk": 289,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Kibirizi"
+        }
+    },
+    {
+        "pk": 290,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Kigoma"
+        }
+    },
+    {
+        "pk": 291,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Mukingo"
+        }
+    },
+    {
+        "pk": 292,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Rwabicuma"
+        }
+    },
+    {
+        "pk": 293,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Muyira"
+        }
+    },
+    {
+        "pk": 294,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Ntyazo"
+        }
+    },
+    {
+        "pk": 295,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 21,
+            "name": "Nyagisozi"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Nyaruguru"
+        }
+    },
+    {
+        "pk": 296,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Cyahinda"
+        }
+    },
+    {
+        "pk": 297,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Busanze"
+        }
+    },
+    {
+        "pk": 298,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Kibeho"
+        }
+    },
+    {
+        "pk": 299,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Mata"
+        }
+    },
+    {
+        "pk": 300,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Munini"
+        }
+    },
+    {
+        "pk": 301,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Kivu"
+        }
+    },
+    {
+        "pk": 302,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Ngera"
+        }
+    },
+    {
+        "pk": 303,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Ngoma"
+        }
+    },
+    {
+        "pk": 304,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Nyabimata"
+        }
+    },
+    {
+        "pk": 305,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Nyagisozi"
+        }
+    },
+    {
+        "pk": 306,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Ruheru"
+        }
+    },
+    {
+        "pk": 307,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Muganza"
+        }
+    },
+    {
+        "pk": 308,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Ruramba"
+        }
+    },
+    {
+        "pk": 309,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 22,
+            "name": "Rusenge"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 4,
+            "name": "Ruhango"
+        }
+    },
+    {
+        "pk": 310,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Bweramana"
+        }
+    },
+    {
+        "pk": 311,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Byimana"
+        }
+    },
+    {
+        "pk": 312,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Kabagari"
+        }
+    },
+    {
+        "pk": 313,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Kinazi"
+        }
+    },
+    {
+        "pk": 314,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Kinihira"
+        }
+    },
+    {
+        "pk": 315,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Mbuye"
+        }
+    },
+    {
+        "pk": 316,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Mwendo"
+        }
+    },
+    {
+        "pk": 317,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Ntongwe"
+        }
+    },
+    {
+        "pk": 318,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 23,
+            "name": "Ruhango"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "hierarchy.province",
+        "fields": {
+            "name": "Western province"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Karongi"
+        }
+    },
+    {
+        "pk": 319,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Bwishyura"
+        }
+    },
+    {
+        "pk": 320,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Gishari"
+        }
+    },
+    {
+        "pk": 321,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Gishyita"
+        }
+    },
+    {
+        "pk": 322,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Gisovu"
+        }
+    },
+    {
+        "pk": 323,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Gitesi"
+        }
+    },
+    {
+        "pk": 324,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Kareba"
+        }
+    },
+    {
+        "pk": 325,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Murambi"
+        }
+    },
+    {
+        "pk": 326,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Mubuga"
+        }
+    },
+    {
+        "pk": 327,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Mutuntu"
+        }
+    },
+    {
+        "pk": 328,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Rubengera"
+        }
+    },
+    {
+        "pk": 329,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Rugabano"
+        }
+    },
+    {
+        "pk": 330,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Ruganda"
+        }
+    },
+    {
+        "pk": 331,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Rwankuba"
+        }
+    },
+    {
+        "pk": 332,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 24,
+            "name": "Twumba"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Ngororero"
+        }
+    },
+    {
+        "pk": 333,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Bwira"
+        }
+    },
+    {
+        "pk": 334,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Gatumba"
+        }
+    },
+    {
+        "pk": 335,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Hindiro"
+        }
+    },
+    {
+        "pk": 336,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Kabaya"
+        }
+    },
+    {
+        "pk": 337,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Kageyo"
+        }
+    },
+    {
+        "pk": 338,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Kavumu"
+        }
+    },
+    {
+        "pk": 339,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Matyazo"
+        }
+    },
+    {
+        "pk": 340,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Muhanda"
+        }
+    },
+    {
+        "pk": 341,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Muhororo"
+        }
+    },
+    {
+        "pk": 342,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Ndaro"
+        }
+    },
+    {
+        "pk": 343,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Ngororero"
+        }
+    },
+    {
+        "pk": 344,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Nyange"
+        }
+    },
+    {
+        "pk": 345,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 25,
+            "name": "Sovu"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Nyabihu"
+        }
+    },
+    {
+        "pk": 346,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Bigogwe"
+        }
+    },
+    {
+        "pk": 347,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Jenda"
+        }
+    },
+    {
+        "pk": 348,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Jomba"
+        }
+    },
+    {
+        "pk": 349,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Kabatwa"
+        }
+    },
+    {
+        "pk": 350,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Karago"
+        }
+    },
+    {
+        "pk": 351,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Kintobo"
+        }
+    },
+    {
+        "pk": 352,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Mukamira"
+        }
+    },
+    {
+        "pk": 353,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Muringa"
+        }
+    },
+    {
+        "pk": 354,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Rambura"
+        }
+    },
+    {
+        "pk": 355,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Rugera"
+        }
+    },
+    {
+        "pk": 356,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Rurembo"
+        }
+    },
+    {
+        "pk": 357,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 26,
+            "name": "Shyira"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Nyamasheke"
+        }
+    },
+    {
+        "pk": 358,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Bushekeri"
+        }
+    },
+    {
+        "pk": 359,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Bushenge"
+        }
+    },
+    {
+        "pk": 360,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Cyato"
+        }
+    },
+    {
+        "pk": 361,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Gihombo"
+        }
+    },
+    {
+        "pk": 362,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Kagano"
+        }
+    },
+    {
+        "pk": 363,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Kanjogo"
+        }
+    },
+    {
+        "pk": 364,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Karambi"
+        }
+    },
+    {
+        "pk": 365,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Karengera"
+        }
+    },
+    {
+        "pk": 366,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Kirimbi"
+        }
+    },
+    {
+        "pk": 367,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Macuba"
+        }
+    },
+    {
+        "pk": 368,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Mahembe"
+        }
+    },
+    {
+        "pk": 369,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Nyabitekeri"
+        }
+    },
+    {
+        "pk": 370,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Rangiro"
+        }
+    },
+    {
+        "pk": 371,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Ruharambuga"
+        }
+    },
+    {
+        "pk": 372,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 27,
+            "name": "Shangi"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Rubavu"
+        }
+    },
+    {
+        "pk": 373,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Bugeshi"
+        }
+    },
+    {
+        "pk": 374,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Busasamana"
+        }
+    },
+    {
+        "pk": 375,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Cyanzarwe"
+        }
+    },
+    {
+        "pk": 376,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Gisenyi"
+        }
+    },
+    {
+        "pk": 377,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Kanama"
+        }
+    },
+    {
+        "pk": 378,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Kanzenze"
+        }
+    },
+    {
+        "pk": 379,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Mudende"
+        }
+    },
+    {
+        "pk": 380,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Nyakiliba"
+        }
+    },
+    {
+        "pk": 381,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Nyamyumba"
+        }
+    },
+    {
+        "pk": 382,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Nyundo"
+        }
+    },
+    {
+        "pk": 383,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Rubavu"
+        }
+    },
+    {
+        "pk": 384,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 28,
+            "name": "Rugerero"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Rusizi"
+        }
+    },
+    {
+        "pk": 385,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Bugarama"
+        }
+    },
+    {
+        "pk": 386,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Butare"
+        }
+    },
+    {
+        "pk": 387,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Bweyeye"
+        }
+    },
+    {
+        "pk": 388,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Gikundamvura"
+        }
+    },
+    {
+        "pk": 389,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Gashonga"
+        }
+    },
+    {
+        "pk": 390,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Giheke"
+        }
+    },
+    {
+        "pk": 391,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Gihundwe"
+        }
+    },
+    {
+        "pk": 392,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Gitambi"
+        }
+    },
+    {
+        "pk": 393,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Kamembe"
+        }
+    },
+    {
+        "pk": 394,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Muganza"
+        }
+    },
+    {
+        "pk": 395,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Mururu"
+        }
+    },
+    {
+        "pk": 396,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nkanka"
+        }
+    },
+    {
+        "pk": 397,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nkombo"
+        }
+    },
+    {
+        "pk": 398,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nkungu"
+        }
+    },
+    {
+        "pk": 399,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nyakabuye"
+        }
+    },
+    {
+        "pk": 400,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nyakarenzo"
+        }
+    },
+    {
+        "pk": 401,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Nzahaha"
+        }
+    },
+    {
+        "pk": 402,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 29,
+            "name": "Rwimbogo"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "hierarchy.district",
+        "fields": {
+            "district_province": 5,
+            "name": "Rutsiro"
+        }
+    },
+    {
+        "pk": 403,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Boneza"
+        }
+    },
+    {
+        "pk": 404,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Gihango"
+        }
+    },
+    {
+        "pk": 405,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Kigeyo"
+        }
+    },
+    {
+        "pk": 406,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Kivumu"
+        }
+    },
+    {
+        "pk": 407,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Manihira"
+        }
+    },
+    {
+        "pk": 408,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Mukura"
+        }
+    },
+    {
+        "pk": 409,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Murunda"
+        }
+    },
+    {
+        "pk": 410,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Musasa"
+        }
+    },
+    {
+        "pk": 411,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Mushonyi"
+        }
+    },
+    {
+        "pk": 412,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Mushubati"
+        }
+    },
+    {
+        "pk": 413,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Nyabirasi"
+        }
+    },
+    {
+        "pk": 414,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Ruhango"
+        }
+    },
+    {
+        "pk": 415,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 30,
+            "name": "Rusebeya"
+        }
+    }
+]
