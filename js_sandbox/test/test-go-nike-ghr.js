@@ -18,7 +18,6 @@ describe("test_api", function() {
     });
 });
 
-var sector_file = process.env.GHR_SECTOR_FILE || "fixtures/sectors.json";
 // for test fixtures where the data is all good
 var test_fixtures_full = [
     'test/fixtures/mandl.json',
@@ -42,6 +41,9 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_opinions_popular.json',
     'test/fixtures/weekly_quiz.json',
     'test/fixtures/directory.json',
+    'test/fixtures/hierarchy_sectors.json',
+    'test/fixtures/userinteraction_sector_duplicates.json',
+    'test/fixtures/userinteraction_sector_duplicates_district.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -76,7 +78,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
@@ -229,6 +231,50 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        it("entering a duplicate sector should ask for district", function (done) {
+            var user = {
+                current_state: 'reg_sector',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "Remera",
+                next_state: "reg_district",
+                response: (
+                    "What district are you in?"
+                )
+            });
+                p.then(done, done);
+            });
+
+        it("should register a user successfully with duplicate district", function(done){
+            var user = {
+                current_state: 'reg_thanks',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: 'Remera'
+                }
+            };
+
+            var p = tester.check_state({
+                user: user,
+                content: "Gastibo",
+                next_state: "reg_thanks",
+                response: (
+                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
+                    "For each set of 4 questions you answer, you enter a lucky draw to " +
+                    "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+            p.then(done, done);
+        });
     });
 
     describe("as a partially registered user - not completed any M&L questions", function() {
@@ -240,7 +286,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -412,7 +458,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -476,7 +522,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
@@ -1182,6 +1228,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
             'test/fixtures/userinteraction_wwnd.json',
+            'test/fixtures/hierarchy_sectors.json',
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
@@ -1216,7 +1263,7 @@ describe("When using the USSD line", function() {
                 api.config_store.config = JSON.stringify({
                     testing: true,
                     testing_mock_today: [2013,5,1,8,10],
-                    sectors: JSON.parse(fs.readFileSync(sector_file)),
+                    sectors: [],
                     crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
                     terms_url: "faketermsurl.com",
                     airtime_reward_active: true,
@@ -1280,5 +1327,4 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
     });
-
 });
