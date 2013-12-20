@@ -442,7 +442,7 @@ describe("When using the USSD line", function() {
                     "5. Directory$"
             });
             p.then(function() {
-                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_users'];
                 assert.equal(updated_kv, 1);
             }).then(done, done);
         });
