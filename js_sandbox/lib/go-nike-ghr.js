@@ -1178,6 +1178,10 @@ function GoNikeGHR() {
         p.callback();
         return p;
     };
+
+    self.on_session_new = function(event) {
+        return self.increment_and_fire_direct("ghr_ussd_total_sessions");
+    };
 }
 
 // launch app

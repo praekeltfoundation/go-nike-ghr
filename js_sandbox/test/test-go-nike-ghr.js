@@ -103,12 +103,17 @@ describe("When using the USSD line", function() {
                 response: "^To proceed with registration, do you accept the Terms " +
                     "and Conditions of Ni Nyampinga - faketermsurl.com:[^]" +
                     "1. Yes[^]"+
-                    "2. No$"
+                    "2. No$",
+                session_event: "new"
             });
             p.then(function() {
                 var updated_kv = tester.api.kv_store['ghr_ussd_total_unique_users'];
                 assert.equal(updated_kv, 1);
+            }).then(function() {
+                var updated_kv = tester.api.kv_store['ghr_ussd_total_sessions'];
+                assert.equal(updated_kv, 1);
             }).then(done, done);
+
         });
 
         it("declining T&C's should thanks and exit", function (done) {
