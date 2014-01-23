@@ -84,12 +84,7 @@ function GoNikeGHR() {
             amount: 1
         });
         p.add_callback(function(result) {
-            return im.api_request('metrics.fire', {
-                store: 'ghr_metrics',
-                metric: metric_key,
-                value: result.value,
-                agg: 'max'
-            });
+            return im.metrics.fire(metric_key, result.value, 'max');
         });
         return p;
     };
@@ -529,7 +524,7 @@ function GoNikeGHR() {
                         contact_key = result.contact.key;
                         if (result.contact["extras-ghr_last_active_week"] !== undefined){
                             if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
-                                var piafd = self.increment_and_fire_direct("ghr_ussd_total_users_"+wc);
+                                var piafd = self.increment_and_fire_direct("ghr_ussd_total_users");
                                 piafd.add_callback(function(result) {
                                     return true;
                                 });
@@ -1182,6 +1177,10 @@ function GoNikeGHR() {
 
         p.callback();
         return p;
+    };
+
+    self.on_session_new = function(event) {
+        return self.increment_and_fire_direct("ghr_ussd_total_sessions");
     };
 }
 

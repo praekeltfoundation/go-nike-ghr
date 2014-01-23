@@ -204,12 +204,7 @@ function GoNikeGHRSMS() {
             amount: 1
         });
         p.add_callback(function(result) {
-            return im.api_request('metrics.fire', {
-                store: 'ghr_metrics',
-                metric: metric_key,
-                value: result.value,
-                agg: 'max'
-            });
+            return im.metrics.fire(metric_key, result.value, 'max');
         });
         return p;
     };
