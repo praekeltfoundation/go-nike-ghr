@@ -1,0 +1,113 @@
+{
+    "layout": [{
+        "type": "diamondash.widgets.lvalue.LValueWidget",
+        "time_range": "7d",
+        "name": "Total Unique Users",
+        "target": {
+            "metric_type": "account",
+            "store": "ghr_qa_metrics",
+            "name": "ghr_ussd_total_unique_users",
+            "agg": "max"
+        }
+    }, {
+        "type": "diamondash.widgets.lvalue.LValueWidget",
+        "time_range": "7d",
+        "name": "Total Registrations",
+        "target": {
+            "metric_type": "account",
+            "store": "ghr_qa_metrics",
+            "name": "ghr_ussd_total_registrations",
+            "agg": "max"
+        }
+    }, {
+        "type": "diamondash.widgets.lvalue.LValueWidget",
+        "time_range": "7d",
+        "name": "Total Girl Registered Users",
+        "target": {
+            "metric_type": "account",
+            "store": "ghr_qa_metrics",
+            "name": "ghr_ussd_total_girl_registered_users",
+            "agg": "max"
+        }
+    }, {
+        "type": "diamondash.widgets.lvalue.LValueWidget",
+        "time_range": "7d",
+        "name": "Total Sessions",
+        "target": {
+            "metric_type": "account",
+            "store": "ghr_qa_metrics",
+            "name": "ghr_ussd_total_sessions",
+            "agg": "max"
+        }
+    }, {
+        "type": "diamondash.widgets.graph.GraphWidget",
+        "name": "Total Users and Total Registrations per Week",
+        "width": 12,
+        "time_range": "112d",
+        "bucket_size": "7d",
+        "metrics": [{
+            "name": "Total Users",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_total_users",
+                "agg": "max"
+            }
+        }, {
+            "name": "Total Registrations",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_total_registrations",
+                "agg": "max"
+            }
+        }]
+     }, {
+        "type": "diamondash.widgets.graph.GraphWidget",
+        "name": "Total Views per Week",
+        "width": 12,
+        "time_range": "112d",
+        "bucket_size": "7d",
+        "metrics": [{
+            "name": "Total Article Views",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_articles_views",
+                "agg": "max"
+            }
+        }, {
+            "name": "Total Shangazi Views",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_shangazi_views",
+                "agg": "max"
+            }
+        }, {
+            "name": "Total Directory Views",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_directory_views",
+                "agg": "max"
+            }
+        }, {
+            "name": "Total Opinions Views",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_opinions_views",
+                "agg": "max"
+            }
+        }, {
+            "name": "Total Article Views",
+            "target": {
+                "metric_type": "account",
+                "store": "ghr_qa_metrics",
+                "name": "ghr_ussd_opinions_views",
+                "agg": "max"
+            }
+        }]
+    }]
+}
