@@ -1140,7 +1140,7 @@ function GoNikeGHR() {
     };
 
     self.build_sectors_array = function(){
-        var p_sector = self.crm_get('sectors/');
+        var p_sector = self.crm_get('v1/sector/');
 
         var originals = [];
         var duplicates = [];
