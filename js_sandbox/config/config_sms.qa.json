@@ -1,0 +1,6 @@
+{
+    "user_store": "ghr_sms_qa",
+    "metric_store": "ghr_sms_qa",
+    "crm_api_root": "http://qa-nghr.za.prk-host.net/api/",
+    "terms_url": "faketermsurl.com"
+}
