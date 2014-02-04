@@ -5,7 +5,7 @@
         "name": "Total Unique Users",
         "target": {
             "metric_type": "account",
-            "store": "ghr_metrics",
+            "store": "ghr_sms_prd",
             "name": "ghr_sms_total_unique_users",
             "agg": "max"
         }
@@ -15,7 +15,7 @@
         "name": "Total Registered Users",
         "target": {
             "metric_type": "account",
-            "store": "ghr_metrics",
+            "store": "ghr_sms_prd",
             "name": "ghr_sms_total_registered_users",
             "agg": "max"
         }
@@ -25,7 +25,7 @@
         "name": "Total Girl Registered Users",
         "target": {
             "metric_type": "account",
-            "store": "ghr_metrics",
+            "store": "ghr_sms_prd",
             "name": "ghr_sms_total_girl_registered_users",
             "agg": "max"
         }
@@ -35,7 +35,7 @@
         "name": "Total Messages Sent",
         "target": {
             "metric_type": "account",
-            "store": "ghr_metrics",
+            "store": "ghr_sms_prd",
             "name": "ghr_sms_total_messages_sent",
             "agg": "max"
         }
@@ -45,7 +45,7 @@
         "name": "Total Messages Received",
         "target": {
             "metric_type": "account",
-            "store": "ghr_metrics",
+            "store": "ghr_sms_prd",
             "name": "ghr_sms_total_messages_received",
             "agg": "max"
         }
@@ -59,7 +59,7 @@
             "name": "Total Unique Users",
             "target": {
                 "metric_type": "account",
-                "store": "ghr_metrics",
+                "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_unique_users",
                 "agg": "max"
             }
@@ -67,7 +67,7 @@
             "name": "Total Registered Users",
             "target": {
                 "metric_type": "account",
-                "store": "ghr_metrics",
+                "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_registered_users",
                 "agg": "max"
             }
@@ -82,7 +82,7 @@
             "name": "Messages Sent",
             "target": {
                 "metric_type": "account",
-                "store": "ghr_metrics",
+                "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_messages_sent",
                 "agg": "max"
             }
@@ -90,7 +90,7 @@
             "name": "Messages Received",
             "target": {
                 "metric_type": "account",
-                "store": "ghr_metrics",
+                "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_messages_received",
                 "agg": "max"
             }
