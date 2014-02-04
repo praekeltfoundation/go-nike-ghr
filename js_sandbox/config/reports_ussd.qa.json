@@ -7,7 +7,7 @@
             "metric_type": "account",
             "store": "ghr_ussd_qa",
             "name": "ghr_ussd_total_unique_users",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -17,7 +17,7 @@
             "metric_type": "account",
             "store": "ghr_ussd_qa",
             "name": "ghr_ussd_total_registrations",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -27,7 +27,7 @@
             "metric_type": "account",
             "store": "ghr_ussd_qa",
             "name": "ghr_ussd_total_girl_registered_users",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -37,7 +37,7 @@
             "metric_type": "account",
             "store": "ghr_ussd_qa",
             "name": "ghr_ussd_total_sessions",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.graph.GraphWidget",
@@ -51,7 +51,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_total_users",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Registrations",
@@ -59,7 +59,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_total_registrations",
-                "agg": "max"
+                "aggregator": "max"
             }
         }]
      }, {
@@ -74,7 +74,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_articles_views",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Shangazi Views",
@@ -82,7 +82,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_shangazi_views",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Directory Views",
@@ -90,7 +90,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_directory_views",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Opinions Views",
@@ -98,7 +98,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_opinions_views",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Article Views",
@@ -106,7 +106,7 @@
                 "metric_type": "account",
                 "store": "ghr_ussd_qa",
                 "name": "ghr_ussd_opinions_views",
-                "agg": "max"
+                "aggregator": "max"
             }
         }]
     }]

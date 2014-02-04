@@ -7,7 +7,7 @@
             "metric_type": "account",
             "store": "ghr_sms_prd",
             "name": "ghr_sms_total_unique_users",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -17,7 +17,7 @@
             "metric_type": "account",
             "store": "ghr_sms_prd",
             "name": "ghr_sms_total_registered_users",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -27,7 +27,7 @@
             "metric_type": "account",
             "store": "ghr_sms_prd",
             "name": "ghr_sms_total_girl_registered_users",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -37,7 +37,7 @@
             "metric_type": "account",
             "store": "ghr_sms_prd",
             "name": "ghr_sms_total_messages_sent",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
@@ -47,7 +47,7 @@
             "metric_type": "account",
             "store": "ghr_sms_prd",
             "name": "ghr_sms_total_messages_received",
-            "agg": "max"
+            "aggregator": "max"
         }
     }, "new_row", {
         "type": "diamondash.widgets.graph.GraphWidget",
@@ -61,7 +61,7 @@
                 "metric_type": "account",
                 "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_unique_users",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Total Registered Users",
@@ -69,7 +69,7 @@
                 "metric_type": "account",
                 "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_registered_users",
-                "agg": "max"
+                "aggregator": "max"
             }
         }]
     }, {
@@ -84,7 +84,7 @@
                 "metric_type": "account",
                 "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_messages_sent",
-                "agg": "max"
+                "aggregator": "max"
             }
         }, {
             "name": "Messages Received",
@@ -92,7 +92,7 @@
                 "metric_type": "account",
                 "store": "ghr_sms_prd",
                 "name": "ghr_sms_total_messages_received",
-                "agg": "max"
+                "aggregator": "max"
             }
         }]
     }]
