@@ -733,10 +733,10 @@ function GoNikeGHR() {
                     if (result.success){
                         var fields = {
                             "ghr_reg_complete": "true",
-                            "ghr_gender": gender,
-                            "ghr_age": age,
-                            "ghr_sector": sector,
-                            "ghr_district": district,
+                            "ghr_gender": JSON.stringify(gender),
+                            "ghr_age": JSON.stringify(age),
+                            "ghr_sector": JSON.stringify(sector),
+                            "ghr_district": JSON.stringify(district),
                             "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
                         };
                         // Run the extras update
