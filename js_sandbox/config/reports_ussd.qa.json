@@ -1,7 +1,7 @@
 {
     "layout": [{
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Unique Users",
         "target": {
             "metric_type": "account",
@@ -11,7 +11,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Registrations",
         "target": {
             "metric_type": "account",
@@ -21,7 +21,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Girl Registered Users",
         "target": {
             "metric_type": "account",
@@ -31,7 +31,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Sessions",
         "target": {
             "metric_type": "account",
@@ -43,8 +43,8 @@
         "type": "diamondash.widgets.graph.GraphWidget",
         "name": "Total Users and Total Registrations per Week",
         "width": 12,
-        "time_range": "112d",
-        "bucket_size": "7d",
+        "time_range": "1d",
+        "bucket_size": "1h",
         "metrics": [{
             "name": "Total Users",
             "target": {
@@ -66,8 +66,8 @@
         "type": "diamondash.widgets.graph.GraphWidget",
         "name": "Total Views per Week",
         "width": 12,
-        "time_range": "112d",
-        "bucket_size": "7d",
+        "time_range": "1d",
+        "bucket_size": "1h",
         "metrics": [{
             "name": "Total Article Views",
             "target": {
