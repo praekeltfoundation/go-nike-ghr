@@ -1,7 +1,7 @@
 {
     "layout": [{
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Unique Users",
         "target": {
             "metric_type": "account",
@@ -11,7 +11,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Registered Users",
         "target": {
             "metric_type": "account",
@@ -21,7 +21,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Girl Registered Users",
         "target": {
             "metric_type": "account",
@@ -31,7 +31,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Messages Sent",
         "target": {
             "metric_type": "account",
@@ -41,7 +41,7 @@
         }
     }, {
         "type": "diamondash.widgets.lvalue.LValueWidget",
-        "time_range": "7d",
+        "time_range": "1d",
         "name": "Total Messages Received",
         "target": {
             "metric_type": "account",
@@ -53,8 +53,8 @@
         "type": "diamondash.widgets.graph.GraphWidget",
         "name": "Total Unique Users and Registered Users per Week",
         "width": 6,
-        "time_range": "112d",
-        "bucket_size": "7d",
+        "time_range": "1d",
+        "bucket_size": "1h",
         "metrics": [{
             "name": "Total Unique Users",
             "target": {
@@ -76,8 +76,8 @@
         "type": "diamondash.widgets.graph.GraphWidget",
         "name": "Messages Sent and Received per Week",
         "width": 6,
-        "time_range": "112d",
-        "bucket_size": "7d",
+        "time_range": "1d",
+        "bucket_size": "1h",
         "metrics": [{
             "name": "Messages Sent",
             "target": {
