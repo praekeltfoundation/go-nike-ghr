@@ -371,7 +371,10 @@ function GoNikeGHR() {
             });
             p_e.add_callback(function(){
                 // Show the first state for the next quiz
-                var quiz_name = "mandl_quiz_" + quiz_id + "_q_1";
+                // Get first
+                var quiz_name = "mandl_quiz_" + quiz_id + "_" + im.config.quizzes["mandl_quiz_" + quiz_id]["start"];
+                console.log(quiz_name);
+                //var quiz_name = "mandl_quiz_" + quiz_id + "_q_1";
                 return self.state_creators[quiz_name]();
             });
             return p_e;
