@@ -371,7 +371,8 @@ function GoNikeGHR() {
             });
             p_e.add_callback(function(){
                 // Show the first state for the next quiz
-                var quiz_name = "mandl_quiz_" + quiz_id + "_q_1";
+                // Get first
+                var quiz_name = "mandl_quiz_" + quiz_id + "_" + im.config.quizzes["mandl_quiz_" + quiz_id]["start"];
                 return self.state_creators[quiz_name]();
             });
             return p_e;
@@ -729,14 +730,14 @@ function GoNikeGHR() {
                 p.add_callback(function(result) {
                     // This callback updates extras when contact is found
                     var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
-                    next_state = 'mandl_quiz_' + possible_mandl[0] + '_q_1';
+                    next_state = 'mandl_quiz_' + possible_mandl[0]  + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
                     if (result.success){
                         var fields = {
                             "ghr_reg_complete": "true",
-                            "ghr_gender": gender,
-                            "ghr_age": age,
-                            "ghr_sector": sector,
-                            "ghr_district": district,
+                            "ghr_gender": JSON.stringify(gender),
+                            "ghr_age": JSON.stringify(age),
+                            "ghr_sector": JSON.stringify(sector),
+                            "ghr_district": JSON.stringify(district),
                             "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
                         };
                         // Run the extras update
