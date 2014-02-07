@@ -730,7 +730,7 @@ function GoNikeGHR() {
                 p.add_callback(function(result) {
                     // This callback updates extras when contact is found
                     var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
-                    next_state = 'mandl_quiz_' + possible_mandl[0] + '_q_1';
+                    next_state = 'mandl_quiz_' + possible_mandl[0]  + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
                     if (result.success){
                         var fields = {
                             "ghr_reg_complete": "true",
