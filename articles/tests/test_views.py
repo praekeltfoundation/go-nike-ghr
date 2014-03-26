@@ -19,7 +19,7 @@ class TestArticlesAPIWorks(TestCase):
         articles = Article.objects.all()
         articles.update(created_at=timezone.now(), publish_at=timezone.now())
         response = self.client.get(url)
-        self.assertEqual("/api/article/", response.request["PATH_INFO"])
+        self.assertEqual("/vumigo/api/article/", response.request["PATH_INFO"])
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['article'][0],

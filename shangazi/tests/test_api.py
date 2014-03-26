@@ -17,7 +17,7 @@ class TestShangaziAPIWorks(TestCase):
         shangazi = Shangazi.objects.all()
         shangazi.update(created_at=timezone.now(), publish_at=timezone.now())
         response = self.client.get(url)
-        self.assertEqual("/api/shangazi/", response.request["PATH_INFO"])
+        self.assertEqual("/vumigo/api/shangazi/", response.request["PATH_INFO"])
         self.assertEqual("application/json", response["Content-Type"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content)['shangazi'][0],
