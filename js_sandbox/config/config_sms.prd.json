@@ -1,6 +1,6 @@
 {
     "user_store": "ghr_sms_prd",
     "metric_store": "ghr_sms_prd",
-    "crm_api_root": "http://prd-nghr.za.prk-host.net/api/",
+    "crm_api_root": "http://prd-nghr.za.prk-host.net/vumigo/api/",
     "terms_url": "girlhub.org"
 }

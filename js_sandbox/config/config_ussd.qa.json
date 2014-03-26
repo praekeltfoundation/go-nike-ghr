@@ -1,6 +1,6 @@
 {
     "user_store": "ghr_ussd_qa",
     "metric_store": "ghr_ussd_qa",
-    "crm_api_root": "http://qa-nghr.za.prk-host.net/api/",
+    "crm_api_root": "http://qa-nghr.za.prk-host.net/vumigo/api/",
     "terms_url": "faketermsurl.com"
 }
