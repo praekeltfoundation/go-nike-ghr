@@ -12,17 +12,17 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^celery/', include('celery_app.urls')),
+    url(r'^vumigo/admin/', include(admin.site.urls)),
+    url(r'^vumigo/celery/', include('celery_app.urls')),
 
     # Monitoring and Learning urls
-    url(r'^', include('monitor_and_learn.urls')),
+    url(r'^vumigo/', include('monitor_and_learn.urls')),
     # API links
-    url(r'^', include('articles.urls')),
-    url(r'^', include('user_interactions.urls')),
-    url(r'^', include('shangazi.urls')),
-    url(r'^', include('opinions.urls')),
-    url(r'^', include('weekly_quiz.urls')),
-    url(r'^', include('directory.urls')),
-    url(r'^', include('hierarchy.urls')),
+    url(r'^vumigo/', include('articles.urls')),
+    url(r'^vumigo/', include('user_interactions.urls')),
+    url(r'^vumigo/', include('shangazi.urls')),
+    url(r'^vumigo/', include('opinions.urls')),
+    url(r'^vumigo/', include('weekly_quiz.urls')),
+    url(r'^vumigo/', include('directory.urls')),
+    url(r'^vumigo/', include('hierarchy.urls')),
 )
