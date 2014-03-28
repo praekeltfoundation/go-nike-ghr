@@ -144,7 +144,9 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
     'djcelery',
     'djcelery_email',
-    'debug_toolbar',
+    # NOTE: For some reason `debug_toolbar` breaks on the server,
+    #       enable again for local dev.
+    # 'debug_toolbar',
     'tastypie',
 
     # sample apps to explain usage
