@@ -4,7 +4,7 @@ import json
 
 
 class TestOpinion(TestCase):
-    fixtures = ['test/test_opinion.json']
+    fixtures = ['test_opinion.json']
 
     def test_api_works(self):
         url = reverse('api_dispatch_list',
@@ -19,7 +19,7 @@ class TestOpinion(TestCase):
 
 
 class TestOpinionPolls(TestCase):
-    fixtures = ['test/test_opinion_poll.json']
+    fixtures = ['test_opinion_poll.json']
 
     def test_opinion_polls_url(self):
         url = reverse('api_dispatch_list',
