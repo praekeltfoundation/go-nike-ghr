@@ -4,7 +4,7 @@ import json
 
 
 class TestWeeklyQuizApi(TestCase):
-    fixtures = ['test/test_weekly_quiz.json']
+    fixtures = ['test_weekly_quiz.json']
 
     def test_correct_url(self):
         url = reverse('api_dispatch_list',
@@ -82,7 +82,7 @@ class TestWeeklyQuizApi(TestCase):
 
 
 class TestWeeklyQuizApiNotActive(TestCase):
-    fixtures = ['test/test_weekly_quiz_inactive.json']
+    fixtures = ['test_weekly_quiz_inactive.json']
 
     def test_api_response(self):
         url = reverse('api_dispatch_list',

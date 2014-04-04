@@ -81,7 +81,7 @@ class TestUserInteraction(TestCase):
 
 
 class TestU18Filter(TestCase):
-    fixtures = ["test/test_userinteraction.json"]
+    fixtures = ["test_userinteraction.json"]
 
     def test_fixture_loaded(self):
         users = UserInteraction.objects.filter(msisdn=27721231232).all()
