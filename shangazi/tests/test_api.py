@@ -6,7 +6,7 @@ import json
 
 
 class TestShangaziAPIWorks(TestCase):
-    fixtures = ['test/shangazi_api_good_test_data.json']
+    fixtures = ['shangazi_api_good_test_data.json']
 
     def test_api_works(self):
         # Tests to see if API is functioning correctly (however since it
@@ -25,7 +25,7 @@ class TestShangaziAPIWorks(TestCase):
 
 
 class TestAPIShangaziNoNewshangazi(TestCase):
-    fixtures = ['test/shangazi_api_non_lastweek_test_data.json']
+    fixtures = ['shangazi_api_non_lastweek_test_data.json']
 
     def test_no_shangazi_last_week(self):
         # Tests response for no shangazis published in the last 7 days.
@@ -46,7 +46,7 @@ class TestAPIShangaziNoNewshangazi(TestCase):
 
 
 class TestAPIShangaziNotPublished(TestCase):
-    fixtures = ['test/shangazi_api_unpublished_test_data.json']
+    fixtures = ['shangazi_api_unpublished_test_data.json']
 
     def test_shangazi_not_published(self):
         # Tests to see if shangazis are un-published.
