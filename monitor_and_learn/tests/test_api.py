@@ -4,7 +4,7 @@ import json
 
 
 class TestMLAPI(TestCase):
-    fixtures = ['test/test_M_and_L.json']
+    fixtures = ['test_M_and_L.json']
 
     def test_get_quiz_ids(self):
         url = reverse('api_quiz_ids',
