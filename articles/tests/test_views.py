@@ -8,7 +8,7 @@ from articles.models import Article
 
 
 class TestArticlesAPIWorks(TestCase):
-    fixtures = ['test/articles_api_good_test_data.json']
+    fixtures = ['articles_api_good_test_data.json']
 
     def test_api_works(self):
         # Tests to see if API is functioning correctly (however since it
@@ -27,7 +27,7 @@ class TestArticlesAPIWorks(TestCase):
 
 
 class TestAPIArticlesNoNewArticle(TestCase):
-    fixtures = ['test/articles_api_non_lastweek_test_data.json']
+    fixtures = ['articles_api_non_lastweek_test_data.json']
 
     def test_no_article_last_week(self):
         # Tests response for no articles published in the last 7 days.
@@ -50,7 +50,7 @@ class TestAPIArticlesNoNewArticle(TestCase):
 
 
 class TestAPIArticlesNotPublished(TestCase):
-    fixtures = ['test/articles_api_unpublished_test_data.json']
+    fixtures = ['articles_api_unpublished_test_data_2.json']
 
     def test_article_not_published(self):
         # Tests to see if articles are un-published.
