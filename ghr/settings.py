@@ -229,3 +229,8 @@ RAVEN_CONFIG = {
 }
 
 API_LIMIT_PER_PAGE = 0
+
+try:
+    from production_settings import *
+except ImportError:
+    pass
