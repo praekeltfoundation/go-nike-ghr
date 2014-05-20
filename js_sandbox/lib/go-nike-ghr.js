@@ -289,15 +289,10 @@ function GoNikeGHR() {
             if(cached) {
                 var now = new Date();
                 var timestamp = new Date(cached.timestamp);
-                var lp = im.log('timstamp? ->' + cached.timestamp + '<-');
-                lp.add_callback(function () {
-                    if(now - timestamp < lifetime) {
-                        // still fresh, so return
-                        return cached.result;
-                    }
-                });
-                lp.add_callback(self.log_result('Cached result'));
-                return lp;
+                if(now - timestamp < lifetime) {
+                    // still fresh, so return
+                    return cached.result;
+                }
             }
 
             // doesn't exist or isn't fresh, do expensive function call
