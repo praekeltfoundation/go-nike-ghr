@@ -268,25 +268,20 @@ function GoNikeGHR() {
                 key: cache_key
             });
             kv_p.add_callback(function (result) {
-                try {
-                    var lp = im.log('Result ' + result.value);
-                    if(result.success && result.value) {
-                        lp.add_callback(function () {
-                            return JSON.parse(result.value);
-                        });
-                        return lp;
-                    } else {
-                        lp.add_callback(self.log_result('result not success: ' + result.success));
-                        lp.add_callback(function () {
-                            return null;
-                        });
-                        return lp;
-                    }
-                } catch (err) {
+                if(result.value) {
+                    return JSON.parse(result.value);
                 }
-                return null;
             });
             return kv_p;
+        });
+        p.add_callback(function (cached) {
+            if(cached) {
+                var lp = im.log(Object.keys(cached));
+                lp.add_callback(function () {
+                    return cached;
+                });
+                return lp;
+            }
         });
         // p.add_callback(self.log_result('Cache get'));
         p.add_callback(function (cached) {
