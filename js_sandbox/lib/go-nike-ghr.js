@@ -249,29 +249,48 @@ function GoNikeGHR() {
         }, view.opinions, choices);
     };
 
+    self.log_result = function(msg) {
+        return function (result) {
+            var p = im.log(msg + ', got result ' + JSON.stringify(result));
+            p.add_callback(function() { return result; });
+            return p;
+        };
+    };
+
     self.cache = function(key, cache_lifetime, opts) {
         var cache_key = 'cache_' + key;
         var lifetime = cache_lifetime || im.config.cache_lifetime;
         var func = opts.func;
         var func_arguments = opts.args;
         // attempt to fetch from the cache
-        var p = im.api_request('kv.get', {
-            key: cache_key
+        var p = im.log('Caching ' + cache_key);
+        p.add_callback(function () {
+            return im.api_request('kv.get', {
+                key: cache_key
+            });
         });
+        p.add_callback(self.log_result('Cache get'));
         p.add_callback(function (result) {
             // if we have a result, check if it's still valid wrt lifetime
             if(result.value) {
                 var cached = JSON.parse(result.value);
                 var now = new Date();
                 var timestamp = new Date(cached.timestamp);
-                if(now - timestamp < lifetime) {
-                    // still fresh, so return
-                    return cached.result;
-                }
+
+                var lp = im.log('now:' + now + ', timestamp: ', timestamp);
+                lp.add_callback(function () {
+                    if(now - timestamp < lifetime) {
+                        // still fresh, so return
+                        return cached.result;
+                    }
+                });
+                lp.add_callback(self.log_result('Cached result'));
+                return lp;
             }
 
             // doesn't exist or isn't fresh, do expensive function call
             var result_p = func.apply(self, func_arguments);
+            result_p.add_callback(self.log_result('Cache miss'));
             result_p.add_callback(function (result) {
                 // cache the results
                 var cache_p = im.api_request('kv.set', {
@@ -282,6 +301,7 @@ function GoNikeGHR() {
                     })
                 });
                 // when cached return the original result
+                cache_p.add_callback(self.log_result('Cache set'));
                 cache_p.add_callback(function (r) {
                     return result;
                 });
