@@ -1,6 +1,8 @@
 var fs = require("fs");
 var assert = require("assert");
 var vumigo = require("vumigo_v01");
+var Promise = vumigo.promise.Promise;
+
 // CHANGE THIS to your-app-name
 var app = require("../lib/go-nike-ghr");
 
@@ -113,6 +115,40 @@ describe("When using the USSD line", function() {
                 var updated_kv = tester.api.kv_store['ghr_ussd_total_sessions'];
                 assert.equal(updated_kv, 1);
             }).then(done, done);
+
+        });
+
+        it('should allow for caching', function (done) {
+            var state_creator = tester.api.im.state_creator;
+
+            function foo(arg) {
+                p = new Promise();
+                p.add_callback(function (init) {
+                    return init + arg;
+                });
+                p.callback(1);
+                return p;
+            }
+
+            var p = state_creator.cache('key', 1000, {
+                func: foo,
+                args: [1]
+            });
+            p.add_callback(function (result) {
+                assert.equal(result, 2);
+            });
+            p.add_callback(function () {
+                var rerun_p = state_creator.cache('key', 1000, {
+                    func: foo,
+                    args: [200]
+                });
+                rerun_p.add_callback(function (result) {
+                    // we should get the cached value
+                    assert.equal(result, 2);
+                });
+                return rerun_p;
+            });
+            p.add_callback(done);
 
         });
 
@@ -1274,6 +1310,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
+                    cache_lifetime: 100
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);

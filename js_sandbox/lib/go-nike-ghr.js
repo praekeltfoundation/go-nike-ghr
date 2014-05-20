@@ -249,9 +249,9 @@ function GoNikeGHR() {
         }, view.opinions, choices);
     };
 
-    self.cache = function(key, opts) {
+    self.cache = function(key, cache_lifetime, opts) {
         var cache_key = 'cache_' + key;
-        var lifetime = opts.cache_lifetime || im.config.cache_lifetime;
+        var lifetime = cache_lifetime || im.config.cache_lifetime;
         var func = opts.func;
         var func_arguments = opts.args;
         // attempt to fetch from the cache
@@ -261,9 +261,9 @@ function GoNikeGHR() {
         p.add_callback(function (result) {
             // if we have a result, check if it's still valid wrt lifetime
             if(result.value) {
-                cached = JSON.parse(result.value);
-                now = new Date();
-                timestamp = new Date(cached.timestamp);
+                var cached = JSON.parse(result.value);
+                var now = new Date();
+                var timestamp = new Date(cached.timestamp);
                 if(now - timestamp < lifetime) {
                     // still fresh, so return
                     return cached.result;
