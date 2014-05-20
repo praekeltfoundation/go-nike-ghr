@@ -276,8 +276,13 @@ function GoNikeGHR() {
                             return JSON.parse(result.value);
                         });
                         return lp;
+                    } else {
+                        lp.add_callback(self.log_result('result not success: ' + result.success));
+                        lp.add_callback(function () {
+                            return null;
+                        });
+                        return lp;
                     }
-                    return null;
                 } catch (err) {
                 }
                 return null;
