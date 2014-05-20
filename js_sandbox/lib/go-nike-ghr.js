@@ -275,16 +275,6 @@ function GoNikeGHR() {
             return kv_p;
         });
         p.add_callback(function (cached) {
-            if(cached) {
-                var lp = im.log(Object.keys(cached));
-                lp.add_callback(function () {
-                    return cached;
-                });
-                return lp;
-            }
-        });
-        // p.add_callback(self.log_result('Cache get'));
-        p.add_callback(function (cached) {
             // if we have a result, check if it's still valid wrt lifetime
             if(cached) {
                 var now = new Date();
