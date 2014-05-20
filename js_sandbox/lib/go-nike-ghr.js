@@ -271,12 +271,13 @@ function GoNikeGHR() {
                 try {
                     var lp = im.log(new Buffer(result.value).toString('base64'));
                     if(result.success && result.value) {
+                        lp.add_callback(self.log_result('Success!'));
                         lp.add_callback(function () {
                             return JSON.parse(result.value);
                         });
                         return lp;
-
                     }
+                    return null;
                 } catch (err) {
                 }
                 return null;
