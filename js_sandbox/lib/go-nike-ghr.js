@@ -286,6 +286,9 @@ function GoNikeGHR() {
                         return cached.result;
                     });
                     return lp;
+                } else {
+                    im.log('?? ' + now + ', ' + timestamp + ', ' + lifetime);
+                    im.log('check? ' + (now - timestamp < lifetime));
                 }
             }
 
