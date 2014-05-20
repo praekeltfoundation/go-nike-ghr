@@ -316,7 +316,7 @@ function GoNikeGHR() {
     };
 
     self.cached_crm_get = function (path) {
-        return self.cache(path, {
+        return self.cache(path, im.config.cache_lifetime, {
             func: self.crm_get,
             args: [path]
         });

@@ -86,6 +86,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
+                    cache_lifetime: 100
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -332,6 +333,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
+                    cache_lifetime: 100
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -504,6 +506,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
+                    cache_lifetime: 100
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -568,6 +571,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
+                    cache_lifetime: 100
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
