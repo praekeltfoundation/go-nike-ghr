@@ -281,7 +281,11 @@ function GoNikeGHR() {
                 var timestamp = new Date(cached.timestamp);
                 if(now - timestamp < lifetime) {
                     // still fresh, so return
-                    return cached.result;
+                    var lp = im.log('Cache hit!');
+                    lp.add_callback(function() {
+                        return cached.result;
+                    });
+                    return lp;
                 }
             }
 
