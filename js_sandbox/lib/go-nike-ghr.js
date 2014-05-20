@@ -257,8 +257,7 @@ function GoNikeGHR() {
         };
     };
 
-    self.cache = function(key, cache_lifetime, opts) {
-        var cache_key = 'cache_' + key;
+    self.cache = function(cache_key, cache_lifetime, opts) {
         var lifetime = cache_lifetime || im.config.cache_lifetime;
         var func = opts.func;
         var func_arguments = opts.args;
@@ -279,7 +278,7 @@ function GoNikeGHR() {
             });
             return kv_p;
         });
-        p.add_callback(self.log_result('Cache get'));
+        // p.add_callback(self.log_result('Cache get'));
         p.add_callback(function (cached) {
             // if we have a result, check if it's still valid wrt lifetime
             if(cached) {
@@ -345,7 +344,7 @@ function GoNikeGHR() {
     };
 
     self.cached_crm_get = function (path) {
-        return self.cache(path, im.config.cache_lifetime, {
+        return self.cache('cached_' + path, im.config.cache_lifetime, {
             func: self.crm_get,
             args: [path]
         });
