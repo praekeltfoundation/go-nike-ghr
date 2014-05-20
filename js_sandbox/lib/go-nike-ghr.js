@@ -273,7 +273,9 @@ function GoNikeGHR() {
                     if(result.success && result.value) {
                         lp.add_callback(self.log_result('Success!'));
                         lp.add_callback(function () {
-                            return JSON.parse(result.value);
+                            var data = JSON.parse(result.value);
+                            im.log('data keys', Object.keys(data));
+                            return data;
                         });
                         return lp;
                     } else {
