@@ -265,15 +265,24 @@ function GoNikeGHR() {
         // attempt to fetch from the cache
         var p = im.log('Caching ' + cache_key);
         p.add_callback(function () {
-            return im.api_request('kv.get', {
+            var kv_p = im.api_request('kv.get', {
                 key: cache_key
             });
+            kv_p.add_callback(function (result) {
+                try {
+                    if(result.success && result.value) {
+                        return JSON.parse(result.value);
+                    }
+                } catch (err) {
+                }
+                return null;
+            });
+            return kv_p;
         });
         p.add_callback(self.log_result('Cache get'));
-        p.add_callback(function (result) {
+        p.add_callback(function (cached) {
             // if we have a result, check if it's still valid wrt lifetime
-            if(result.value) {
-                var cached = JSON.parse(result.value);
+            if(cached) {
                 var now = new Date();
                 var timestamp = new Date(cached.timestamp);
 
