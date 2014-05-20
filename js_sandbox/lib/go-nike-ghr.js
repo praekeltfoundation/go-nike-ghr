@@ -269,7 +269,7 @@ function GoNikeGHR() {
             });
             kv_p.add_callback(function (result) {
                 try {
-                    var lp = im.log('Result ' + result);
+                    var lp = im.log('Result ' + result.value);
                     if(result.success && result.value) {
                         lp.add_callback(function () {
                             return JSON.parse(result.value);
