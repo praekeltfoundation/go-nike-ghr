@@ -269,13 +269,10 @@ function GoNikeGHR() {
             });
             kv_p.add_callback(function (result) {
                 try {
-                    var lp = im.log(new Buffer(result.value).toString('base64'));
+                    var lp = im.log('Result ' + result);
                     if(result.success && result.value) {
-                        lp.add_callback(self.log_result('Success!'));
                         lp.add_callback(function () {
-                            var data = JSON.parse(result.value);
-                            im.log('data keys', Object.keys(data));
-                            return data;
+                            return JSON.parse(result.value);
                         });
                         return lp;
                     } else {
