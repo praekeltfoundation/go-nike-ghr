@@ -290,7 +290,7 @@ function GoNikeGHR() {
                 var now = new Date();
                 var timestamp = new Date(cached.timestamp);
 
-                var lp = im.log('now:' + now + ', timestamp: ', timestamp);
+                var lp = im.log('now:' + now + ', timestamp: ', cached.timestamp);
                 lp.add_callback(function () {
                     if(now - timestamp < lifetime) {
                         // still fresh, so return
