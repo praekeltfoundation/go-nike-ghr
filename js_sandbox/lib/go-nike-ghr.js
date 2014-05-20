@@ -249,6 +249,49 @@ function GoNikeGHR() {
         }, view.opinions, choices);
     };
 
+    self.cache = function(key, opts) {
+        var cache_key = 'cache_' + key;
+        var lifetime = opts.cache_lifetime || im.config.cache_lifetime;
+        var func = opts.func;
+        var func_arguments = opts.args;
+        // attempt to fetch from the cache
+        var p = im.api_request('kv.get', {
+            key: cache_key
+        });
+        p.add_callback(function (result) {
+            // if we have a result, check if it's still valid wrt lifetime
+            if(result.value) {
+                cached = JSON.parse(result.value);
+                now = new Date();
+                timestamp = new Date(cached.timestamp);
+                if(now - timestamp < lifetime) {
+                    // still fresh, so return
+                    return cached.result;
+                }
+            }
+
+            // doesn't exist or isn't fresh, do expensive function call
+            var result_p = func.apply(self, func_arguments);
+            result_p.add_callback(function (result) {
+                // cache the results
+                var cache_p = im.api_request('kv.set', {
+                    key: cache_key,
+                    value: JSON.stringify({
+                        timestamp: new Date().toISOString(),
+                        result: result
+                    })
+                });
+                // when cached return the original result
+                cache_p.add_callback(function (r) {
+                    return result;
+                });
+                return cache_p;
+            });
+            return result_p;
+        });
+        return p;
+    };
+
     self.crm_get = function(path) {
         var url = im.config.crm_api_root + path + "?format=json";
         var p = im.log('Starting crm_get: ' + path);
@@ -270,6 +313,13 @@ function GoNikeGHR() {
             return lp;
         });
         return p;
+    };
+
+    self.cached_crm_get = function (path) {
+        return self.cache(path, {
+            func: self.crm_get,
+            args: [path]
+        });
     };
 
     self.crm_post = function(path, data) {
@@ -1007,7 +1057,7 @@ function GoNikeGHR() {
 
     self.state_exists = function(state_name) {
         return self.state_creators.hasOwnProperty(state_name);
-    }
+    };
 
     self.add_creator_unless_exists = function(state_name, state) {
         if(self.state_exists(state_name)) {
@@ -1018,7 +1068,7 @@ function GoNikeGHR() {
     };
 
     self.build_mandl_quiz_states = function() {
-        var p_mandl = self.crm_get('mandl/');
+        var p_mandl = self.cached_crm_get('mandl/');
         // load the quizzes
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
@@ -1057,7 +1107,7 @@ function GoNikeGHR() {
     };
 
     self.load_quizzes_config = function() {
-        var p_mandl_all = self.crm_get('mandl/all/');
+        var p_mandl_all = self.cached_crm_get('mandl/all/');
         p_mandl_all.add_callback(function(result) {
             // Load all mandl quiz IDs
             im.config.mandl_quizzes = result.quizzes;
@@ -1067,16 +1117,16 @@ function GoNikeGHR() {
     };
 
     self.load_opinions_config = function() {
-        var p_opinion = self.crm_get('opinions/sms/');
+        var p_opinion = self.cached_crm_get('opinions/sms/');
         p_opinion.add_callback(function(result){
             im.config.opinions = result.opinions;
             return true;
         });
         return p_opinion;
-    }
+    };
 
     self.build_weekly_quiz_states = function() {
-        var p_weeklyquiz = self.crm_get('weeklyquiz/');
+        var p_weeklyquiz = self.cached_crm_get('weeklyquiz/');
         p_weeklyquiz.add_callback(function(result) {
             // This callback checks extras when contact is found
             var quiz = result.quiz;
@@ -1109,11 +1159,11 @@ function GoNikeGHR() {
             // End of Build Weekly quiz
         });
         return p_weeklyquiz;
-    }
+    };
 
     self.build_opinion_states = function() {
         // Build Opinion Viewing
-        var p_opinion_view = self.crm_get('opinions/view/');
+        var p_opinion_view = self.cached_crm_get('opinions/view/');
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
             var first_view_prefix = false;
@@ -1141,7 +1191,7 @@ function GoNikeGHR() {
 
     self.build_directory_states = function() {
         // Build directory
-        var p_directory = self.crm_get('directory/');
+        var p_directory = self.cached_crm_get('directory/');
         p_directory.add_callback(function(result) {
             var directory = result.directory;
             var max_items = 3;
@@ -1161,7 +1211,7 @@ function GoNikeGHR() {
     };
 
     self.build_sectors_array = function(){
-        var p_sector = self.crm_get('v1/sector/');
+        var p_sector = self.cached_crm_get('v1/sector/');
 
         var originals = [];
         var duplicates = [];
