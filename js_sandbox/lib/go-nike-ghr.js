@@ -251,13 +251,23 @@ function GoNikeGHR() {
 
     self.crm_get = function(path) {
         var url = im.config.crm_api_root + path + "?format=json";
-        var p = im.api_request("http.get", {
-            url: url,
-            headers: self.headers
+        var p = im.log('Starting crm_get: ' + path);
+        p.add_callback(function() {
+            return im.api_request("http.get", {
+                url: url,
+                headers: self.headers
+            });
         });
         p.add_callback(function(result) {
             var json = self.check_reply(result, url, 'GET', null, false);
             return json;
+        });
+        p.add_callback(function(json) {
+            var lp = im.log('Completed crm_get: ' + path);
+            lp.add_callback(function() {
+                return json;
+            });
+            return lp;
         });
         return p;
     };
@@ -265,14 +275,24 @@ function GoNikeGHR() {
     self.crm_post = function(path, data) {
         var url = im.config.crm_api_root + path + "?format=json";
         data = self.url_encode(data);
-        var p = im.api_request("http.post", {
-            url: url,
-            headers: self.post_headers,
-            data: data
+        var p = im.log('Starting crm_post: ' + path);
+        p.add_callback(function() {
+            return im.api_request("http.post", {
+                url: url,
+                headers: self.post_headers,
+                data: data
+            });
         });
         p.add_callback(function(result) {
             var json = self.check_reply(result, url, 'POST', data, false);
             return json;
+        });
+        p.add_callback(function(json) {
+            var lp = im.log('Completed crm_post: ' + path);
+            lp.add_callback(function() {
+                return json;
+            });
+            return lp;
         });
         return p;
     };
@@ -519,7 +539,7 @@ function GoNikeGHR() {
                     // Metric counting and logging
                     var wc = self.get_week_commencing(self.get_today());
                     var contact_key;
-                    
+
                     var p_c = self.get_contact(im);
                     p_c.add_callback(function(result){
                         contact_key = result.contact.key;
