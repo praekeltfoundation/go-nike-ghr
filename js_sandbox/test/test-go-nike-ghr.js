@@ -719,7 +719,7 @@ describe("When using the USSD line", function() {
                     },
                     current_state: 'articles'
                 },
-                content: "0",
+                content: "3",
                 next_state: 'end_state',
                 response: '^Thank you and bye bye!$',
                 continue_session: false
@@ -819,7 +819,7 @@ describe("When using the USSD line", function() {
                     },
                     current_state: 'wwsd'
                 },
-                content: "0",
+                content: "3",
                 next_state: 'end_state',
                 response: '^Thank you and bye bye!$',
                 continue_session: false
@@ -969,7 +969,7 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "0",
+                content: "3",
                 next_state: "end_state",
                 response: (
                     "^Thank you and bye bye!$"
@@ -979,7 +979,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 0 viewing 2nd Opinion should display thank you and end", function (done) {
+        it("selecting 3 viewing 2nd Opinion should display thank you and end", function (done) {
             var user = {
                 current_state: 'opinions_popular',
                 pages: {
@@ -988,7 +988,7 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "0",
+                content: "3",
                 next_state: "end_state",
                 response: (
                     "^Thank you and bye bye!$"
@@ -1266,7 +1266,7 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "0",
+                content: "3",
                 next_state: "end_state",
                 response: (
                     "^Thank you and bye bye!$"
