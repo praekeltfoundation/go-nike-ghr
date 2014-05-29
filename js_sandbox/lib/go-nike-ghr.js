@@ -543,9 +543,9 @@ function GoNikeGHR() {
                     pages: (content_array.length-1),
                     page_text: next_page,
                     buttons: {
-                        "1": -1, "2": +1, "0": "exit"
+                        "1": -1, "2": +1, "3": "exit"
                     },
-                    footer_text: "\n1 for prev, 2 for next, 0 to end."
+                    footer_text: "\n1 for prev, 2 for next, 3 to end."
                 }
             );
         };
@@ -918,9 +918,9 @@ function GoNikeGHR() {
                         pages: 4,
                         page_text: next_page,
                         buttons: {
-                            "1": -1, "2": +1, "0": "exit"
+                            "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -981,9 +981,9 @@ function GoNikeGHR() {
                         pages: 4,
                         page_text: next_page,
                         buttons: {
-                            "1": -1, "2": +1, "0": "exit"
+                            "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -1014,9 +1014,9 @@ function GoNikeGHR() {
                 pages: 5,
                 page_text: next_page,
                 buttons: {
-                    "1": -1, "2": +1, "0": "exit"
+                    "1": -1, "2": +1, "3": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                footer_text: "\n1 for prev, 2 for next, 3 to end.",
                 handlers: {
                     on_enter: function() {
                         var p_log = new Promise();
