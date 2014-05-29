@@ -545,7 +545,7 @@ function GoNikeGHR() {
                     buttons: {
                         "1": -1, "2": +1, "0": "exit"
                     },
-                    footer_text: "\n1 for prev, 2 for next, 0 to end."
+                    footer_text: "\n1 for prev, 2 for next, 3 to end."
                 }
             );
         };
@@ -920,7 +920,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "0": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -983,7 +983,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "0": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -1016,7 +1016,7 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "0": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 0 to end.",
+                footer_text: "\n1 for prev, 2 for next, 3 to end.",
                 handlers: {
                     on_enter: function() {
                         var p_log = new Promise();

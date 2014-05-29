@@ -637,7 +637,7 @@ describe("When using the USSD line", function() {
                 next_state: "articles",
                 response: (
                     "^Lorem ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(function() {
@@ -655,7 +655,7 @@ describe("When using the USSD line", function() {
                 next_state: 'articles',
                 response: "^Proin a porta justo. Maecenas sem felis, sollicitudin vitae " +
                           "risus luctus, consectetur sollicitudin leo.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -672,7 +672,7 @@ describe("When using the USSD line", function() {
                 next_state: 'articles',
                 response: "^Donec tincidunt lobortis erat eget malesuada. Cras cursus " +
                           "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -689,7 +689,7 @@ describe("When using the USSD line", function() {
                 next_state: 'articles',
                 response: "^Etiam tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -705,7 +705,7 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: 'articles',
                 response: "^Lorem ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$",
+                          "1 for prev, 2 for next, 3 to end.$",
                 continue_session: true
             });
             p.then(done, done);
@@ -737,7 +737,7 @@ describe("When using the USSD line", function() {
                 next_state: "wwsd",
                 response: (
                     "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(function() {
@@ -755,7 +755,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi a porta justo. Maecenas sem felis, sollicitudin vitae " +
                           "risus luctus, consectetur sollicitudin leo.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -772,7 +772,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi tincidunt lobortis erat eget malesuada. Cras cursus " +
                           "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -789,7 +789,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$"
+                          "1 for prev, 2 for next, 3 to end.$"
             });
             p.then(done, done);
         });
@@ -805,7 +805,7 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: 'wwsd',
                 response: "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                          "1 for prev, 2 for next, 0 to end.$",
+                          "1 for prev, 2 for next, 3 to end.$",
                 continue_session: true
             });
             p.then(done, done);
@@ -878,7 +878,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion one[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(function() {
@@ -897,7 +897,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion two[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -916,7 +916,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion three[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -935,7 +935,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion four[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -954,7 +954,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion five[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -965,6 +965,25 @@ describe("When using the USSD line", function() {
                 current_state: 'opinions_popular',
                 pages: {
                     opinions_popular: 4
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "0",
+                next_state: "end_state",
+                response: (
+                    "^Thank you and bye bye!$"
+                ),
+                continue_session: false
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 0 viewing 2nd Opinion should display thank you and end", function (done) {
+            var user = {
+                current_state: 'opinions_popular',
+                pages: {
+                    opinions_popular: 2
                 }
             };
             var p = tester.check_state({
@@ -1197,7 +1216,7 @@ describe("When using the USSD line", function() {
                 next_state: "directory_category_one_sub_category_one",
                 response: (
                     "^first part of contact details[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -1213,7 +1232,7 @@ describe("When using the USSD line", function() {
                 next_state: "directory_category_one_sub_category_one",
                 response: (
                     "^second part of contact details[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
@@ -1232,7 +1251,7 @@ describe("When using the USSD line", function() {
                 next_state: "directory_category_one_sub_category_one",
                 response: (
                     "^second part of contact details[^]" +
-                    "1 for prev, 2 for next, 0 to end.$"
+                    "1 for prev, 2 for next, 3 to end.$"
                 )
             });
             p.then(done, done);
