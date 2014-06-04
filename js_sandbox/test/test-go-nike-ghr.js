@@ -46,6 +46,8 @@ var test_fixtures_full = [
     'test/fixtures/hierarchy_sectors.json',
     'test/fixtures/userinteraction_sector_duplicates.json',
     'test/fixtures/userinteraction_sector_duplicates_district.json',
+    'test/fixtures/userinteraction_sector_duplicates_district_live.json',
+    'test/fixtures/userinteraction_gender_female.json',
 ];
 
 describe("When using the USSD line", function() {
@@ -293,6 +295,31 @@ describe("When using the USSD line", function() {
                 p.then(done, done);
             });
 
+        it("entering a duplicate sector (like live) should ask for district", function (done) {
+            var user = {
+                current_state: 'reg_district',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Female',
+                    reg_sector: 'Remera',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "Gasabo",
+                next_state: "reg_thanks",
+                response: (
+                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
+                    "For each set of 4 questions you answer, you enter a lucky draw to " +
+                    "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+                p.then(done, done);
+            });
+
+       
         it("should register a user successfully with duplicate district", function(done){
             var user = {
                 current_state: 'reg_thanks',

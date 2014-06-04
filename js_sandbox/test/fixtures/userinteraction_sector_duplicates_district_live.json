@@ -1,0 +1,7 @@
+{
+    "url": "http://ghr.preview.westerncapelabs.com/api/userinteraction/?format=json",
+    "method": "POST",
+    "content_type": "application/x-www-form-urlencoded",
+    "data": "feature=REGISTRATION&key=district&value=Gasabo&transport=ussd&msisdn=1234567",
+    "body": {}
+}

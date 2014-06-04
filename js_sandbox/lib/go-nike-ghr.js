@@ -896,6 +896,12 @@ function GoNikeGHR() {
         }
     });
 
+    self.add_state(new FreeText(
+        "reg_district",
+        "reg_thanks",
+        "What district are you in?"
+    ));
+
     self.add_creator('articles', function(state_name, im) {
         var p = self.crm_get("article/");
         p.add_callback(function(response) {
