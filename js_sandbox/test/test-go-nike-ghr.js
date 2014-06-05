@@ -292,8 +292,8 @@ describe("When using the USSD line", function() {
                     "What district are you in?"
                 )
             });
-                p.then(done, done);
-            });
+            p.then(done, done);
+        });
 
         it("entering a duplicate sector (like live) should ask for district", function (done) {
             var user = {
@@ -316,8 +316,8 @@ describe("When using the USSD line", function() {
                     "1. Continue$"
                 )
             });
-                p.then(done, done);
-            });
+            p.then(done, done);
+        });
 
        
         it("should register a user successfully with duplicate district", function(done){
