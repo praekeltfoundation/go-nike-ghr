@@ -1062,6 +1062,7 @@ function GoNikeGHR() {
         return p_weeklyquiz;
     });
 
+    /*
     self.add_creator('directory_start', function(state_name, im) {
         // Get the directory
         var p_dir = self.crm_get('directory/');
@@ -1077,6 +1078,7 @@ function GoNikeGHR() {
         return p_dir;
     });
 
+    */
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",

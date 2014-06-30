@@ -320,6 +320,7 @@ describe("When using the USSD line", function() {
         });
 
        
+
         it("should register a user successfully with duplicate district", function(done){
             var user = {
                 current_state: 'reg_thanks',
@@ -508,8 +509,8 @@ describe("When using the USSD line", function() {
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
                     "3. What would Shangazi do\\?[^]" +
-                    "4. Weekly quiz[^]" +
-                    "5. Directory$"
+                    "4. Weekly quiz[^]"
+                   // "5. Directory$"
             });
             p.then(function() {
                 var updated_kv = tester.api.kv_store['ghr_ussd_total_users'];
@@ -645,8 +646,8 @@ describe("When using the USSD line", function() {
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
                     "3. What would Shangazi do\\?[^]" +
-                    "4. Weekly quiz[^]" +
-                    "5. Directory$"
+                    "4. Weekly quiz[^]"
+                   // "5. Directory$"
             });
             p.then(function() {
                 var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
@@ -888,8 +889,8 @@ describe("When using the USSD line", function() {
                     "1. Articles[^]" +
                     "2. Opinions[^]" +
                     "3. What would Shangazi do\\?[^]" +
-                    "4. Weekly quiz[^]" +
-                    "5. Directory$"
+                    "4. Weekly quiz[^]"
+                    //"5. Directory$"
                 )
             });
             p.then(done, done);
@@ -1114,6 +1115,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
+        /*
         it("selecting 5 from menu should show the directory category listing", function (done) {
             var user = {
                 current_state: 'main_menu'
@@ -1302,7 +1304,7 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
-
+        */
     });
 
     describe("with no articles or Shangazi in system", function() {
