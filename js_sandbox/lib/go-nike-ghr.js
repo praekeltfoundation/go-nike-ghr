@@ -1079,6 +1079,19 @@ function GoNikeGHR() {
     });
 
     */
+
+     self.add_state(new ChoiceState(
+            "directory_start",
+            function(choice) {
+                return choice.value;
+            },
+            "Directory is currently not populated:",
+            [
+                new Choice("main_menu", "Back")
+            ]
+        )
+    );
+
     self.add_state(new EndState(
         "end_state",
         "Thank you and bye bye!",
