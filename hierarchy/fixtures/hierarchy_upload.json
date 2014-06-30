@@ -3593,5 +3593,13 @@
             "sector_district": 30,
             "name": "Rusebeya"
         }
+    },
+    {
+        "pk": 416,
+        "model": "hierarchy.sector",
+        "fields": {
+            "sector_district": 31,
+            "name": "Unknown"
+        }
     }
 ]

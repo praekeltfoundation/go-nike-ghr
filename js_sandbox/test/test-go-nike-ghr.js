@@ -211,7 +211,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("ask if user knows their sector", function (done) {
+        it("should ask sector lived in", function (done) {
             var user = {
                 current_state: 'reg_age',
                 answers: {
@@ -222,29 +222,8 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "4",
-                next_state: "known_sector",
-                response: (
-                    "^Do you know your sector\\?[^]" +
-                    "1. Yes[^]" +
-                    "2. No$"
-                )
-            });
-            p.then(done, done);
-        });
-
-        it("should ask sector lived in", function (done) {
-            var user = {
-                current_state: 'known_sector',
-                answers: {
-                    initial_state: 'reg_gender',
-                    reg_gender: 'Male'
-                }
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "1",
                 next_state: "reg_sector",
-                response: "^Which sector do you live in\\?$"
+                response: "^Which sector do you live in\\?\nPress 1 if you do not know$"
             });
             p.then(done, done);
         });
@@ -290,7 +269,7 @@ describe("When using the USSD line", function() {
                 next_state: "reg_sector",
                 response: (
                     "^Sorry, cannot find a match. Please try again.\n" +
-                    "Which sector do you live in\\?$"
+                    "Which sector do you live in\\?\nPress 1 if you do not know$"
                 )
             });
             p.then(done, done);
@@ -364,33 +343,6 @@ describe("When using the USSD line", function() {
                 )
             });
             p.then(done, done);
-        });
-
-        it("register user without a sector", function (done) {
-            var user = {
-                current_state: 'known_sector',
-                answers: {
-                    initial_state: 'reg_gender',
-                    reg_gender: 'Male',
-                    reg_age: '19-24',
-                    reg_sector: 'Mareba'
-                }
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "2",
-                next_state: "reg_thanks",
-                response: (
-                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
-                    "For each set of 4 questions you answer, you enter a lucky draw to " +
-                    "win 100 RwF weekly.[^]" +
-                    "1. Continue$"
-                )
-            });
-            p.then(function() {
-                var updated_kv = tester.api.kv_store['ghr_ussd_total_registrations'];
-                assert.equal(updated_kv, 1);
-            }).then(done, done);
         });
     });
 
