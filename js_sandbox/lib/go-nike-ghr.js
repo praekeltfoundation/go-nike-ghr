@@ -1087,7 +1087,7 @@ function GoNikeGHR() {
             },
             "Directory is currently not populated:",
             [
-                new Choice("main_menu", "Back")
+                new Choice("main_menu", _.gettext("Back"))
             ]
         )
     );
