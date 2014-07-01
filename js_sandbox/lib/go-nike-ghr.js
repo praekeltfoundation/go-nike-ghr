@@ -597,7 +597,7 @@ function GoNikeGHR() {
     };
 
     self.make_main_menu = function(im){
-        var_=im.i18n;
+        var _ =im.i18n;
         if(self.check_directory(im)){
         return new ChoiceState(
             "main_menu",
