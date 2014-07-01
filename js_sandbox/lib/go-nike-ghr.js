@@ -717,6 +717,7 @@ function GoNikeGHR() {
 
         p.add_callback(function(result) {
             // This callback creates extras if first time visitor - or just passes through
+            im.set_user_lang('rw')
             if (result.contact["extras-ghr_reg_complete"] === undefined){
                 // First visit - create extras
                 var today = self.get_today(im);
