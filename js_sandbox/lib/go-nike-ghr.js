@@ -981,6 +981,7 @@ function GoNikeGHR() {
         var _ = im.i18n;
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
+            var _ = im.i18n;
             if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
@@ -1077,10 +1078,10 @@ function GoNikeGHR() {
     });
 
     self.add_creator('directory_start', function(state_name, im) {
-        var _ = im.i18n;
         // Get the directory
         var p_dir = self.crm_get('directory/');
         p_dir.add_callback(function(result) {
+            var _ = im.i18n;
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
