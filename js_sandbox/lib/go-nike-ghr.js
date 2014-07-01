@@ -27,6 +27,7 @@ function GoNikeGHRError(msg) {
 
 function GoNikeGHR() {
     var self = this;
+    var _ = new jed({});
 
     self.post_headers = {
         'Content-Type': ['application/x-www-form-urlencoded']
@@ -596,6 +597,7 @@ function GoNikeGHR() {
     };
 
     self.make_main_menu = function(im){
+        var_=im.i18n;
         if(self.check_directory(im)){
         return new ChoiceState(
             "main_menu",
@@ -604,10 +606,10 @@ function GoNikeGHR() {
             },
             "",
             [
-                new Choice("articles", "Articles"),
-                new Choice("opinions", "Opinions"),
-                new Choice("wwsd", "What would Shangazi do?"),
-                new Choice("quiz_start", "Weekly quiz"),
+                new Choice("articles", _.gettext("Articles")),
+                new Choice("opinions", _.gettext("Opinions")),
+                new Choice("wwsd", _.gettext("What would Shangazi do?")),
+                new Choice("quiz_start", _.gettext("Weekly quiz")),
             ],
             null,
             {
