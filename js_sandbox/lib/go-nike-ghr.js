@@ -218,6 +218,7 @@ function GoNikeGHR() {
 
     self.make_answer_state = function(prefix, answer) {
         return function(state_name, im) {
+            var _ = im.i18n;
             return new ChoiceState(
                 state_name,
                 function(choice) {
@@ -225,7 +226,7 @@ function GoNikeGHR() {
                 },
                 answer.response,
                 [
-                    new Choice(answer["next"], "Next")
+                    new Choice(answer["next"], _.gettext("Next"))
                 ]
             );
         };
@@ -478,14 +479,15 @@ function GoNikeGHR() {
 
     self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
          return function(state_name, im) {
+            var _ = im.i18n;
             var choices = items.map(function(item) {
                 var value = prefix + "_" + self.clean_state_name(item);
                 if (to_sub_nav) value+="_0";
                 var name = item;
                 return new Choice(value, name);
             });
-            if (!first) choices.push(new Choice(prefix + "_" + (page-1), "Back"));
-            if (!last) choices.push(new Choice(prefix + "_" + (page+1), "Next"));
+            if (!first) choices.push(new Choice(prefix + "_" + (page-1), _.gettext("Back")));
+            if (!last) choices.push(new Choice(prefix + "_" + (page+1), _.gettext("Next")));
             if (parent) choices.push(new Choice(parent, parent_text));
 
             return new ChoiceState(state_name, function(choice) {
@@ -516,12 +518,13 @@ function GoNikeGHR() {
     };
 
     self.make_initial_navigation_state = function(state_name, prefix, question, items, last, parent, parent_text) {
+        var _ = im.i18n;
         var choices = items.map(function(item) {
                 var value = prefix + "_" + self.clean_state_name(item) + "_0";
                 var name = item;
                 return new Choice(value, name);
         });
-        if (!last) choices.push(new Choice(prefix + "_1", "Next"));
+        if (!last) choices.push(new Choice(prefix + "_1", _.gettext("Next")));
         if (parent) choices.push(new Choice(parent, parent_text));
 
         return new ChoiceState(state_name, function(choice) {
@@ -751,8 +754,8 @@ function GoNikeGHR() {
 
     self.add_state(new EndState(
         "reg_noterms",
-        "Sorry but we can't proceed with your registration unless you accept the " +
-        "Terms & Conditions. Please redial if you change your mind. Thanks!",
+            _.gettext("Sorry but we can't proceed with your registration unless you accept the " +
+        "Terms & Conditions. Please redial if you change your mind. Thanks!"),
         "initial_state"
     ));
 
@@ -774,15 +777,16 @@ function GoNikeGHR() {
         });
 
         p.add_callback(function(result) {
+            var _ = im.i18n;
             // This callback generates the state the user sees
             if (result.success){
                 return new ChoiceState(
                     state_name,
                     "reg_age",
-                    "Please choose your gender:",
+                    _.gettext("Please choose your gender:"),
                     [
-                        new Choice("Male", "Male"),
-                        new Choice("Female", "Female")
+                        new Choice("Male", _.gettext("Male")),
+                        new Choice("Female", _.gettext("Female"))
                     ]
                 );
             } else {
@@ -795,9 +799,9 @@ function GoNikeGHR() {
     self.add_state(new ChoiceState(
             "reg_age",
             "reg_sector",
-            "Please choose your age:",
+        _.gettext("Please choose your age:"),
             [
-                new Choice("12 or under", "12 or under"),
+                new Choice("12 or under", _.gettext("12 or under")),
                 new Choice("12-15", "12-15"),
                 new Choice("16-18", "16-18"),
                 new Choice("19-24", "19-24"),
@@ -810,7 +814,7 @@ function GoNikeGHR() {
     self.add_state(new FreeText(
         "reg_sector",
         "reg_thanks",
-        "Which sector do you live in?"
+        _.gettext("Which sector do you live in?")
     ));
 
     self.add_creator('reg_thanks', function(state_name, im) {
@@ -819,6 +823,7 @@ function GoNikeGHR() {
         var age = im.get_user_answer('reg_age');
         var district = im.get_user_answer("reg_district");
         var next_state;
+        var _ = im.i18n;
 
         if (self.validate_sector(im, sector)) {
             // Get the user
@@ -849,16 +854,17 @@ function GoNikeGHR() {
                     }
                 });
                 p.add_callback(function(result) {
+                    var _ = im.i18n;
                     if (result.success){
                         var girl = ["12 or under", "12-15", "16-18"];
                         return new ChoiceState(
                             state_name,
                             next_state,
-                            "Welcome Ni Nyampinga club member! We want to know you better. " +
+                            _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
                             "For each set of 4 questions you answer, you enter a lucky draw to " +
-                            "win " + im.config.airtime_reward_amount + " RwF weekly.",
+                            "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
                             [
-                                new Choice("continue", "Continue")
+                                new Choice("continue", _.gettext("Continue"))
                             ],
                             null,
                             {
@@ -890,14 +896,14 @@ function GoNikeGHR() {
                 return new FreeText(
                     "reg_district",
                     "reg_thanks",
-                    "What district are you in?"
+                    _.gettext("What district are you in?")
                 );
             }
         } else {
            return new FreeText(
                 "reg_sector",
                 "reg_thanks",
-                "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?"
+               _.gettext("Sorry, cannot find a match. Please try again.\nWhich sector do you live in?")
             );
         }
     });
@@ -905,7 +911,7 @@ function GoNikeGHR() {
     self.add_state(new FreeText(
         "reg_district",
         "reg_thanks",
-        "What district are you in?"
+        _.gettext("What district are you in?")
     ));
 
     self.add_creator('articles', function(state_name, im) {
@@ -915,9 +921,9 @@ function GoNikeGHR() {
                 return new ChoiceState(
                     state_name,
                     "main_menu",
-                    "Sorry there's no article this week, dial back soon!",
+                    _.gettext("Sorry there's no article this week, dial back soon!"),
                     [
-                        new Choice("main_menu", "Main menu")
+                        new Choice("main_menu", _.gettext("Main menu"))
                     ]
                 );
             } else {
@@ -932,7 +938,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
+                        footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end."),
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -954,11 +960,11 @@ function GoNikeGHR() {
             function(choice) {
                 return choice.value;
             },
-            "Please choose an option:",
+        _.gettext("Please choose an option:"),
             [
-                new Choice("opinions_popular", "Popular opinions from SMS"),
-                new Choice("opinions_view", "Leave your opinion"),
-                new Choice("main_menu", "Back")
+                new Choice("opinions_popular", _.gettext("Popular opinions from SMS")),
+                new Choice("opinions_view", _.gettext("Leave your opinion")),
+                new Choice("main_menu", _.gettext("Back"))
             ],
             null,
             {
@@ -972,15 +978,16 @@ function GoNikeGHR() {
 
 
     self.add_creator('wwsd', function(state_name, im) {
+        var _ = im.i18n;
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
             if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
                     "main_menu",
-                    "No new content this week",
+                    _.gettext("No new content this week"),
                     [
-                        new Choice("main_menu", "Main menu")
+                        new Choice("main_menu", _.gettext("Main menu"))
                     ]
                 );
             } else {
@@ -995,7 +1002,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: "\n1 for prev, 2 for next, 3 to end.",
+                        footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end."),
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -1014,6 +1021,7 @@ function GoNikeGHR() {
     });
 
     self.add_creator('opinions_popular', function(state_name, im) {
+        var _ = im.i18n;
 
         var next_page = function(page_number) {
             // We load the opinions in all in one go on_config_load
@@ -1028,7 +1036,7 @@ function GoNikeGHR() {
                 buttons: {
                     "1": -1, "2": +1, "3": "exit"
                 },
-                footer_text: "\n1 for prev, 2 for next, 3 to end.",
+                footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end."),
                 handlers: {
                     on_enter: function() {
                         var p_log = new Promise();
@@ -1069,23 +1077,24 @@ function GoNikeGHR() {
     });
 
     self.add_creator('directory_start', function(state_name, im) {
+        var _ = im.i18n;
         // Get the directory
         var p_dir = self.crm_get('directory/');
         p_dir.add_callback(function(result) {
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
-            var question = "Please select an option:";
+            var question = _.gettext("Please select an option:");
             var items = Object.keys(directory);
             var last = (items.length <= max_items) ? true : false;
-            return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last, 'main_menu', "Main menu");
+            return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last, 'main_menu', _.gettext("Main menu"));
         });
         return p_dir;
     });
 
     self.add_state(new EndState(
         "end_state",
-        "Thank you and bye bye!",
+        _.gettext("Thank you and bye bye!"),
         "first_state"
     ));
 
@@ -1224,20 +1233,21 @@ function GoNikeGHR() {
     };
 
     self.build_directory_states = function() {
+        var _ = im.i18n;
         // Build directory
         var p_directory = self.cached_crm_get('directory/');
         p_directory.add_callback(function(result) {
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
-            var question = "Please select an option:";
+            var question = _.gettext("Please select an option:");
             var items = Object.keys(directory);
-            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', "Main menu" );
+            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', _.gettext("Main menu"));
             for (var s=0; s<items.length;s++){
                 var sub_question = "Please select an organization:";
                 var sub_items = directory[items[s]];
                 var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
-                self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', "Back to categories");
+                self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', _.gettext("Back to categories"));
             }
             // End Build directory
         });
