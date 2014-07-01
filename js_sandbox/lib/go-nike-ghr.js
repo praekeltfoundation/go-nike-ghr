@@ -27,6 +27,7 @@ function GoNikeGHRError(msg) {
 
 function GoNikeGHR() {
     var self = this;
+    var _ = new jed({});
 
     self.post_headers = {
         'Content-Type': ['application/x-www-form-urlencoded']
@@ -138,14 +139,15 @@ function GoNikeGHR() {
 
     self.make_mandl_thanks_state = function(state_name, quiz, quiz_name) {
          return function(state_name, im) {
+             var _=im.i18n;
             return new ChoiceState(state_name,
             function(choice) {
                 return choice.value;
             },
                 "Thanks! Carry on.",
                 [
-                    new Choice("continue", "Main menu"),
-                    new Choice("help_screen", "Menu help")
+                    new Choice("continue", _.gettext("Main menu")),
+                    new Choice("help_screen", _.gettext("Menu help"))
                 ], null,
                 {
                     on_enter: function(){
@@ -598,11 +600,11 @@ function GoNikeGHR() {
     self.add_state(new ChoiceState(
             "help_screen",
             "main_menu",
-            ("On the menu, press the number of the option you like to view.\n"+
+            _.gettext("On the menu, press the number of the option you like to view.\n"+
             "Once you have chosen your option, you can navigate by choosing\n"+
             "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu."),
             [
-                new Choice("main_menu", ("Continue"))
+                new Choice("main_menu", _.gettext("Continue"))
             ]
         )
     );
