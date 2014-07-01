@@ -460,7 +460,7 @@ function GoNikeGHR() {
         } else {
             // Mark contact with in progress quiz
             var fields = {
-                "ghr_mandl_inprog": JSON.stringify(quiz_id),
+                "ghr_mandl_inprog": JSON.stringify(quiz_id)
             };
             // Run the extras update
             var p_e = im.api_request('contacts.update_extras', {
