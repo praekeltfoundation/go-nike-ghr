@@ -42,6 +42,7 @@ function GoNikeGHRSMSError(msg) {
 
 function GoNikeGHRSMS() {
     var self = this;
+    var _ = new jed({});
 
     self.post_headers = {
         'Content-Type': ['application/x-www-form-urlencoded']
@@ -66,9 +67,10 @@ function GoNikeGHRSMS() {
     };
 
     self.error_state = function() {
+        var _ = im.i18n;
         return new EndState(
             "end_state_error",
-            "Sorry! Something went wrong. Please redial and try again.",
+            _.gettext("Sorry! Something went wrong. Please redial and try again."),
             "initial_state"
         );
     };
@@ -234,7 +236,7 @@ function GoNikeGHRSMS() {
     self.add_state(new FreeText(
             'start',
             'process_sms',
-            "Should never be seen"
+        _.gettext("Should never be seen")
     ));
 
     self.add_creator('process_sms', function(state_name, im) {
@@ -293,17 +295,18 @@ function GoNikeGHRSMS() {
                 return p_c;
             });
             p.add_callback(function(result){
+                var _ = im.i18n;
                 if (includes_swear || is_spammer){
-                    return self.make_thanks_state(state_name, "Thanks for your SMS opinion! " +
-                        "Please try to keep messages clean!");
+                    return self.make_thanks_state(state_name, _.gettext("Thanks for your SMS opinion! " +
+                        "Please try to keep messages clean!"));
                 } else {
                     // all clean
-                    return self.make_thanks_state(state_name, "Thanks for your SMS opinion!");
+                    return self.make_thanks_state(state_name, _.gettext("Thanks for your SMS opinion!"));
                 }
             });
             return p;
         } else {
-            return self.make_thanks_state(state_name, "Nothing to say?");
+            return self.make_thanks_state(state_name, _.gettext("Nothing to say?"));
         }
 
     });
