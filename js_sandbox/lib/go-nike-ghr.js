@@ -68,7 +68,7 @@ function GoNikeGHR() {
     };
 
     self.error_state = function() {
-         _ = im.i18n;
+         var _ = im.i18n;
         return new EndState(
             "end_state_error",
             _.gettext("Sorry! Something went wrong. Please redial and try again."),
@@ -1244,7 +1244,7 @@ function GoNikeGHR() {
             var items = Object.keys(directory);
             self.make_navigation_states(prefix, question, items, max_items, 'main_menu', _.gettext("Main menu"));
             for (var s=0; s<items.length;s++){
-                var sub_question = "Please select an organization:";
+                var sub_question = _.gettext("Please select an organization:");
                 var sub_items = directory[items[s]];
                 var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
                 self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', _.gettext("Back to categories"));
