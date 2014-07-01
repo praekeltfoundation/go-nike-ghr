@@ -16,6 +16,8 @@ var BookletState = vumigo.states.BookletState;
 var InteractionMachine = vumigo.state_machine.InteractionMachine;
 var StateCreator = vumigo.state_machine.StateCreator;
 
+
+
 function GoNikeGHRError(msg) {
     var self = this;
     self.msg = msg;
@@ -27,6 +29,7 @@ function GoNikeGHRError(msg) {
 
 function GoNikeGHR() {
     var self = this;
+    var _ = new jed({});
 
     self.post_headers = {
         'Content-Type': ['application/x-www-form-urlencoded']
@@ -65,9 +68,10 @@ function GoNikeGHR() {
     };
 
     self.error_state = function() {
+         _ = im.i18n;
         return new EndState(
             "end_state_error",
-            "Sorry! Something went wrong. Please redial and try again.",
+            _.gettext("Sorry! Something went wrong. Please redial and try again."),
             "initial_state"
         );
     };
@@ -138,10 +142,11 @@ function GoNikeGHR() {
 
     self.make_mandl_thanks_state = function(state_name, quiz, quiz_name) {
          return function(state_name, im) {
+            var _ = im.i18n;
             return new ChoiceState(state_name, 'main_menu',
-                "Thanks! Carry on.",
+                _.gettext("Thanks! Carry on."),
                 [
-                    new Choice("completed", "Main menu")
+                    new Choice("completed",_.gettext("Main menu"))
                 ], null,
                 {
                     on_enter: function(){
@@ -454,7 +459,7 @@ function GoNikeGHR() {
         } else {
             // Mark contact with in progress quiz
             var fields = {
-                "ghr_mandl_inprog": JSON.stringify(quiz_id),
+                "ghr_mandl_inprog": JSON.stringify(quiz_id)
             };
             // Run the extras update
             var p_e = im.api_request('contacts.update_extras', {
@@ -536,7 +541,7 @@ function GoNikeGHR() {
             var next_page = function(page_number) {
                 return content_array[page_number];
             };
-
+            var _ = im.i18n;
             return new BookletState(
                 state_name, {
                     next: end_state,
@@ -545,7 +550,7 @@ function GoNikeGHR() {
                     buttons: {
                         "1": -1, "2": +1, "3": "exit"
                     },
-                    footer_text: "\n1 for prev, 2 for next, 3 to end."
+                    footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end.")
                 }
             );
         };
@@ -592,6 +597,7 @@ function GoNikeGHR() {
     };
 
     self.make_main_menu = function(){
+        _ = im.i18n;
         return new ChoiceState(
             "main_menu",
             function(choice) {
@@ -599,11 +605,11 @@ function GoNikeGHR() {
             },
             "",
             [
-                new Choice("articles", "Articles"),
-                new Choice("opinions", "Opinions"),
-                new Choice("wwsd", "What would Shangazi do?"),
-                new Choice("quiz_start", "Weekly quiz"),
-                new Choice("directory_start", "Directory")
+                new Choice("articles", _.gettext("Articles")),
+                new Choice("opinions", _.gettext("Opinions")),
+                new Choice("wwsd", _.gettext("What would Shangazi do?")),
+                new Choice("quiz_start", _.gettext("Weekly quiz")),
+                new Choice("directory_start", _.gettext("Directory"))
             ],
             null,
             {
@@ -716,11 +722,11 @@ function GoNikeGHR() {
                         function(choice) {
                             return choice.value;
                         },
-                        "To proceed with registration, do you accept the Terms " +
-                        "and Conditions of Ni Nyampinga - " + im.config.terms_url + ":",
+                        _.gettext("To proceed with registration, do you accept the Terms " +
+                        "and Conditions of Ni Nyampinga - ") + im.config.terms_url + ":",
                         [
-                            new Choice("reg_gender", "Yes"),
-                            new Choice("reg_noterms", "No")
+                            new Choice("reg_gender", _.gettext("Yes")),
+                            new Choice("reg_noterms", _.gettext("No"))
                         ],
                         null,
                         {
