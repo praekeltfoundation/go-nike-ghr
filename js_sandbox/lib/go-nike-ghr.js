@@ -67,7 +67,7 @@ function GoNikeGHR() {
         return date.toISOString().substring(0,10);
     };
 
-    self.error_state = function() {
+    self.error_state = function(im) {
          var _ = im.i18n;
         return new EndState(
             "end_state_error",
@@ -1233,11 +1233,12 @@ function GoNikeGHR() {
         return p_opinion_view;
     };
 
-    self.build_directory_states = function() {
+    self.build_directory_states = function(im) {
         // Build directory
+        var _ = im.i18n;
         var p_directory = self.cached_crm_get('directory/');
         p_directory.add_callback(function(result) {
-            var _ = im.i18n;
+
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
