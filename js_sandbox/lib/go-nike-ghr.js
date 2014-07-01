@@ -846,13 +846,10 @@ function GoNikeGHR() {
         var next_state;
 
         var _ = im.i18n;
-        if(sector == "1"){
-            sector="Unknown"
-        }
 
-        if (self.validate_sector(im, sector)) {
+        if (self.validate_sector(im, sector) || sector == "1") {
             // Get the user
-            if (self.unique_sector(im, sector) || (!self.unique_sector(im, sector) && district)) {
+            if (self.unique_sector(im, sector) || (!self.unique_sector(im, sector) && district) || sector == "1") {
                 var p = self.get_contact(im);
 
                 p.add_callback(function(result) {
@@ -860,6 +857,7 @@ function GoNikeGHR() {
                     var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
                     next_state = 'mandl_quiz_' + possible_mandl[0]  + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
                     if (result.success){
+
                         var fields = {
                             "ghr_reg_complete": "true",
                             "ghr_gender": JSON.stringify(gender),
@@ -897,9 +895,11 @@ function GoNikeGHR() {
                                     var p_log = new Promise();
                                     p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "gender", gender);});
                                     p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "age", age);});
+                                    if(sector!="1"){
                                     p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
                                     if (district) {  // If not district this will not run
                                         p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "district", district);});
+                                    }
                                     }
                                     p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
                                     p_log.add_callback(function(){

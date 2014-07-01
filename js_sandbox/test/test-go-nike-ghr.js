@@ -239,7 +239,7 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "Mareba",
+                content: "1",
                 next_state: "reg_thanks",
                 response: (
                     "^Welcome Ni Nyampinga club member! We want to know you better. " +
@@ -252,6 +252,29 @@ describe("When using the USSD line", function() {
                 var updated_kv = tester.api.kv_store['ghr_ussd_total_registrations'];
                 assert.equal(updated_kv, 1);
             }).then(done, done);
+        });
+
+         it("entering one should register a user without a sector", function (done) {
+            var user = {
+                current_state: 'reg_sector',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Male',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "reg_thanks",
+                response: (
+                    "^Welcome Ni Nyampinga club member! We want to know you better. " +
+                    "For each set of 4 questions you answer, you enter a lucky draw to " +
+                    "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+            p.then(done, done);
         });
 
         it("entering invalid sector should ask for reentry", function (done) {
