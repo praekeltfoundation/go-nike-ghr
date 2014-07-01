@@ -450,7 +450,7 @@ function GoNikeGHR() {
         }
         if (!quiz_id) {
             // No survey left to do
-            return self.make_main_menu();
+            return self.make_main_menu(im);
         } else {
             // Mark contact with in progress quiz
             var fields = {
@@ -591,7 +591,66 @@ function GoNikeGHR() {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
 
-    self.make_main_menu = function(){
+    self.check_directory = function(im){
+        return im.config.directory_disable
+    };
+
+    self.make_main_menu = function(im){
+        if(self.check_directory(im)){
+        return new ChoiceState(
+            "main_menu",
+            function(choice) {
+                return choice.value;
+            },
+            "",
+            [
+                new Choice("articles", "Articles"),
+                new Choice("opinions", "Opinions"),
+                new Choice("wwsd", "What would Shangazi do?"),
+                new Choice("quiz_start", "Weekly quiz"),
+            ],
+            null,
+            {
+                on_enter: function() {
+                    // Metric counting and logging
+                    var wc = self.get_week_commencing(self.get_today());
+                    var contact_key;
+
+                    var p_c = self.get_contact(im);
+                    p_c.add_callback(function(result){
+                        contact_key = result.contact.key;
+                        if (result.contact["extras-ghr_last_active_week"] !== undefined){
+                            if (new Date(wc) > new Date(result.contact["extras-ghr_last_active_week"])){
+                                var piafd = self.increment_and_fire_direct("ghr_ussd_total_users");
+                                piafd.add_callback(function(result) {
+                                    return true;
+                                });
+                                return piafd;
+                            } else {
+                                return false;
+                            }
+                        } else { // for contacts somehow missing attribute
+                            return true;
+                        }
+                    });
+                    p_c.add_callback(function(result){
+                        if (result){
+                            var fields = {
+                                "ghr_last_active_week": wc
+                            };
+                            return im.api_request('contacts.update_extras', {
+                                key: contact_key,
+                                fields: fields
+                            });
+                        }
+                    });
+                    return p_c;
+                }
+            }
+        );
+        }
+        else
+        {
         return new ChoiceState(
             "main_menu",
             function(choice) {
@@ -644,11 +703,12 @@ function GoNikeGHR() {
                 }
             }
         );
+        }
     };
 
     self.make_main_menu_state = function() {
         return function(state_name, im) {
-            return self.make_main_menu();
+            return self.make_main_menu(im);
         };
     };
 
@@ -1258,6 +1318,10 @@ function GoNikeGHR() {
         return p_sector;
     };
 
+    self.set_directory_disable = function(){
+        im.config.directory_disable = true
+    }
+
     self.on_config_read = function(event){
         // Run calls out to the APIs to load dynamic states
         var p = new Promise();
@@ -1268,6 +1332,7 @@ function GoNikeGHR() {
         p.add_callback(self.build_opinion_states);
         p.add_callback(self.build_directory_states);
         p.add_callback(self.build_sectors_array);
+        p.add_callback(self.set_directory_disable)
 
         if(!self.state_exists('main_menu')) {
             self.add_creator('main_menu',
