@@ -480,7 +480,8 @@ describe("When using the USSD line", function() {
                 content: "1",
                 next_state: "mandl_quiz_1_thanks",
                 response: "^Thanks! Carry on.[^]" +
-                    "1. Main menu$"
+                    "1. Main menu[^]" +
+                    "2. Menu help$"
             });
             p.then(function() {
               var updated_contact = tester.api.contact_store['f953710a2472447591bd59e906dc2c26'];
@@ -488,7 +489,7 @@ describe("When using the USSD line", function() {
             }).then(done, done);
         });
 
-        it("opting to continue should show main menu", function (done) {
+        it("opting to continue should show help menu", function (done) {
             var user = {
                 current_state: 'mandl_quiz_1_thanks',
                 answers: {
@@ -502,7 +503,16 @@ describe("When using the USSD line", function() {
             };
             var p = tester.check_state({
                 user: user,
-                content: "1",
+                content: "2",
+                next_state: "help_screen",
+                response: "On the menu, press the number of the option you like to view.\n"+
+                          "Once you have chosen your option, you can navigate by choosing\n"+
+                          "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu.[^]" +
+                          "1. Continue"
+            });
+            p.then(done, done);
+        });
+
         it("opting to continue should show main menu", function (done) {
             var user = {
                 current_state: 'help_screen',

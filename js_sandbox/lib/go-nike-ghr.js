@@ -138,10 +138,14 @@ function GoNikeGHR() {
 
     self.make_mandl_thanks_state = function(state_name, quiz, quiz_name) {
          return function(state_name, im) {
-            return new ChoiceState(state_name, 'main_menu',
+            return new ChoiceState(state_name,
+            function(choice) {
+                return choice.value;
+            },
                 "Thanks! Carry on.",
                 [
-                    new Choice("completed", "Main menu")
+                    new Choice("continue", "Main menu"),
+                    new Choice("help_screen", "Menu help")
                 ], null,
                 {
                     on_enter: function(){
@@ -591,8 +595,7 @@ function GoNikeGHR() {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
 
-    self.make_help_screen = function(){
-        return new ChoiceState(
+    self.add_state(new ChoiceState(
             "help_screen",
             "main_menu",
             ("On the menu, press the number of the option you like to view.\n"+
@@ -602,7 +605,7 @@ function GoNikeGHR() {
                 new Choice("main_menu", ("Continue"))
             ]
         )
-    }
+    );
 
     self.make_main_menu = function(){
         return new ChoiceState(
@@ -664,6 +667,7 @@ function GoNikeGHR() {
             return self.make_main_menu();
         };
     };
+
 
     self.array_parse_ints = function(target){
         return target.map(function(str) {
