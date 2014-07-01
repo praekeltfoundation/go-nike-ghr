@@ -362,6 +362,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_chance: 10,
                     cache_lifetime: 100
                 });
+                tester.max_response_length = 300
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
                 });
