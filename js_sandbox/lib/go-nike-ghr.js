@@ -1233,10 +1233,10 @@ function GoNikeGHR() {
     };
 
     self.build_directory_states = function() {
-        var _ = im.i18n;
         // Build directory
         var p_directory = self.cached_crm_get('directory/');
         p_directory.add_callback(function(result) {
+            var _ = im.i18n;
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
