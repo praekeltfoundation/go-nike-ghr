@@ -814,7 +814,7 @@ function GoNikeGHR() {
     self.add_state(new FreeText(
         "reg_sector",
         "reg_thanks",
-        _.gettext("Which sector do you live in?")
+        _.gettext("Which sector do you live in?\nPress 1 if you do not know")
     ));
 
     self.add_creator('reg_thanks', function(state_name, im) {
@@ -823,7 +823,11 @@ function GoNikeGHR() {
         var age = im.get_user_answer('reg_age');
         var district = im.get_user_answer("reg_district");
         var next_state;
+
         var _ = im.i18n;
+        if(sector == "1"){
+            sector="Unknown"
+        }
 
         if (self.validate_sector(im, sector)) {
             // Get the user
@@ -903,10 +907,12 @@ function GoNikeGHR() {
            return new FreeText(
                 "reg_sector",
                 "reg_thanks",
-               _.gettext("Sorry, cannot find a match. Please try again.\nWhich sector do you live in?")
+               _.gettext("Sorry, cannot find a match. Please try again.\nWhich sector do you live in?\nPress 1 if you do not know")
+
             );
         }
     });
+
 
     self.add_state(new FreeText(
         "reg_district",
