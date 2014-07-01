@@ -482,7 +482,7 @@ describe("When using the USSD line", function() {
                 next_state: "mandl_quiz_1_thanks",
                 response: "^Thanks! Carry on.[^]" +
                     "1. Main menu[^]" +
-                    "2. Menu help$"
+                    "2. Instructions to user USSD menu$"
             });
             p.then(function() {
               var updated_contact = tester.api.contact_store['f953710a2472447591bd59e906dc2c26'];

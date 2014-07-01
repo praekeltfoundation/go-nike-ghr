@@ -152,7 +152,7 @@ function GoNikeGHR() {
                 _.gettext("Thanks! Carry on."),
                 [
                     new Choice("continue", _.gettext("Main menu")),
-                    new Choice("help_screen", _.gettext("Menu help"))
+                    new Choice("help_screen", _.gettext("Instructions to user USSD menu"))
                 ],
                 null,
                 {
