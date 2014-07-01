@@ -142,12 +142,19 @@ function GoNikeGHR() {
 
     self.make_mandl_thanks_state = function(state_name, quiz, quiz_name) {
          return function(state_name, im) {
+
             var _ = im.i18n;
-            return new ChoiceState(state_name, 'main_menu',
+            return new ChoiceState(
+                state_name,
+                function(choice) {
+                    return choice.value;
+                },
                 _.gettext("Thanks! Carry on."),
                 [
-                    new Choice("completed",_.gettext("Main menu"))
-                ], null,
+                    new Choice("continue", _.gettext("Main menu")),
+                    new Choice("help_screen", _.gettext("Menu help"))
+                ],
+                null,
                 {
                     on_enter: function(){
                         var completed_question;
@@ -163,7 +170,7 @@ function GoNikeGHR() {
                         p.callback();
                         return p;
                     }
-                });
+            });
         };
     };
 
@@ -599,7 +606,20 @@ function GoNikeGHR() {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
 
-    self.make_main_menu = function(im){
+    self.add_state(new ChoiceState(
+            "help_screen",
+            "main_menu",
+            _.gettext("On the menu, press the number of the option you like to view.\n"+
+            "Once you have chosen your option, you can navigate by choosing\n"+
+            "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu."),
+            [
+                new Choice("main_menu", _.gettext("Continue"))
+            ]
+        )
+    );
+
+    self.make_main_menu = function(){
+
         _ = im.i18n;
         return new ChoiceState(
             "main_menu",
@@ -660,6 +680,7 @@ function GoNikeGHR() {
             return self.make_main_menu(im);
         };
     };
+
 
     self.array_parse_ints = function(target){
         return target.map(function(str) {

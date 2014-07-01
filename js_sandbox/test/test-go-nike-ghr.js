@@ -362,6 +362,7 @@ describe("When using the USSD line", function() {
                     airtime_reward_chance: 10,
                     cache_lifetime: 100
                 });
+                tester.max_response_length = 300
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
                 });
@@ -480,7 +481,8 @@ describe("When using the USSD line", function() {
                 content: "1",
                 next_state: "mandl_quiz_1_thanks",
                 response: "^Thanks! Carry on.[^]" +
-                    "1. Main menu$"
+                    "1. Main menu[^]" +
+                    "2. Menu help$"
             });
             p.then(function() {
               var updated_contact = tester.api.contact_store['f953710a2472447591bd59e906dc2c26'];
@@ -488,9 +490,33 @@ describe("When using the USSD line", function() {
             }).then(done, done);
         });
 
-        it("opting to continue should show main menu", function (done) {
+        it("opting to continue should show help menu", function (done) {
             var user = {
                 current_state: 'mandl_quiz_1_thanks',
+                answers: {
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: "Mareba",
+                    mandl_quiz_1_q_1: 'Yes',
+                    mandl_quiz_1_q_2: 'Of course',
+                    mandl_quiz_1_q_3: 'First'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "help_screen",
+                response: "On the menu, press the number of the option you like to view.\n"+
+                          "Once you have chosen your option, you can navigate by choosing\n"+
+                          "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu.[^]" +
+                          "1. Continue"
+            });
+            p.then(done, done);
+        });
+
+        it("opting to continue should show main menu", function (done) {
+            var user = {
+                current_state: 'help_screen',
                 answers: {
                     reg_gender: 'Male',
                     reg_age: '19-24',
