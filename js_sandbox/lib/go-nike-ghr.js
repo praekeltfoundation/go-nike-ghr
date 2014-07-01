@@ -517,7 +517,7 @@ function GoNikeGHR() {
         }
     };
 
-    self.make_initial_navigation_state = function(state_name, prefix, question, items, last, parent, parent_text) {
+    self.make_initial_navigation_state = function(state_name, prefix, question, items, last, parent, parent_text,im) {
         var _ = im.i18n;
         var choices = items.map(function(item) {
                 var value = prefix + "_" + self.clean_state_name(item) + "_0";
@@ -746,7 +746,7 @@ function GoNikeGHR() {
                 }
             } else {
                 // Something went wrong saving the extras
-                return self.error_state();
+                return self.error_state(im);
             }
         });
         return p;  // return the promise
@@ -790,7 +790,7 @@ function GoNikeGHR() {
                     ]
                 );
             } else {
-                return self.error_state();
+                return self.error_state(im);
             }
         });
         return p;
@@ -850,7 +850,7 @@ function GoNikeGHR() {
                         });
                     } else {
                         // Error finding contact
-                        return self.error_state();
+                        return self.error_state(im);
                     }
                 });
                 p.add_callback(function(result) {
@@ -888,7 +888,7 @@ function GoNikeGHR() {
                             });
                     } else {
                         // Error saving contact extras
-                        return self.error_state();
+                        return self.error_state(im);
                     }
                 });
                 return p;
@@ -981,7 +981,6 @@ function GoNikeGHR() {
         var _ = im.i18n;
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
-            var _ = im.i18n;
             if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
@@ -1069,7 +1068,7 @@ function GoNikeGHR() {
             // This callback checks extras when contact is found
             var quiz = result.quiz;
             if (!quiz) {
-                return self.error_state();
+                return self.error_state(im);
             }
             var quiz_name = "weekly_quiz";
             return self.make_initial_question_state(state_name, quiz_name, quiz.quiz_details.questions[quiz['start']]);
@@ -1078,17 +1077,17 @@ function GoNikeGHR() {
     });
 
     self.add_creator('directory_start', function(state_name, im) {
+        var _ = im.i18n;
         // Get the directory
         var p_dir = self.crm_get('directory/');
         p_dir.add_callback(function(result) {
-            var _ = im.i18n;
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
             var question = _.gettext("Please select an option:");
             var items = Object.keys(directory);
             var last = (items.length <= max_items) ? true : false;
-            return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last, 'main_menu', _.gettext("Main menu"));
+            return self.make_initial_navigation_state(state_name, prefix, question, items.slice(0,max_items), last, 'main_menu', _.gettext("Main menu"),im);
         });
         return p_dir;
     });
@@ -1175,7 +1174,7 @@ function GoNikeGHR() {
             // This callback checks extras when contact is found
             var quiz = result.quiz;
             if (!quiz) {
-                return self.error_state();
+                return self.error_state(im);
             }
             var quiz_name = "weekly_quiz";
             var first_view_prefix = false;
@@ -1233,12 +1232,10 @@ function GoNikeGHR() {
         return p_opinion_view;
     };
 
-    self.build_directory_states = function(im) {
+    self.build_directory_states = function() {
         // Build directory
-        var _ = im.i18n;
         var p_directory = self.cached_crm_get('directory/');
         p_directory.add_callback(function(result) {
-
             var directory = result.directory;
             var max_items = 3;
             var prefix = "directory";
