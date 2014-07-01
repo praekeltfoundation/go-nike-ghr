@@ -360,7 +360,8 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
-                    cache_lifetime: 100
+                    cache_lifetime: 100,
+
                 });
                 tester.max_response_length = 300
                 fixtures.forEach(function (f) {
@@ -482,7 +483,7 @@ describe("When using the USSD line", function() {
                 next_state: "mandl_quiz_1_thanks",
                 response: "^Thanks! Carry on.[^]" +
                     "1. Main menu[^]" +
-                    "2. Menu help$"
+                    "2. Instructions to user USSD menu$"
             });
             p.then(function() {
               var updated_contact = tester.api.contact_store['f953710a2472447591bd59e906dc2c26'];
@@ -624,7 +625,8 @@ describe("When using the USSD line", function() {
                     airtime_reward_active: true,
                     airtime_reward_amount: 100,
                     airtime_reward_chance: 10,
-                    cache_lifetime: 100
+                    cache_lifetime: 100,
+                    directory_disable:true
                 });
                 fixtures.forEach(function (f) {
                     api.load_http_fixture(f);
@@ -659,6 +661,74 @@ describe("When using the USSD line", function() {
             },
             async: true
         });
+
+        it("test menu with directory disabled", function (done) {
+
+            var p = tester.check_state({
+                user: null,
+                content: null,
+                next_state: "main_menu",
+                response: "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz$"
+            });
+            p.then(done, done);
+        });
+    });
+
+    describe("as an registered user - completed all M&L questions", function() {
+        // These are used to mock API reponses
+        var fixtures = test_fixtures_full;
+
+        var tester = new vumigo.test_utils.ImTester(app.api, {
+            custom_setup: function (api) {
+                api.config_store.config = JSON.stringify({
+                    testing: true,
+                    testing_mock_today: [2013,5,1,8,10],
+                    sectors: [],
+                    crm_api_root: "http://ghr.preview.westerncapelabs.com/api/",
+                    airtime_reward_active: true,
+                    airtime_reward_amount: 100,
+                    airtime_reward_chance: 10,
+                    cache_lifetime: 100
+                });
+                fixtures.forEach(function (f) {
+                    api.load_http_fixture(f);
+                });
+
+                var dummy_contact = {
+                    key: "f953710a2472447591bd59e906dc2c26",
+                    surname: "Trotter",
+                    user_account: "test-0-user",
+                    bbm_pin: null,
+                    msisdn: "+1234567",
+                    created_at: "2013-04-24 14:01:41.803693",
+                    gtalk_id: null,
+                    dob: null,
+                    groups: null,
+                    facebook_id: null,
+                    twitter_handle: null,
+                    email_address: null,
+                    name: "Rodney"
+                };
+
+                api.add_contact(dummy_contact);
+                api.update_contact_extras(dummy_contact, {
+                    "ghr_reg_complete": "true",
+                    "ghr_reg_started": "2013-05-24T08:27:01.209Z",
+                    "ghr_questions": '["1", "2", "3", "4", "5"]',
+                    "ghr_gender": "Male",
+                    "ghr_age": "25-35",
+                    "ghr_sector": "Test",
+                    "ghr_last_active_week": '2013-05-27'
+                });
+            },
+            async: true
+        });
+
+
 
         // first test should always start 'null, null' because we haven't
         // started interacting yet

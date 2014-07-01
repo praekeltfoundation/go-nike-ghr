@@ -152,7 +152,7 @@ function GoNikeGHR() {
                 _.gettext("Thanks! Carry on."),
                 [
                     new Choice("continue", _.gettext("Main menu")),
-                    new Choice("help_screen", _.gettext("Menu help"))
+                    new Choice("help_screen", _.gettext("Instructions to user USSD menu"))
                 ],
                 null,
                 {
@@ -618,8 +618,20 @@ function GoNikeGHR() {
         )
     );
 
-    self.make_main_menu = function(){
+    self.check_directory = function(im){
+        return im.config.directory_disable
+    };
 
+    self.make_main_menu = function(im){
+        var choices =  [
+                 new Choice("articles", _.gettext("Articles")),
+                 new Choice("opinions", _.gettext("Opinions")),
+                 new Choice("wwsd", _.gettext("What would Shangazi do?")),
+                 new Choice("quiz_start", _.gettext("Weekly quiz"))
+             ]
+        if (!self.check_directory(im)) {
+            choices.push(new Choice("directory_start", _.gettext("Directory")))
+        }
         _ = im.i18n;
         return new ChoiceState(
             "main_menu",
@@ -627,13 +639,7 @@ function GoNikeGHR() {
                 return choice.value;
             },
             "",
-            [
-                new Choice("articles", _.gettext("Articles")),
-                new Choice("opinions", _.gettext("Opinions")),
-                new Choice("wwsd", _.gettext("What would Shangazi do?")),
-                new Choice("quiz_start", _.gettext("Weekly quiz")),
-                new Choice("directory_start", _.gettext("Directory"))
-            ],
+            choices,
             null,
             {
                 on_enter: function() {
