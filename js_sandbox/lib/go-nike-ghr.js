@@ -27,6 +27,7 @@ function GoNikeGHRError(msg) {
 
 function GoNikeGHR() {
     var self = this;
+    var _ = new jed({});
 
     self.post_headers = {
         'Content-Type': ['application/x-www-form-urlencoded']
@@ -804,7 +805,7 @@ function GoNikeGHR() {
     self.add_state(new FreeText(
         "reg_sector",
         "reg_thanks",
-        "Which sector do you live in?\nPress 1 if you do not know"
+        _.gettext("Which sector do you live in?\nPress 1 if you do not know")
     ));
 
     self.add_creator('reg_thanks', function(state_name, im) {
@@ -894,7 +895,7 @@ function GoNikeGHR() {
            return new FreeText(
                 "reg_sector",
                 "reg_thanks",
-                "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?\nPress 1 if you do not know"
+               _.gettext("Sorry, cannot find a match. Please try again.\nWhich sector do you live in?\nPress 1 if you do not know")
             );
         }
     });
