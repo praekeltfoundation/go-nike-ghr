@@ -446,7 +446,7 @@ function GoNikeGHR() {
     };
 
 
-    self.make_mandl_or_mainmenu = function(state_name, contact){
+    self.make_mandl_or_mainmenu = function(state_name, contact,im){
         var completed_mandl = self.array_parse_ints(JSON.parse(contact["extras-ghr_questions"]));
         var quiz_id = false;
         var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
@@ -456,7 +456,7 @@ function GoNikeGHR() {
         }
         if (!quiz_id) {
             // No survey left to do
-            return self.make_main_menu();
+            return self.make_main_menu(im);
         } else {
             // Mark contact with in progress quiz
             var fields = {
@@ -599,7 +599,7 @@ function GoNikeGHR() {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
 
-    self.make_main_menu = function(){
+    self.make_main_menu = function(im){
         _ = im.i18n;
         return new ChoiceState(
             "main_menu",
@@ -657,7 +657,7 @@ function GoNikeGHR() {
 
     self.make_main_menu_state = function() {
         return function(state_name, im) {
-            return self.make_main_menu();
+            return self.make_main_menu(im);
         };
     };
 
@@ -742,7 +742,7 @@ function GoNikeGHR() {
                 } else {
                     // Registration complete so check for questions
                     // Check all question sets have been answered
-                    return self.make_mandl_or_mainmenu(state_name, result.contact);
+                    return self.make_mandl_or_mainmenu(state_name, result.contact, im);
                 }
             } else {
                 // Something went wrong saving the extras
