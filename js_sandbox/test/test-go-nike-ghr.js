@@ -503,6 +503,21 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "1",
+        it("opting to continue should show main menu", function (done) {
+            var user = {
+                current_state: 'help_screen',
+                answers: {
+                    reg_gender: 'Male',
+                    reg_age: '19-24',
+                    reg_sector: "Mareba",
+                    mandl_quiz_1_q_1: 'Yes',
+                    mandl_quiz_1_q_2: 'Of course',
+                    mandl_quiz_1_q_3: 'First'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
                 next_state: "main_menu",
                 response: "^[^]" +
                     "1. Articles[^]" +

@@ -591,6 +591,19 @@ function GoNikeGHR() {
         return im.config.duplicates.indexOf(sector.toLowerCase()) == -1;
     };
 
+    self.make_help_screen = function(){
+        return new ChoiceState(
+            "help_screen",
+            "main_menu",
+            ("On the menu, press the number of the option you like to view.\n"+
+            "Once you have chosen your option, you can navigate by choosing\n"+
+            "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu."),
+            [
+                new Choice("main_menu", ("Continue"))
+            ]
+        )
+    }
+
     self.make_main_menu = function(){
         return new ChoiceState(
             "main_menu",
