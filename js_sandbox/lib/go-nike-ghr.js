@@ -141,10 +141,13 @@ function GoNikeGHR() {
         };
     };
 
+    //Dynamically builds the state
     self.make_mandl_question_state = function(state_name, prefix, next_state, question) {
         return function() {
+            //Dynamically builds the choice list
             var choices = self.make_question_choices(question.choices);
 
+            //Create the state, adding in the next state and the question itself
             return new ChoiceState(state_name, next_state, question.question, choices);
         };
     };
@@ -1224,30 +1227,71 @@ function GoNikeGHR() {
         // load the quizzes
         p_mandl.add_callback(function(result) {
             var quizzes = result.quizzes;
+
             // Make the M&L quizzes available to other states too
             im.config.quizzes = quizzes;
             for (var quiz_name in quizzes){
+                //Using name as index, get quiz
                 var quiz = quizzes[quiz_name];
+
                 // Create the quiz
                 var previous_question = false;
                 var previous_question_state_name = false;
                 var item = 0;
+                var num_questions = Object.keys(quiz.questions).length;
+
+                //Iterate through questions
                 for (var question_name in quiz.questions){
+
+                    //Increment item?
                     item++;
                     var question = quiz.questions[question_name];
+
+                    //Construct quiz name
                     var question_state_name = quiz_name + "_" + question_name;
+
                     // construct a function using make_mandl_question_state()
                     // to prevent getting a wrongly scoped 'question'
-                    if (item !== 1){
-                        self.add_creator_unless_exists(previous_question_state_name,
-                            self.make_mandl_question_state(previous_question_state_name, quiz_name, question_state_name, previous_question));
-                        if ((Object.keys(quiz.questions).length) == item){
+
+                    //If this is the 2nd item being processed
+                    if (item > 1){
+
+                        //Add the state creator for the previous state
+                        //Since now we have the next state
+                        self.add_creator_unless_exists(
+                            previous_question_state_name,
+                            self.make_mandl_question_state(
+                                previous_question_state_name,
+                                quiz_name,
+                                question_state_name,
+                                previous_question
+                            )
+                        );
+
+                        //If this is the last question
+                        if (num_questions == item){
                             var thanks_state_name = quiz_name + "_thanks";
-                            // This is a buffer state that logs their responses
-                            self.add_creator_unless_exists(thanks_state_name,
-                                self.make_mandl_thanks_state(thanks_state_name, quiz, quiz_name));
-                            self.add_creator_unless_exists(question_state_name,
-                                self.make_mandl_question_state(question_state_name, quiz_name, thanks_state_name, question));
+
+                            // This is a buffer state that logs their responses to the question
+                            self.add_creator_unless_exists(
+                                thanks_state_name,
+                                self.make_mandl_thanks_state(
+                                    thanks_state_name,
+                                    quiz,
+                                    quiz_name
+                                )
+                            );
+
+                            //Create the final quiz state, since there is no more iterations
+                            self.add_creator_unless_exists(
+                                question_state_name,
+                                self.make_mandl_question_state(
+                                    question_state_name,
+                                    quiz_name,
+                                    thanks_state_name,
+                                    question
+                                )
+                            );
                         }
                     }
                     previous_question = question;
@@ -1277,22 +1321,49 @@ function GoNikeGHR() {
         return p_opinion;
     };
 
-
+    /*
+    * The structure of what is returned by tastypie is:
+    * {
+    *   quiz: {
+    *       quiz_details: {
+    *           answers: {
+    *               ...
+    *           },
+    *           questions: {
+    *               q_x: {
+    *                   question:"...",
+    *                   choices: [...]
+    *               },
+    *               q_xx: {
+    *                   question:"...",
+    *                   choices: [...]
+    *               }
+    *           }
+    *       },
+    *       start: "q_x"
+    *   }
+    * }
+    * */
     self.build_weekly_quiz_states = function() {
+        //Get quizzes from cache
         var p_weeklyquiz = self.cached_crm_get('weeklyquiz/');
         p_weeklyquiz.add_callback(function(result) {
+
             // This callback checks extras when contact is found
-            var quiz = result.quiz;
+            var quiz = result.quiz; //var quiz = result.quiz.quiz_details?
+
             if (!quiz) {
                 return self.error_state(im);
             }
             var quiz_name = "weekly_quiz";
             var first_view_prefix = false;
             var first_view = false;
-            // Create the quiz
-            for (var question_name in quiz.questions){
 
-                var question = quiz.questions[question_name];
+            // Create the quiz
+            //For each question
+            for (var question_name in quiz.quiz_details.questions){
+
+                var question = quiz.quiz_details.questions[question_name];
                 var question_state_name = quiz_name + "_" + question_name;
 
                 // construct a function using make_question_state()
