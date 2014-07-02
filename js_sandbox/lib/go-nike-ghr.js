@@ -124,11 +124,20 @@ function GoNikeGHR() {
 
     self.make_question_state = function(prefix, question) {
          return function(state_name, im) {
-            var choices = self.make_navigation_choices(question.choices, prefix, "main_menu");
+            var choices = self.make_navigation_choices(
+                question.choices,
+                prefix,
+                "main_menu"
+            );
 
-            return new ChoiceState(state_name, function(choice) {
-                return choice.value;
-            }, question.question, choices);
+            return new ChoiceState(
+                state_name,
+                function(choice) {
+                    return choice.value;
+                },
+                question.question,
+                choices
+            );
         };
     };
 
@@ -484,7 +493,8 @@ function GoNikeGHR() {
         }
     };
 
-    self.make_navigation_state = function(page, prefix, question, items, first, last, parent, parent_text, to_sub_nav) {
+    self.make_navigation_state = function(page, prefix, question, items, first, last, parent_hierarchy, parent_hierarchy_text, to_sub_nav) {
+
          return function(state_name, im) {
             var _ = im.i18n;
             var choices = items.map(function(item) {
@@ -495,8 +505,18 @@ function GoNikeGHR() {
             });
             if (!first) choices.push(new Choice(prefix + "_" + (page-1), _.gettext("Back")));
             if (!last) choices.push(new Choice(prefix + "_" + (page+1), _.gettext("Next")));
-            if (parent) choices.push(new Choice(parent, parent_text));
 
+            if (parent_hierarchy) {
+                //If there hierarchy is more than 1 item
+                if (parent_hierarchy instanceof Array) {
+
+                    for (var i=0; i < parent_hierarchy.length; i++) {
+                        choices.push(new Choice(parent_hierarchy[i],parent_hierarchy_text[i]));
+                    }
+                } else {
+                    choices.push(new Choice(parent_hierarchy, parent_hierarchy_text));
+                }
+            }
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
             }, question, choices);
@@ -519,8 +539,20 @@ function GoNikeGHR() {
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
 
-            self.add_creator_unless_exists(navigation_page_name,
-                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, true));
+            self.add_creator_unless_exists(
+                navigation_page_name,
+                self.make_navigation_state(
+                    p,
+                    prefix,
+                    question,
+                    pages[p],
+                    first,
+                    last,
+                    parent,
+                    parent_text,
+                    true
+                )
+            );
         }
     };
 
@@ -567,24 +599,44 @@ function GoNikeGHR() {
     };
 
     self.make_navigation_and_content_states = function(prefix, question, items, max_items, parent, parent_text) {
+
         // Generates the navigation paging states and related booklet_states
         var items_keys = Object.keys(items);
         var total_pages = Math.ceil(items_keys.length / max_items);
         var pages = [];
         var start = null;
+
+        // Generates the pages
         for (var i = 0; i < total_pages; i++){
             start = i*max_items;
             pages.push(items_keys.slice(start, start+max_items));
         }
+
+        // For each page
         var navigation_page_name = null;
         for (var p = 0; p < pages.length; p++){
+
+            // Determine if first or last
             var first = (p===0) ? true : false;
             var last = (p==(pages.length-1)) ? true : false;
+
             // Give the state a name
             navigation_page_name = prefix + "_" + p;
 
-            self.add_creator_unless_exists(navigation_page_name,
-                                    self.make_navigation_state(p, prefix, question, pages[p], first, last, parent, parent_text, false));
+            self.add_creator_unless_exists(
+                navigation_page_name,
+                self.make_navigation_state(
+                    p,
+                    prefix,
+                    question,
+                    pages[p],
+                    first,
+                    last,
+                    parent,
+                    parent_text,
+                    false
+                )
+            );
         }
         for (var cat_name in items){
             var sub_cat = items[cat_name];
@@ -1299,12 +1351,26 @@ function GoNikeGHR() {
             var prefix = "directory";
             var question = _.gettext("Please select an option:");
             var items = Object.keys(directory);
-            self.make_navigation_states(prefix, question, items, max_items, 'main_menu', _.gettext("Main menu"));
+            self.make_navigation_states(
+                prefix,
+                question,
+                items,
+                max_items,
+                'main_menu',
+                _.gettext("Main menu")
+            );
             for (var s=0; s<items.length;s++){
                 var sub_question = _.gettext("Please select an organization:");
                 var sub_items = directory[items[s]];
                 var sub_prefix = prefix + "_" + self.clean_state_name(items[s]);
-                self.make_navigation_and_content_states(sub_prefix, sub_question, sub_items, max_items, 'directory_start', _.gettext("Back to categories"));
+                self.make_navigation_and_content_states(
+                    sub_prefix,
+                    sub_question,
+                    sub_items,
+                    max_items,
+                    ['directory_start','main_menu'],
+                    [_.gettext("Back to categories"), _.gettext("Main menu")]
+                );
             }
             // End Build directory
         });
