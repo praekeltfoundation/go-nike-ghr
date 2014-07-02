@@ -1,0 +1,163 @@
+{
+    "": {
+        "pot-creation-date": "2014-07-01 06:01:+0200",
+        "project-id-version": "GHR USSD",
+        "language-team": "LANGUAGE <LL@li.org>",
+        "mime-version": "1.0",
+        "content-type": "text/plain; charset=UTF-8",
+        "content-transfer-encoding": "8bit",
+        "po-revision-date": "2014-07-02 20:05+0530",
+        "last-translator": "",
+        "x-generator": "Poedit 1.6.5",
+        "plural-forms": "nplurals=2; plural=(n != 1);",
+        "language": "rw_RW"
+    },
+    "Sorry! Something went wrong. Please redial and try again.": [
+        null,
+        "Mwihangane, hari ibidakoretse neza. Ongera usubiremo"
+    ],
+    "Thanks! Carry on.": [
+        null,
+        "Kandi 1 kujya Ahabanza na 2 kumenya uko bakoresha Ni Nyampinga Mobile"
+    ],
+    "Main menu": [
+        null,
+        "Ahabanza"
+    ],
+    "Instructions to user USSD menu": [
+        null,
+        "Ni gute wakoresha Ni Nyampinga mobile"
+    ],
+    "Next": [
+        null,
+        "Komeza"
+    ],
+    "Back": [
+        null,
+        "Inyuma"
+    ],
+    "\n1 for prev, 2 for next, 3 to end.": [
+        null,
+        "1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
+    ],
+    "On the menu, press the number of the option you like to view.\nOnce you have chosen your option, you can navigate by choosing\n1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu.": [
+        null,
+        "Hitamo umubare wicyo ushaka kureba \nIgihe wamaze guhitamo icyo ushaka kureba, ushobora kubikora ukuresheje \n1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
+    ],
+    "Continue": [
+        null,
+        "Komeza"
+    ],
+    "Articles": [
+        null,
+        "Inkuru"
+    ],
+    "Opinions": [
+        null,
+        "Ubyumva ute"
+    ],
+    "What would Shangazi do?": [
+        null,
+        "Inama za Shangazi"
+    ],
+    "Weekly quiz": [
+        null,
+        "Tyaza ubwenge"
+    ],
+    "Directory": [
+        null,
+        "Abo wakwiyambaza"
+    ],
+    "To proceed with registration, do you accept the Terms and Conditions of Ni Nyampinga - ": [
+        null,
+        "Kugirango ukomeze kwiyandikisha uremera amabwiriza n'amategeko ya Ni Nyampinga Mobile"
+    ],
+    "Yes": [
+        null,
+        "Yego"
+    ],
+    "No": [
+        null,
+        "Hoya"
+    ],
+    "Sorry but we can't proceed with your registration unless you accept the Terms & Conditions. Please redial if you change your mind. Thanks!": [
+        null,
+        "Mwihangane. Ntago wakomeza utaremera amabwiriza n amategeko. uramutse uhinduye igitekerezo kanda *900#. Urakoze"
+    ],
+    "Please choose your gender:": [
+        null,
+        "Igitsina?"
+    ],
+    "Male": [
+        null,
+        "Gore"
+    ],
+    "Female": [
+        null,
+        "Gabo"
+    ],
+    "Please choose your age:": [
+        null,
+        "Ese imyaka yawe iri mu kihe kigero?"
+    ],
+    "12 or under": [
+        null,
+        "20 cyangwa irenga"
+    ],
+    "Which sector do you live in?\nPress 1 if you do not know": [
+        null,
+        "Utuye mu wuhe murenge? \nNiba ntabyo uzi kanda 1"
+    ],
+    "Welcome Ni Nyampinga club member! We want to know you better. For each set of 4 questions you answer, you enter a lucky draw to win ": [
+        null,
+        "Murakaza neza muba nyamuryango ba Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira "
+    ],
+    " RwF weekly.": [
+        null,
+        "10 RWF buri cyumweru"
+    ],
+    "What district are you in?": [
+        null,
+        "Utuye mu kahe karere?"
+    ],
+    "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?\nPress 1 if you do not know": [
+        null,
+        "Mwihangane, ntago turi kubona icyo bihura. subiramo \nUtuye mu wuhe murenge? \nNiba ntabyo uzi kanda 1"
+    ],
+    "Sorry there's no article this week, dial back soon!": [
+        null,
+        "Mwihangane, Iki cyumweru nta nkuru shya ihari"
+    ],
+    "Please choose an option:": [
+        null,
+        "Hitamo uburyo bumwe muri ubu"
+    ],
+    "Popular opinions from SMS": [
+        null,
+        "Ibitekerezero byaturutse muri SMS"
+    ],
+    "Leave your opinion": [
+        null,
+        "Nawe tubwire"
+    ],
+    "No new content this week": [
+        null,
+        "Iki cyumweru nta nkuru shya twashyizeho"
+    ],
+    "Please select an option:": [
+        null,
+        "Hitamo uburyo bumwe muri ubu"
+    ],
+    "Thank you and bye bye!": [
+        null,
+        "Ni Nyampinga, Murakoze! Murarikiwe kugaruka gusoma inkuru n'ibindi bishimishije"
+    ],
+    "Please select an organization:": [
+        null,
+        "Hitamo umushinga"
+    ],
+    "Back to categories": [
+        null,
+        "Subira inyuma ahari ibyicaro"
+    ]
+}
