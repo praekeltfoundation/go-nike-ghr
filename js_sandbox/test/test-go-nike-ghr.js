@@ -121,7 +121,7 @@ describe("When using the USSD line", function() {
 
         });
 
-        
+
         it('should allow for caching', function (done) {
             var state_creator = tester.api.im.state_creator;
 
