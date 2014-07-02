@@ -858,7 +858,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it('should continue to end after article finish', function(done) {
+        it('should take user back to main menu after article is done with', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
