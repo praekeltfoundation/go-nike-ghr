@@ -896,10 +896,10 @@ function GoNikeGHR() {
                                     p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "gender", gender);});
                                     p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "age", age);});
                                     if(sector!="1"){
-                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
-                                    if (district) {  // If not district this will not run
-                                        p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "district", district);});
-                                    }
+                                        p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
+                                        if (district) {  // If not district this will not run
+                                            p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "district", district);});
+                                        }
                                     }
                                     p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
                                     p_log.add_callback(function(){
