@@ -1059,18 +1059,27 @@ function GoNikeGHR() {
 
         var next_page = function(page_number) {
             // We load the opinions in all in one go on_config_load
-            return im.config.opinions["opinion_"+(page_number+1)];
+            return im.config.opinions["opinion_"+(page_number+1)] + footer[page_number];
         };
+
+        var footer =  [
+         _.gettext("\n2. Next, 3. Main Menu."),
+         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
+         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
+         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
+         _.gettext("\n1. Prev, 3. Main Menu.")
+    ]
+        var counter = 0;
 
         return new BookletState(
             state_name, {
-                next: 'end_state',
+                next: 'main_menu',
                 pages: 5,
                 page_text: next_page,
                 buttons: {
                     "1": -1, "2": +1, "3": "exit"
                 },
-                footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end."),
+                footer_text: "",
                 handlers: {
                     on_enter: function() {
                         var p_log = new Promise();
@@ -1201,6 +1210,7 @@ function GoNikeGHR() {
         });
         return p_opinion;
     };
+
 
     self.build_weekly_quiz_states = function() {
         var p_weeklyquiz = self.cached_crm_get('weeklyquiz/');
