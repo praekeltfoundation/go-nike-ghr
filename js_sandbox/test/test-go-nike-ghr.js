@@ -931,7 +931,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion one[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "2: Next, 3: Main Menu.$"
                 )
             });
             p.then(function() {
@@ -950,7 +950,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion two[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "1: Prev, 2: Next, 3: Main Menu.$"
                 )
             });
             p.then(done, done);
@@ -969,7 +969,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion three[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "1: Prev, 2: Next, 3: Main Menu.$"
                 )
             });
             p.then(done, done);
@@ -988,7 +988,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion four[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "1: Prev, 2: Next, 3: Main Menu.$"
                 )
             });
             p.then(done, done);
@@ -1007,13 +1007,13 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion five[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "1: Prev, 3: Main Menu.$"
                 )
             });
             p.then(done, done);
         });
 
-        it("selecting 0 viewing 5th Opinion should display thank you and end", function (done) {
+        it("selecting 3 viewing 5th Opinion should display thank you and end", function (done) {
             var user = {
                 current_state: 'opinions_popular',
                 pages: {
@@ -1023,11 +1023,16 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "3",
-                next_state: "end_state",
+                next_state: "main_menu",
                 response: (
-                    "^Thank you and bye bye!$"
+                    "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
                 ),
-                continue_session: false
+                continue_session: true
             });
             p.then(done, done);
         });
@@ -1042,11 +1047,16 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "3",
-                next_state: "end_state",
+                next_state: "main_menu",
                 response: (
-                    "^Thank you and bye bye!$"
+                    "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
                 ),
-                continue_session: false
+                continue_session: true
             });
             p.then(done, done);
         });
