@@ -675,6 +675,7 @@ function GoNikeGHR() {
     };
 
     self.make_main_menu = function(im){
+        _ = im.i18n;
         var choices =  [
                  new Choice("articles", _.gettext("Articles")),
                  new Choice("opinions", _.gettext("Opinions")),
@@ -684,7 +685,6 @@ function GoNikeGHR() {
         if (!self.check_directory(im)) {
             choices.push(new Choice("directory_start", _.gettext("Directory")))
         }
-        _ = im.i18n;
         return new ChoiceState(
             "main_menu",
             function(choice) {
