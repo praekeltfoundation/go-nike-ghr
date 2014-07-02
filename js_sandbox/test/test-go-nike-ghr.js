@@ -1349,7 +1349,8 @@ describe("When using the USSD line", function() {
                     "^Please select an organization:[^]" +
                     "1. sub category one[^]" +
                     "2. sub category two[^]" +
-                    "3. Back to categories$"
+                    "3. Back to categories[^]" +
+                    "4. Main menu$"
                 )
             });
             p.then(done, done);
@@ -1367,7 +1368,8 @@ describe("When using the USSD line", function() {
                     "^Please select an organization:[^]" +
                     "1. sub category three[^]" +
                     "2. sub category four[^]" +
-                    "3. Back to categories$"
+                    "3. Back to categories[^]" +
+                    "4. Main menu$"
                 )
             });
             p.then(done, done);
