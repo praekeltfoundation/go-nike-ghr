@@ -1056,11 +1056,11 @@ function GoNikeGHR() {
         };
 
         var footer =  [
-         "\n2: Next, 3: Main Menu.",
-         "\n1: Prev, 2: Next, 3: Main Menu.",
-         "\n1: Prev, 2: Next, 3: Main Menu.",
-         "\n1: Prev, 2: Next, 3: Main Menu.",
-         "\n1: Prev, 3: Main Menu."
+         _.gettext("\n2: Next, 3: Main Menu."),
+         _.gettext("\n1: Prev, 2: Next, 3: Main Menu."),
+         _.gettext("\n1: Prev, 2: Next, 3: Main Menu."),
+         _.gettext("\n1: Prev, 2: Next, 3: Main Menu."),
+         _.gettext("\n1: Prev, 3: Main Menu.")
     ]
         var counter = 0;
 
