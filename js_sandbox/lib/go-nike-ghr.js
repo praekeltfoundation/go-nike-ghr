@@ -950,6 +950,14 @@ function GoNikeGHR() {
 
     self.add_creator('articles', function(state_name, im) {
         var p = self.crm_get("article/");
+
+        var footer =  [
+         _.gettext("\n2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 3. Main Menu")
+    ]
+
         p.add_callback(function(response) {
             if (typeof(response.article) != "object"){
                 return new ChoiceState(
@@ -962,7 +970,7 @@ function GoNikeGHR() {
                 );
             } else {
                 var next_page = function(page_number) {
-                    return response.article[page_number];
+                    return response.article[page_number] + footer[page_number];
                 };
                 return new BookletState(
                     state_name, {
@@ -972,7 +980,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: _.gettext("\n1. Prev, 2. Next, 3. Main menu"),
+                        footer_text: "",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -1013,6 +1021,12 @@ function GoNikeGHR() {
 
     self.add_creator('wwsd', function(state_name, im) {
         var _ = im.i18n;
+        var footer =  [
+         _.gettext("\n2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 3. Main Menu")
+    ]
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
             if (response.shangazi === undefined){
@@ -1026,7 +1040,7 @@ function GoNikeGHR() {
                 );
             } else {
                 var next_page = function(page_number) {
-                    return response.shangazi[page_number];
+                    return response.shangazi[page_number] + footer[page_number];
                 };
                 return new BookletState(
                     state_name, {
@@ -1036,7 +1050,7 @@ function GoNikeGHR() {
                         buttons: {
                             "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: _.gettext("\n1. Prev, 2. Next, 3. Main menu"),
+                        footer_text: "",
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();
@@ -1063,11 +1077,11 @@ function GoNikeGHR() {
         };
 
         var footer =  [
-         _.gettext("\n2. Next, 3. Main Menu."),
-         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
-         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
-         _.gettext("\n1. Prev, 2. Next, 3. Main Menu."),
-         _.gettext("\n1. Prev, 3. Main Menu.")
+         _.gettext("\n2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 2. Next"),
+         _.gettext("\n1. Prev, 3. Main Menu")
     ]
         var counter = 0;
 
