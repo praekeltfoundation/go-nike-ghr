@@ -1030,13 +1030,13 @@ function GoNikeGHR() {
                 };
                 return new BookletState(
                     state_name, {
-                        next: 'end_state',
+                        next: 'main_menu',
                         pages: 4,
                         page_text: next_page,
                         buttons: {
                             "1": -1, "2": +1, "3": "exit"
                         },
-                        footer_text: _.gettext("\n1 for prev, 2 for next, 3 to end."),
+                        footer_text: _.gettext("\n1. Prev, 2. Next, 3. Main menu"),
                         handlers: {
                             on_enter: function() {
                                 var p_log = new Promise();

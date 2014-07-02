@@ -889,7 +889,7 @@ describe("When using the USSD line", function() {
                 next_state: "wwsd",
                 response: (
                     "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                    "1 for prev, 2 for next, 3 to end.$"
+                    "1. Prev, 2. Next, 3. Main menu$"
                 )
             });
             p.then(function() {
@@ -907,7 +907,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi a porta justo. Maecenas sem felis, sollicitudin vitae " +
                           "risus luctus, consectetur sollicitudin leo.[^]" +
-                          "1 for prev, 2 for next, 3 to end.$"
+                           "1. Prev, 2. Next, 3. Main menu$"
             });
             p.then(done, done);
         });
@@ -924,7 +924,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi tincidunt lobortis erat eget malesuada. Cras cursus " +
                           "accumsan eleifend. Morbi ullamcorper pretium sollicitudin.[^]" +
-                          "1 for prev, 2 for next, 3 to end.$"
+                           "1. Prev, 2. Next, 3. Main menu$"
             });
             p.then(done, done);
         });
@@ -941,7 +941,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
-                          "1 for prev, 2 for next, 3 to end.$"
+                          "1. Prev, 2. Next, 3. Main menu$"
             });
             p.then(done, done);
         });
@@ -957,13 +957,13 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: 'wwsd',
                 response: "^Shangazi ipsum dolor sit amet, consectetur adipiscing elit.[^]" +
-                          "1 for prev, 2 for next, 3 to end.$",
+                           "1. Prev, 2. Next, 3. Main menu$",
                 continue_session: true
             });
             p.then(done, done);
         });
 
-        it('should continue to end after Shangazi Opinions finish', function(done) {
+        it('should continue to main menu after Shangazi Opinions finish', function(done) {
             var p = tester.check_state({
                 user: {
                     pages: {
@@ -972,9 +972,14 @@ describe("When using the USSD line", function() {
                     current_state: 'wwsd'
                 },
                 content: "3",
-                next_state: 'end_state',
-                response: '^Thank you and bye bye!$',
-                continue_session: false
+                next_state: 'main_menu',
+                response: "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$",
+                continue_session: true
             });
             p.then(done, done);
         });
