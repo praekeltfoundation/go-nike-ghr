@@ -52,6 +52,7 @@ class MonitorAndLearningQuizIDResource(ModelResource):
                     choices = []  # A list do hold the answers
 
                     answers = questions[questions_i].data["quiz_ids"]
+                    answers.sort(key=lambda x: x.data["order"])
                     for answer_i in range(len(answers)):
                         choices.append(answers[answer_i].data["answer"])
                     questions_dict[q_id] = {"question": questions[questions_i].data["question"],
