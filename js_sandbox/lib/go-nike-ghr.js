@@ -800,6 +800,7 @@ function GoNikeGHR() {
 
         p.add_callback(function(result) {
             // This callback generates the state the user sees
+            var _=im.i18n;
             if (result.success){
                 if (result.contact["extras-ghr_reg_complete"] == "false"){
                     // Did not finish registration and session state not found
@@ -1014,6 +1015,7 @@ function GoNikeGHR() {
     ]
 
         p.add_callback(function(response) {
+            var _=im.i18n;
             if (typeof(response.article) != "object"){
                 return new ChoiceState(
                     state_name,
@@ -1084,6 +1086,7 @@ function GoNikeGHR() {
     ]
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
+            var _ = im.i18n;
             if (response.shangazi === undefined){
                 return new ChoiceState(
                     state_name,
