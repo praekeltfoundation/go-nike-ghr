@@ -38,6 +38,11 @@ class MonitorAndLearningQuizAnswer(models.Model):
     question_id = models.ForeignKey('MonitorAndLearningQuizQuestion',
                                     related_name="question_ids")
     answer = models.CharField(max_length=160)
+    order = models.IntegerField(
+        verbose_name="Order",
+        blank=True,
+        null=True
+    )
 
     def __unicode__(self):
         return self.answer
