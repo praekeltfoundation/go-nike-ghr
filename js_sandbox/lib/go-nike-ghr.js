@@ -1033,12 +1033,13 @@ function GoNikeGHR() {
 
     self.add_creator('articles', function(state_name, im) {
         var p = self.crm_get("article/");
+        var _=im.i18n;
 
         var footer =  [
-         _.gettext("\n2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 3. Main Menu")
+         "\n2. "+ _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
     ]
 
         p.add_callback(function(response) {
@@ -1106,10 +1107,10 @@ function GoNikeGHR() {
     self.add_creator('wwsd', function(state_name, im) {
         var _ = im.i18n;
         var footer =  [
-         _.gettext("\n2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 3. Main Menu")
+         "\n2. "+ _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
     ]
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
@@ -1162,11 +1163,11 @@ function GoNikeGHR() {
         };
 
         var footer =  [
-         _.gettext("\n2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 2. Next"),
-         _.gettext("\n1. Prev, 3. Main Menu")
+         "\n2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
     ]
         var counter = 0;
 
