@@ -119,7 +119,7 @@ function GoNikeGHR() {
         var nav_choices = choices.map(function(choice) {
             var value = "";
             if (choice[0] == parent){
-                value = parent + "_thank_you";
+                value = "opinions_thank_you";
             } else {
                 value = prefix + "_" + choice[0];
             }
