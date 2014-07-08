@@ -1039,7 +1039,7 @@ function GoNikeGHR() {
          "\n2. "+ _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main menu")
     ]
 
         p.add_callback(function(response) {
@@ -1110,7 +1110,7 @@ function GoNikeGHR() {
          "\n2. "+ _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main menu")
     ]
         var p = self.crm_get("shangazi/");
         p.add_callback(function(response) {
@@ -1167,7 +1167,7 @@ function GoNikeGHR() {
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main Menu")
+         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main menu")
     ]
         var counter = 0;
 
