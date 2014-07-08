@@ -1190,13 +1190,13 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "opinions",
-                response: (
-                    "^Please choose an option:[^]" +
-                    "1. Popular opinions from SMS[^]" +
-                    "2. Leave your opinion[^]" +
-                    "3. Back$"
-                )
+                next_state: "main_menu",
+                response: "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
             });
             p.then(done, done);
         });

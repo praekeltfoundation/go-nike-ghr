@@ -267,11 +267,11 @@ function GoNikeGHR() {
 
     self.add_state(new ChoiceState(
             "opinions_thank_you",
-            "opinions",
+            "main_menu",
             _.gettext("Thanks for sharing your opinion.\n"+
             "Press 1 to go back to the menu"),
             [
-                new Choice("opinions", _.gettext("Continue"))
+                new Choice("main_menu", _.gettext("Continue"))
             ]
         )
     );
