@@ -22,8 +22,14 @@ msgstr "Kandi 1 kujya Ahabanza na 2 kumenya uko bakoresha Ni Nyampinga Mobile"
 
 #: go-nike-ghr.js:154 go-nike-ghr.js:959 go-nike-ghr.js:1023
 #: go-nike-ghr.js:1123 go-nike-ghr.js:1277
+msgid "Prev"
+msgstr "Gusubura inyuma"
+
+#: go-nike-ghr.js:154 go-nike-ghr.js:959 go-nike-ghr.js:1023
+#: go-nike-ghr.js:1123 go-nike-ghr.js:1277
 msgid "Main menu"
 msgstr "Ahabanza"
+
 
 #: go-nike-ghr.js:155
 msgid "Instructions to user USSD menu"
@@ -31,7 +37,7 @@ msgstr "Ni gute wakoresha Ni Nyampinga mobile"
 
 #: go-nike-ghr.js:236 go-nike-ghr.js:497 go-nike-ghr.js:534
 msgid "Next"
-msgstr "Komeza"
+msgstr "Gukomeza"
 
 #: go-nike-ghr.js:496 go-nike-ghr.js:1000
 msgid "Back"
@@ -140,7 +146,7 @@ msgstr ""
 
 #: go-nike-ghr.js:896
 msgid " RwF weekly."
-msgstr "10 RWF buri cyumweru"
+msgstr " RWF buri cyumweru"
 
 #: go-nike-ghr.js:930 go-nike-ghr.js:947
 msgid "What district are you in?"

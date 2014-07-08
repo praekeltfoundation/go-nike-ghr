@@ -20,6 +20,10 @@
         null,
         "Kandi 1 kujya Ahabanza na 2 kumenya uko bakoresha Ni Nyampinga Mobile"
     ],
+    "Prev": [
+        null,
+        "Gusubura inyuma"
+    ],
     "Main menu": [
         null,
         "Ahabanza"
@@ -30,7 +34,7 @@
     ],
     "Next": [
         null,
-        "Komeza"
+        "Gukomeza"
     ],
     "Back": [
         null,
@@ -114,7 +118,7 @@
     ],
     " RwF weekly.": [
         null,
-        "10 RWF buri cyumweru"
+        " RWF buri cyumweru"
     ],
     "What district are you in?": [
         null,
