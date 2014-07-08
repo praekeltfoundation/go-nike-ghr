@@ -836,7 +836,7 @@ describe("When using the USSD line", function() {
                 next_state: 'articles',
                 response: "^Etiam tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
-                          "1. Prev, 3. Main Menu$"
+                          "1. Prev, 3. Main menu$"
             });
             p.then(done, done);
         });
@@ -924,7 +924,7 @@ describe("When using the USSD line", function() {
                 next_state: 'wwsd',
                 response: "^Shangazi tincidunt, sapien elementum pharetra dapibus, " +
                           "mi sem venenatis nulla, at interdum sapien augue eu elit.[^]" +
-                          "1. Prev, 3. Main Menu$"
+                          "1. Prev, 3. Main menu$"
             });
             p.then(done, done);
         });
@@ -1078,7 +1078,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^This is opinion five[^]" +
-                    "1. Prev, 3. Main Menu$"
+                    "1. Prev, 3. Main menu$"
                 )
             });
             p.then(done, done);
