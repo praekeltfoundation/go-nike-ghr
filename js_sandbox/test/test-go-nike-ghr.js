@@ -1166,13 +1166,30 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 2 in response to last opinion available should display Opinions sub menu", function (done) {
+        it("selecting 2 in response to last opinion available should display Opinions thank you", function (done) {
             var user = {
                 current_state: 'opinion_view_1_o_2'
             };
             var p = tester.check_state({
                 user: user,
                 content: "2",
+                next_state: "opinions_thank_you",
+                response: (
+                    "^Thanks for sharing your opinion.\n"+
+                     "Press 1 to go back to the menu[^]" +
+                      "1. Continue$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 1 in thank you screen should display menu", function (done) {
+            var user = {
+                current_state: 'opinions_thank_you'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
                 next_state: "opinions",
                 response: (
                     "^Please choose an option:[^]" +

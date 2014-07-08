@@ -115,6 +115,20 @@ function GoNikeGHR() {
         return nav_choices;
     };
 
+    self.make_opinion_navigation_choices = function(choices, prefix, parent) {
+        var nav_choices = choices.map(function(choice) {
+            var value = "";
+            if (choice[0] == parent){
+                value = "opinions_thank_you";
+            } else {
+                value = prefix + "_" + choice[0];
+            }
+            var name = choice[1];
+            return new Choice(value, name);
+        });
+        return nav_choices;
+    };
+
     self.make_question_choices = function(choices) {
         var nav_choices = choices.map(function(choice) {
             return new Choice(choice, choice);
@@ -249,11 +263,22 @@ function GoNikeGHR() {
                 ]
             );
         };
-    },
+    };
+
+    self.add_state(new ChoiceState(
+            "opinions_thank_you",
+            "opinions",
+            _.gettext("Thanks for sharing your opinion.\n"+
+            "Press 1 to go back to the menu"),
+            [
+                new Choice("opinions", _.gettext("Continue"))
+            ]
+        )
+    );
 
     self.make_view_state = function(prefix, view) {
          return function(state_name, im) {
-            var choices = self.make_navigation_choices(view.choices, prefix, "opinions");
+            var choices = self.make_opinion_navigation_choices(view.choices, prefix, "opinions");
 
             return new ChoiceState(state_name, function(choice) {
                 return choice.value;
@@ -266,6 +291,8 @@ function GoNikeGHR() {
                 });
         };
     };
+
+
 
     self.make_initial_view_state = function(state_name, prefix, view) {
         var choices = self.make_navigation_choices(view.choices, prefix, null);
