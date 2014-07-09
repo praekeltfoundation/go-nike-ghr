@@ -1,28 +1,24 @@
 {
     "": {
-        "pot-creation-date": "2014-07-01 06:01:+0200",
-        "project-id-version": "GHR USSD",
+        "pot-creation-date": "2014-07-08 05:10:+0200",
+        "project-id-version": "GHR USSD Translations_Final",
         "language-team": "LANGUAGE <LL@li.org>",
+        "language": "rw_RW",
         "mime-version": "1.0",
         "content-type": "text/plain; charset=UTF-8",
         "content-transfer-encoding": "8bit",
-        "po-revision-date": "2014-07-02 20:05+0530",
-        "last-translator": "",
-        "x-generator": "Poedit 1.6.5",
+        "po-revision-date": "2014-07-09 16:53+0530",
         "plural-forms": "nplurals=2; plural=(n != 1);",
-        "language": "rw_RW"
+        "last-translator": "",
+        "x-generator": "Poedit 1.6.5"
     },
     "Sorry! Something went wrong. Please redial and try again.": [
         null,
-        "Mwihangane, hari ibidakoretse neza. Ongera usubiremo"
+        "Mwihangane, hari ibitakoretse. Ongera mukanya"
     ],
     "Thanks! Carry on.": [
         null,
-        "Kandi 1 kujya Ahabanza na 2 kumenya uko bakoresha Ni Nyampinga Mobile"
-    ],
-    "Prev": [
-        null,
-        "Gusubura inyuma"
+        "Kanda 1. kujya Ahabanza na 2. Uko bakoresha Ni Nyampinga Mobile"
     ],
     "Main menu": [
         null,
@@ -30,31 +26,31 @@
     ],
     "Instructions to user USSD menu": [
         null,
-        "Ni gute wakoresha Ni Nyampinga mobile"
+        "Uko bakoresha Ni Nyampinga Mobile"
     ],
     "Next": [
         null,
-        "Gukomeza"
-    ],
-    "Back": [
-        null,
-        "Inyuma"
+        "Komeza"
     ],
     "Thanks for sharing your opinion.\nPress 1 to go back to the menu": [
         null,
         "Ni Nyampinga, Murakoze kutubwira uko mubyumva!"
     ],
-    "\n1 for prev, 2 for next, 3 to end.": [
-        null,
-        "1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
-    ],
-    "On the menu, press the number of the option you like to view.\nOnce you have chosen your option, you can navigate by choosing\n1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu.": [
-        null,
-        "Hitamo umubare wicyo ushaka kureba \nIgihe wamaze guhitamo icyo ushaka kureba, ushobora kubikora ukuresheje \n1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
-    ],
     "Continue": [
         null,
         "Komeza"
+    ],
+    "Back": [
+        null,
+        "Subira inyuma"
+    ],
+    "\n1 for prev, 2 for next, 3 to end.": [
+        null,
+        "\n1. Subira inyuma 2. Komeza 3. Ahabanza"
+    ],
+    "On the menu, press the number of the option you like to view.\nOnce you have chosen your option, you can navigate by choosing\n1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu.": [
+        null,
+        "Hitamo umubare wicyo ushaka kureba\nIgihe wamaze guhitamo icyo ushaka kureba, ushobora kubikora ukuresheje\n1. Subira inyuma 2. Komeza 3. Ahabanza"
     ],
     "Articles": [
         null,
@@ -78,7 +74,7 @@
     ],
     "To proceed with registration, do you accept the Terms and Conditions of Ni Nyampinga - ": [
         null,
-        "Kugirango ukomeze kwiyandikisha uremera amabwiriza n'amategeko ya Ni Nyampinga Mobile"
+        "Kugirango ukomeze kwiyandikisha uremera amabwiriza n'amategeko ya Ni Nyampinga Mobile "
     ],
     "Yes": [
         null,
@@ -90,7 +86,7 @@
     ],
     "Sorry but we can't proceed with your registration unless you accept the Terms & Conditions. Please redial if you change your mind. Thanks!": [
         null,
-        "Mwihangane. Ntago wakomeza utaremera amabwiriza n amategeko. uramutse uhinduye igitekerezo kanda *900#. Urakoze"
+        "Mwihangane. Ntiwakomeza utemeye amabwiriza n amategeko. Nuhindura igitekerezo kanda *900#. Urakoze"
     ],
     "Please choose your gender:": [
         null,
@@ -110,19 +106,19 @@
     ],
     "12 or under": [
         null,
-        "20 cyangwa irenga"
+        "12 cyangwa munsi"
     ],
     "Which sector do you live in?\nPress 1 if you do not know": [
         null,
-        "Utuye mu wuhe murenge? \nNiba ntabyo uzi kanda 1"
+        "Utuye mu wuhe murenge?\nNiba ntabyo uzi kanda 1"
     ],
     "Welcome Ni Nyampinga club member! We want to know you better. For each set of 4 questions you answer, you enter a lucky draw to win ": [
         null,
-        "Murakaza neza muba nyamuryango ba Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira "
+        "Murakaza neza mu muryango wa Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira"
     ],
     " RwF weekly.": [
         null,
-        " RWF buri cyumweru"
+        "RWF buri cyumweru"
     ],
     "What district are you in?": [
         null,
@@ -130,7 +126,11 @@
     ],
     "Sorry, cannot find a match. Please try again.\nWhich sector do you live in?\nPress 1 if you do not know": [
         null,
-        "Mwihangane, ntago turi kubona icyo bihura. subiramo \nUtuye mu wuhe murenge? \nNiba ntabyo uzi kanda 1"
+        "Mwihangane, ntago turi kubona icyo bihura. subiramo. \nUtuye mu wuhe murenge?\nNiba ntabyo uzi kanda 1"
+    ],
+    "Prev": [
+        null,
+        "Subira Inyuma"
     ],
     "Sorry there's no article this week, dial back soon!": [
         null,
@@ -142,7 +142,7 @@
     ],
     "Popular opinions from SMS": [
         null,
-        "Ibitekerezero byaturutse muri SMS"
+        "Ubutumwa bwaturutse muri SMS"
     ],
     "Leave your opinion": [
         null,
