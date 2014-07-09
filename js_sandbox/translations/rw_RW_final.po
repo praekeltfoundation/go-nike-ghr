@@ -43,6 +43,11 @@ msgstr "Gukomeza"
 msgid "Back"
 msgstr "Inyuma"
 
+msgid ""
+"Thanks for sharing your opinion.\n"
+"Press 1 to go back to the menu"
+msgstr "Ni Nyampinga, Murakoze kutubwira uko mubyumva!"
+
 #: go-nike-ghr.js:563 go-nike-ghr.js:974 go-nike-ghr.js:1038
 #: go-nike-ghr.js:1072
 msgid ""
