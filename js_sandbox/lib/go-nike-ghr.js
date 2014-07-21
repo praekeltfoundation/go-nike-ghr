@@ -1159,22 +1159,30 @@ function GoNikeGHR() {
 
         var next_page = function(page_number) {
             // We load the opinions in all in one go on_config_load
+            if (page_number == 3){
+               return "Thank you" + footer[page_number]
+            }
+            else
+            {
             return im.config.opinions["opinion_"+(page_number+1)] + footer[page_number];
+            }
+
         };
+
+
 
         var footer =  [
          "\n2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 3. " + _.gettext("Main menu")
+         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next") +", 3. " + _.gettext("Main menu")
     ]
         var counter = 0;
 
         return new BookletState(
             state_name, {
                 next: 'main_menu',
-                pages: 5,
+                pages: 4,
                 page_text: next_page,
                 buttons: {
                     "1": -1, "2": +1, "3": "exit"
