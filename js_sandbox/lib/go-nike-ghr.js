@@ -276,16 +276,61 @@ function GoNikeGHR() {
         )
     );
 
-    self.make_view_state = function(prefix, view) {
-         return function(state_name, im) {
-            var choices = self.make_opinion_navigation_choices(view.choices, prefix, "opinions");
+    self.increment_kv = function(im, key) {
+        // Increment key value store
+        var promise =  im.api_request('kv.incr', {
+            key: key,
+            amount: 1
+        });
+        return promise;
+    };
 
-            return new ChoiceState(state_name, function(choice) {
-                return choice.value;
-            }, view.opinions, choices, null,
+    //This will increment appropriate kv stores for opinions
+    // 1. Will increment a total per question answered.
+    // 2. Will increment a total for specific option for question answered.
+    self.count_answers_of_opinions = function(im, opinion_name, opinion_value) {
+       var promise = self.increment_kv(im, opinion_name + "_total")
+       promise.add_callback(function() {
+                return self.increment_kv(im, opinion_name+'_'+opinion_value)
+            });
+       return promise;
+    };
+
+    self.make_view_state = function(prefix, view) {
+        return function(state_name, im) {
+            //Opinion navigation choices
+            var choices = self.make_opinion_navigation_choices(
+                view.choices,
+                prefix,
+                "opinions"
+            );
+
+            //Create choice state with provided name.
+            return new ChoiceState(
+                state_name,
+                function(choice, done) {
+                    //Count total questions answered
+                    var promise = self.count_answers_of_opinions(
+                        im,
+                        state_name,
+                        choice.value
+                    )
+                    promise.add_callback(function() {
+                        //Return value in callback.
+                        done(choice.value);
+                    });
+                    return promise;
+                },
+                view.opinions,
+                choices,
+                null,
                 {
                     on_enter: function() {
-                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinions);
+                        var p_log = self.interaction_log(
+                            "OPINIONS",
+                            "viewed",
+                            view.opinions
+                        );
                         return p_log;
                     }
                 });
@@ -293,12 +338,23 @@ function GoNikeGHR() {
     };
 
 
-
-    self.make_initial_view_state = function(state_name, prefix, view) {
+    self.make_initial_view_state = function(state_name, prefix, view, im) {
+        //Build the navigation states
         var choices = self.make_navigation_choices(view.choices, prefix, null);
-        return new ChoiceState(state_name, function(choice) {
-            return choice.value;
-        }, view.opinions, choices);
+
+        //Create an actual state
+        return new ChoiceState(state_name,
+            function(choice,done) {
+                //Count total questions answered
+                var promise =  self.count_answers_of_opinions(im, state_name,choice.value)
+                promise.add_callback(function() {
+                    done(choice.value);
+                });
+                return promise;
+            },
+            view.opinions,
+            choices
+        );
     };
 
     self.log_result = function(msg) {
@@ -1083,23 +1139,23 @@ function GoNikeGHR() {
     });
 
     self.add_state(new ChoiceState(
-            "opinions",
-            function(choice) {
-                return choice.value;
-            },
+        "opinions",
+        function(choice) {
+            return choice.value;
+        },
         _.gettext("Please choose an option:"),
-            [
-                new Choice("opinions_popular", _.gettext("Popular opinions from SMS")),
-                new Choice("opinions_view", _.gettext("Leave your opinion")),
-                new Choice("main_menu", _.gettext("Back"))
-            ],
-            null,
-            {
-                on_enter: function() {
-                    var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
-                    return p_log;
-                }
+        [
+            new Choice("opinions_popular", _.gettext("Popular opinions from SMS")),
+            new Choice("opinions_view", _.gettext("Leave your opinion")),
+            new Choice("main_menu", _.gettext("Back"))
+        ],
+        null,
+        {
+            on_enter: function() {
+                var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
+                return p_log;
             }
+        }
         )
     );
 
@@ -1194,12 +1250,26 @@ function GoNikeGHR() {
     });
 
     self.add_creator('opinions_view', function(state_name, im) {
+        // Get the opinion
         var p_opinion_view = self.crm_get('opinions/view/');
+
+        // Create the initial opinion viewing state.
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
+
+            // Prefix to the first opinion
             var first_view_prefix = im.config.opinion_view[0];
+
+            //The actual first opinion
             var first_view = im.config.opinion_view[1];
-            return self.make_initial_view_state(state_name, first_view_prefix, first_view);
+
+            //Construct state
+            return self.make_initial_view_state(
+                state_name,
+                first_view_prefix,
+                first_view,
+                im
+            );
         });
         return p_opinion_view;
     });
@@ -1416,26 +1486,48 @@ function GoNikeGHR() {
         return p_weeklyquiz;
     };
 
+    //Opinion view: is a set of opinions
+    //Each opinion has a set of choices
+    //Each opinion view: has a start opinion.
     self.build_opinion_states = function() {
-        // Build Opinion Viewing
+
+        // Get the collection of opinion views from cache
         var p_opinion_view = self.cached_crm_get('opinions/view/');
+
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
             var first_view_prefix = false;
             var first_view = false;
+
+            // For each opinion_view in the opinion view collection
             for (var opinion_view in collection){
+
+                //If this is the first item, then save the first prefix
                 if (!first_view_prefix) first_view_prefix = opinion_view;
+
+                // Get opinions for relevant opinion view
                 var opinions = collection[opinion_view];
-                // Create the quiz
+
+                //For each opinion name in the views (badly named)
                 for (var view_name in opinions.views){
+
+                    //Get the actual objects
                     var view = opinions.views[view_name];
+
+                    //Save the first opinion
                     if (!first_view) first_view = view;
+
+                    //Create a name based on the view + opinion_name
                     var view_state_name = opinion_view + "_" + view_name;
 
                     // construct a function using make_view_state()
                     // to prevent getting a wrongly scoped 'view'
-                    self.add_creator_unless_exists(view_state_name,
-                        self.make_view_state(opinion_view, view));
+                    // opinion_view = the whole view
+                    // view = an actual opinion with 'opinions' field and 'choices' field.
+                    self.add_creator_unless_exists(
+                        view_state_name,
+                        self.make_view_state(opinion_view, view)
+                    );
                 }
             }
             im.config.opinion_view = [first_view_prefix, first_view];
