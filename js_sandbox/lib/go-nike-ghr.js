@@ -289,14 +289,15 @@ function GoNikeGHR() {
     // 1. Will increment a total per question answered.
     // 2. Will increment a total for specific option for question answered.
     self.count_answers_of_opinions = function(im, opinion_name, opinion_value) {
-       var promise = self.increment_kv(im, opinion_name + "_total")
-       promise.add_callback(function() {
-                return self.increment_kv(im, opinion_name+'_'+opinion_value)
+        var promise = self.increment_kv(im, opinion_name);
+        promise.add_callback(function() {
+                return self.increment_kv(im, opinion_value);
             });
-       return promise;
+        return promise;
     };
 
-    self.make_view_state = function(prefix, view) {
+    self.make_view_state = function(prefix, view, view_name) {
+
         return function(state_name, im) {
             //Opinion navigation choices
             var choices = self.make_opinion_navigation_choices(
@@ -308,15 +309,18 @@ function GoNikeGHR() {
             //Create choice state with provided name.
             return new ChoiceState(
                 state_name,
-                function(choice, done) {
+                function(choice, done) {;
+                    var opinion_key = self.get_opinion_kv_key(prefix, view_name);
+                    var opinion_choice_key = self.get_opinion_choice_kv_key(
+                        prefix,
+                        view,
+                        view_name,
+                        choice.label
+                    );
+
                     //Count total questions answered
-                    var promise = self.count_answers_of_opinions(
-                        im,
-                        state_name,
-                        choice.value
-                    )
+                    var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
                     promise.add_callback(function() {
-                        //Return value in callback.
                         done(choice.value);
                     });
                     return promise;
@@ -337,16 +341,53 @@ function GoNikeGHR() {
         };
     };
 
+    //Since we do not have unique identifier values
+    //But we are recieving arrays of values
+    //We can identify a user's choice based on the index in the array
+    //But since we don't have this index to begin with,
+    //We need to search the array of choices for the label
+    self.get_opinion_choice_id_based_on_label = function(choices, label) {
+        for (var i=0; i < choices.length; i++) {
+            if (choices[i][1] == label) {
+                return i+1;
+            }
+        }
+        return null;
+    };
 
-    self.make_initial_view_state = function(state_name, prefix, view, im) {
+    self.get_opinion_choice_kv_key = function(prefix, view, opinion_reference, label) {
+        return [
+            prefix,
+            opinion_reference,
+            self.get_opinion_choice_id_based_on_label(view.choices, label)
+        ].join('_');
+    };
+
+    self.get_opinion_kv_key = function(prefix, opinion_reference) {
+        return [
+            prefix,
+            opinion_reference,
+            'total'
+        ].join('_');
+    };
+
+    self.make_initial_view_state = function(im, state_name, prefix, view, start_opinion ) {
         //Build the navigation states
         var choices = self.make_navigation_choices(view.choices, prefix, null);
 
         //Create an actual state
         return new ChoiceState(state_name,
             function(choice,done) {
+                var opinion_key = self.get_opinion_kv_key(prefix, start_opinion);
+                var opinion_choice_key = self.get_opinion_choice_kv_key(
+                    prefix,
+                    view,
+                    start_opinion,
+                    choice.label
+                );
+
                 //Count total questions answered
-                var promise =  self.count_answers_of_opinions(im, state_name,choice.value)
+                var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
                 promise.add_callback(function() {
                     done(choice.value);
                 });
@@ -1262,13 +1303,15 @@ function GoNikeGHR() {
 
             //The actual first opinion
             var first_view = im.config.opinion_view[1];
+            var first_view_start_opinion = collection[first_view_prefix].start;
 
             //Construct state
             return self.make_initial_view_state(
+                im,
                 state_name,
                 first_view_prefix,
                 first_view,
-                im
+                first_view_start_opinion
             );
         });
         return p_opinion_view;
@@ -1526,7 +1569,7 @@ function GoNikeGHR() {
                     // view = an actual opinion with 'opinions' field and 'choices' field.
                     self.add_creator_unless_exists(
                         view_state_name,
-                        self.make_view_state(opinion_view, view)
+                        self.make_view_state(opinion_view, view, view_name)
                     );
                 }
             }
