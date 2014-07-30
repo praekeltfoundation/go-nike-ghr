@@ -105,10 +105,9 @@ describe("When using the USSD line", function() {
                 user: null,
                 content: null,
                 next_state: "initial_state",
-                response: "^To proceed with registration, do you accept the Terms " +
-                    "and Conditions of Ni Nyampinga - faketermsurl.com:[^]" +
-                    "1. Yes[^]"+
-                    "2. No$",
+                response: "^Please choose your gender:[^]" +
+                    "1. Male[^]"+
+                    "2. Female$",
                 session_event: "new"
             });
             p.then(function() {
@@ -156,37 +155,6 @@ describe("When using the USSD line", function() {
 
         });
 
-        it("declining T&C's should thanks and exit", function (done) {
-            var user = {
-                current_state: 'initial_state'
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "2",
-                next_state: "reg_noterms",
-                response: "^Sorry but we can't proceed with your registration " +
-                        "unless you accept the Terms & Conditions. Please redial " +
-                        "if you change your mind. Thanks!$",
-                continue_session: false
-            });
-            p.then(done, done);
-        });
-
-
-        it("accepting T&C's should ask us gender", function (done) {
-            var user = {
-                current_state: 'initial_state'
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "1",
-                next_state: "reg_gender",
-                response: "^Please choose your gender:[^]" +
-                    "1. Male[^]"+
-                    "2. Female$"
-            });
-            p.then(done, done);
-        });
 
         it("should ask age", function (done) {
             var user = {

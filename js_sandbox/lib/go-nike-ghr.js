@@ -832,16 +832,13 @@ function GoNikeGHR() {
                 if (result.contact["extras-ghr_reg_complete"] == "false"){
                     // Did not finish registration and session state not found
                     return new ChoiceState(
-                        state_name,
-                        function(choice) {
-                            return choice.value;
-                        },
-                        _.gettext("To proceed with registration, do you accept the Terms " +
-                        "and Conditions of Ni Nyampinga - ") + im.config.terms_url + ":",
-                        [
-                            new Choice("reg_gender", _.gettext("Yes")),
-                            new Choice("reg_noterms", _.gettext("No"))
-                        ],
+                    state_name,
+                    "reg_age",
+                    _.gettext("Please choose your gender:"),
+                    [
+                        new Choice("Male", _.gettext("Male")),
+                        new Choice("Female", _.gettext("Female"))
+                    ],
                         null,
                         {
                             on_enter: function() {
