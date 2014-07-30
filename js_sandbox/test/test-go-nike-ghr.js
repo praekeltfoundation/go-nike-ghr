@@ -992,7 +992,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 1 from Opinions submenu should display 1st of 5 opinions", function (done) {
+        it("selecting 1 from Opinions submenu should display 1st of 3 opinions", function (done) {
             var user = {
                 current_state: 'opinions'
             };
@@ -1046,7 +1046,7 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 2 viewing 3rd Opinion should display 4th of 5 opinions", function (done) {
+        it("selecting 2 viewing 3rd Opinion should display thank you message", function (done) {
             var user = {
                 current_state: 'opinions_popular',
                 pages: {
@@ -1058,33 +1058,15 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: "opinions_popular",
                 response: (
-                    "^This is opinion four[^]" +
-                    "1. Prev, 2. Next$"
+                    "^Thank you_opinions[^]" +
+                    "1. Prev, 2. Next, 3. Main menu$"
                 )
             });
             p.then(done, done);
         });
 
-        it("selecting 2 viewing 4th Opinion should display 5th of 5 opinions", function (done) {
-            var user = {
-                current_state: 'opinions_popular',
-                pages: {
-                    opinions_popular: 3
-                }
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "2",
-                next_state: "opinions_popular",
-                response: (
-                    "^This is opinion five[^]" +
-                    "1. Prev, 3. Main menu$"
-                )
-            });
-            p.then(done, done);
-        });
 
-        it("selecting 3 viewing 5th Opinion should display thank you and end", function (done) {
+        it("selecting 3 viewing thank you message should display thank you and end", function (done) {
             var user = {
                 current_state: 'opinions_popular',
                 pages: {
