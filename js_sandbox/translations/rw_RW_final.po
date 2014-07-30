@@ -196,6 +196,10 @@ msgstr "Nawe tubwire"
 msgid "No new content this week"
 msgstr "Iki cyumweru nta nkuru shya twashyizeho"
 
+#: go-nike-ghr.js:1163
+msgid "Thank you_opinions"
+msgstr "Kurikira ikiganiro Ni Nyampinga cyiki cyumweru kuri radiyo. maze utange igitekerezo cyawe kuri SMS nimero 1019"
+
 #: go-nike-ghr.js:1230 go-nike-ghr.js:1454
 msgid "Please select an option:"
 msgstr "Hitamo uburyo bumwe muri ubu"

@@ -1058,7 +1058,7 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: "opinions_popular",
                 response: (
-                    "^Thank you[^]" +
+                    "^Thank you_opinions[^]" +
                     "1. Prev, 2. Next, 3. Main menu$"
                 )
             });
