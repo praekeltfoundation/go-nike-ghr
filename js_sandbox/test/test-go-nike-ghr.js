@@ -569,7 +569,6 @@ describe("When using the USSD line", function() {
         });
     });
 
-
     describe("as an registered user - not completed all M&L questions", function() {
         // These are used to mock API reponses
         var fixtures = test_fixtures_full;
@@ -752,8 +751,6 @@ describe("When using the USSD line", function() {
             async: true
         });
 
-
-
         // first test should always start 'null, null' because we haven't
         // started interacting yet
         it("first screen should show us menu", function (done) {
@@ -928,7 +925,6 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
-
 
         it('should continue to main menu after Shangazi Opinions finish', function(done) {
             var p = tester.check_state({
@@ -1149,7 +1145,57 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 1 in response to opinion displayed should display another opinion to feedback on", function (done) {
+        describe("selecting 1 in response to opinion display",function(done) {
+            it("should increment to the appropriate kv stores for the question and option",function(done) {
+                var user = {
+                    current_state: 'opinions_view'
+                };
+                var p = tester.check_state({
+                    user: user,
+                    content: "1",
+                    next_state: "opinion_view_1_o_2",
+                    response: (
+                        "^I think something really stupid[^]" +
+                        "1. Yes, I agree[^]"+
+                        "2. No way$"
+                    )
+                });
+                p.then(function() {
+                    var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
+                    assert.equal(updated_kv, 1);
+
+                    var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_1'];
+                    assert.equal(opinion_kv, 1);
+                }).then(done, done);
+            });
+        });
+
+         describe("selecting 1 in response to opinion display",function(done) {
+            it("should increment to the appropriate kv stores for the question and option",function(done) {
+                var user = {
+                    current_state: 'opinions_view'
+                };
+                var p = tester.check_state({
+                    user: user,
+                    content: "2",
+                    next_state: "opinion_view_1_o_2",
+                    response: (
+                        "^I think something really stupid[^]" +
+                        "1. Yes, I agree[^]"+
+                        "2. No way$"
+                    )
+                });
+                p.then(function() {
+                    var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
+                    assert.equal(updated_kv, 1);
+
+                    var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_2'];
+                    assert.equal(opinion_kv, 1);
+                }).then(done, done);
+            });
+        });
+
+        it("selecting 2 in response to opinion displayed should display another opinion to feedback on", function (done) {
             var user = {
                 current_state: 'opinions_view'
             };
@@ -1164,6 +1210,8 @@ describe("When using the USSD line", function() {
                 )
             });
             p.then(done, done);
+
+
         });
 
         it("selecting 2 in response to last opinion available should display Opinions thank you", function (done) {
