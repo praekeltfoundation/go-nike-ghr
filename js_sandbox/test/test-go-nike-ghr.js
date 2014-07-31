@@ -1197,7 +1197,7 @@ describe("When using the USSD line", function() {
         });
 
         describe("selecting 2 in response to opinion display",function(done) {
-            it.only("should increment to the appropriate kv stores for the question and option",function(done) {
+            it("should increment to the appropriate kv stores for the question and option",function(done) {
                 var user = {
                     current_state: 'opinions_view'
                 };
