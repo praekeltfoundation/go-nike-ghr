@@ -276,6 +276,19 @@ function GoNikeGHR() {
         )
     );
 
+    self.add_creator("opinion_result",function(state_name, im) {
+        var text = "to be added";
+        return new FreeText(
+            state_name,
+            function(content, done) {
+                var next =  im.user.next_opinion_state;
+                delete im.user.next_opinion_state;
+                done(next);
+            },
+            text
+        );
+    });
+
     self.increment_kv = function(im, key) {
         // Increment key value store
         var promise =  im.api_request('kv.incr', {
@@ -285,14 +298,68 @@ function GoNikeGHR() {
         return promise;
     };
 
+    self.get_kv = function(im, key) {
+        return im.api_request('kv.get', {
+            key: key
+        });
+    };
+
     //This will increment appropriate kv stores for opinions
     // 1. Will increment a total per question answered.
     // 2. Will increment a total for specific option for question answered.
     self.count_answers_of_opinions = function(im, opinion_name, opinion_value) {
         var promise = self.increment_kv(im, opinion_name);
         promise.add_callback(function() {
-                return self.increment_kv(im, opinion_value);
+            return self.increment_kv(im, opinion_value);
+        });
+        return promise;
+    };
+
+    self.get_opinion_results = function(im, total_key, prefix, view, opinion_reference) {
+        // Get a list of all keys
+        var opinion_choices = view.choices;
+        var opinion_choice_keys = [];
+        for (var i=0; i < opinion_choices.length; i++) {
+            var key = self.get_opinion_choice_kv_key(
+                prefix,
+                view,
+                opinion_reference,
+                opinion_choices[i][1]
+            );
+            opinion_choice_keys.push(key);
+        }
+
+        //Get all the opinions.
+        //Get the total
+        var promise = self.get_kv(im,total_key);
+
+        //Assign the total and get the first choice value
+        promise.add_callback(function(total_answers) {
+            im.user.opinion_total = total_answers.value;
+            im.user.opinion_counts = [];
+            return self.get_kv(im, opinion_choice_keys[0]);
+        });
+
+        //Get every item
+        for (var i=0; i < opinion_choice_keys.length; i++) {
+            promise.add_callback(function(count) {
+
+                //Save the value of the opinion
+                var total = im.user.opinion_total;
+                var count = count.value || 0;
+
+                var ratio = (total==0) ? 0 : count/total;
+                im.user.opinion_counts.push(ratio);
+
+                //If it's the last one, stop the chain.
+                if (i+1 < opinion_choice_keys.length) {
+                    return self.get_kv(im, opinion_choice_keys[i + 1]);
+                }
+                else {
+                    return im.user.opinion_counts;
+                }
             });
+        }
         return promise;
     };
 
@@ -300,6 +367,7 @@ function GoNikeGHR() {
 
         return function(state_name, im) {
             //Opinion navigation choices
+
             var choices = self.make_opinion_navigation_choices(
                 view.choices,
                 prefix,
@@ -309,7 +377,7 @@ function GoNikeGHR() {
             //Create choice state with provided name.
             return new ChoiceState(
                 state_name,
-                function(choice, done) {;
+                function(choice, done) {
                     var opinion_key = self.get_opinion_kv_key(prefix, view_name);
                     var opinion_choice_key = self.get_opinion_choice_kv_key(
                         prefix,
@@ -321,8 +389,16 @@ function GoNikeGHR() {
                     //Count total questions answered
                     var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
                     promise.add_callback(function() {
-                        done(choice.value);
+                        return self.get_opinion_results(
+                            im, opinion_key,
+                            prefix, view, view_name
+                        );
                     });
+                    promise.add_callback(function() {
+                        im.user.next_opinion_state = choice.value;
+                        done("opinion_result");
+                    });
+
                     return promise;
                 },
                 view.opinions,
@@ -348,7 +424,7 @@ function GoNikeGHR() {
     //We need to search the array of choices for the label
     self.get_opinion_choice_id_based_on_label = function(choices, label) {
         for (var i=0; i < choices.length; i++) {
-            if (choices[i][1] == label) {
+            if (choices[i][1] === label) {
                 return i+1;
             }
         }
@@ -374,11 +450,11 @@ function GoNikeGHR() {
     self.make_initial_view_state = function(im, state_name, prefix, view, start_opinion ) {
         //Build the navigation states
         var choices = self.make_navigation_choices(view.choices, prefix, null);
-
         //Create an actual state
         return new ChoiceState(state_name,
             function(choice,done) {
                 var opinion_key = self.get_opinion_kv_key(prefix, start_opinion);
+
                 var opinion_choice_key = self.get_opinion_choice_kv_key(
                     prefix,
                     view,
@@ -389,7 +465,14 @@ function GoNikeGHR() {
                 //Count total questions answered
                 var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
                 promise.add_callback(function() {
-                    done(choice.value);
+                    return self.get_opinion_results(
+                        im, opinion_key,
+                        prefix, view, start_opinion
+                    );
+                });
+                promise.add_callback(function() {
+                    im.user.next_opinion_state = choice.value;
+                    done("opinion_result");
                 });
                 return promise;
             },
