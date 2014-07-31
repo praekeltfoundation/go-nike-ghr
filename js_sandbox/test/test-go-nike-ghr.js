@@ -1251,7 +1251,7 @@ describe("When using the USSD line", function() {
 
         it("after responding to the results of last opinion, take back to opinions page", function (done) {
             var user = {
-                current_state: 'opinion_results',
+                current_state: 'opinion_result',
                 next_opinion_state: 'opinions'
             };
             var p = tester.check_state({
