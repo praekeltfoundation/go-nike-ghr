@@ -117,12 +117,7 @@ function GoNikeGHR() {
 
     self.make_opinion_navigation_choices = function(choices, prefix, parent) {
         var nav_choices = choices.map(function(choice) {
-            var value = "";
-            if (choice[0] == parent){
-                value = "opinions_thank_you";
-            } else {
-                value = prefix + "_" + choice[0];
-            }
+            var value = prefix + "_" + choice[0];
             var name = choice[1];
             return new Choice(value, name);
         });
@@ -450,6 +445,7 @@ function GoNikeGHR() {
     self.make_initial_view_state = function(im, state_name, prefix, view, start_opinion ) {
         //Build the navigation states
         var choices = self.make_navigation_choices(view.choices, prefix, null);
+
         //Create an actual state
         return new ChoiceState(state_name,
             function(choice,done) {
