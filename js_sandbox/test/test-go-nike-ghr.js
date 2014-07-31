@@ -1155,7 +1155,7 @@ describe("When using the USSD line", function() {
                     content: "1",
                     next_state: "opinion_result",
                     response: (
-                        "to be added"
+                        "100% chose 'Yes, I agree' and 0% chose 'No way' for this question."
                     )
                 });
                 p.then(function() {
@@ -1171,7 +1171,7 @@ describe("When using the USSD line", function() {
 
                     //Assert that the array is created and is correct
                     assert.equal(user.opinion_counts.length,2);
-                    tester.assert_deep_equal(user.opinion_counts,[1,0]);
+                    tester.assert_deep_equal(user.opinion_counts,[["Yes, I agree",100],["No way",0]]);
                 }).then(done, done);
             });
         });
@@ -1180,7 +1180,8 @@ describe("When using the USSD line", function() {
             it("should take the user to the next opinion", function (done) {
                 var user = {
                     current_state: 'opinion_result',
-                    next_opinion_state: 'opinion_view_1_o_2'
+                    next_opinion_state: 'opinion_view_1_o_2',
+                    opinion_counts :[["Yes, I agree",0],["No way",100]]
                 };
                 var p = tester.check_state({
                     user: user,
@@ -1206,7 +1207,7 @@ describe("When using the USSD line", function() {
                     content: "2",
                     next_state:  "opinion_result",
                     response: (
-                        "to be added"
+                        "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
                     )
                 });
                 p.then(function() {
@@ -1222,7 +1223,7 @@ describe("When using the USSD line", function() {
 
                     //Assert that the array is created and is correct
                     assert.equal(user.opinion_counts.length,2);
-                    tester.assert_deep_equal(user.opinion_counts,[0,1]);
+                    tester.assert_deep_equal(user.opinion_counts,[["Yes, I agree",0],["No way",100]]);
                 }).then(done, done);
             });
         });
@@ -1236,22 +1237,7 @@ describe("When using the USSD line", function() {
                 content: "2",
                 next_state: "opinion_result",
                 response: (
-                    "to be added"
-                )
-            });
-            p.then(done, done);
-        });
-
-        it("selecting 2 in response to last opinion available should display the results", function (done) {
-            var user = {
-                current_state: 'opinion_view_1_o_2'
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "2",
-                next_state: "opinion_result",
-                response: (
-                    "to be added"
+                    "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
                 )
             });
             p.then(done, done);
@@ -1260,29 +1246,12 @@ describe("When using the USSD line", function() {
         it("after responding to the results of last opinion, take back to opinions page", function (done) {
             var user = {
                 current_state: 'opinion_result',
-                next_opinion_state: 'opinions'
+                next_opinion_state: 'opinions',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
             };
             var p = tester.check_state({
                 user: user,
                 content: "2",
-                next_state: "opinions",
-                response: (
-                    "^Please choose an option:[^]" +
-                    "1. Popular opinions from SMS[^]" +
-                    "2. Leave your opinion[^]" +
-                    "3. Back$"
-                )
-            });
-            p.then(done, done);
-        });
-
-        it("selecting 1 in thank you screen should display menu", function (done) {
-            var user = {
-                current_state: 'opinions_thank_you'
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "1",
                 next_state: "opinions",
                 response: (
                     "^Please choose an option:[^]" +

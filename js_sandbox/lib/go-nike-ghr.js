@@ -68,7 +68,7 @@ function GoNikeGHR() {
     };
 
     self.error_state = function(im) {
-         var _ = im.i18n;
+        var _ = im.i18n;
         return new EndState(
             "end_state_error",
             _.gettext("Sorry! Something went wrong. Please redial and try again."),
@@ -271,9 +271,23 @@ function GoNikeGHR() {
         )
     );
 
+    self.get_opinion_result_text = function(im, opinion_counts) {
+        var _ = im.i18n;
+        var message = "";
+        for (var i=0; i < opinion_counts.length; i++) {
+            message += opinion_counts[i][1] + "%"
+                + _.gettext(" chose '")
+                + opinion_counts[i][0] + "'";
+            if (i+1 < opinion_counts.length) {
+                message += _.gettext(" and ");
+            }
+        }
+        message += " for this question.";
+        return message;
+    };
+
     self.add_creator("opinion_result",function(state_name, im) {
-        var text = "to be added";
-        var results = im.user.opinion_counts;
+        var text =  self.get_opinion_result_text(im, im.user.opinion_counts);
         return new FreeText(
             state_name,
             function(content, done) {
@@ -323,9 +337,7 @@ function GoNikeGHR() {
                 opinion_reference,
                 opinion_choices[i][1]
             );
-            var item = [];
-            item.push(key); item.push(opinion_choices[i][1]);
-            opinion_choice_keys.push(item);
+            opinion_choice_keys.push([key, opinion_choices[i][1]]);
         }
         return opinion_choice_keys;
     };
@@ -338,10 +350,8 @@ function GoNikeGHR() {
             var total = im.user.opinion_total;
             var count = count.value || 0;
 
-            var ratio = (total==0) ? 0 : count/total;
-            var item = [];
-
-            im.user.opinion_counts.push(ratio);
+            var ratio = (total==0) ? 0 : Math.round(100*count/total);
+            im.user.opinion_counts.push([opinion_choice_keys[i][1], ratio]);
 
             //If it's the last one, stop the chain.
             if (i+1 < opinion_choice_keys.length) {
@@ -373,7 +383,6 @@ function GoNikeGHR() {
         }
         return promise;
     };
-
 
     self.make_view_state = function(prefix, view, view_name) {
 
