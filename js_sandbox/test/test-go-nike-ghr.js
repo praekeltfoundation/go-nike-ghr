@@ -47,7 +47,7 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_sector_duplicates.json',
     'test/fixtures/userinteraction_sector_duplicates_district.json',
     'test/fixtures/userinteraction_sector_duplicates_district_live.json',
-    'test/fixtures/userinteraction_gender_female.json',
+    'test/fixtures/userinteraction_gender_female.json'
 ];
 
 describe("When using the USSD line", function() {
@@ -1153,11 +1153,9 @@ describe("When using the USSD line", function() {
                 var p = tester.check_state({
                     user: user,
                     content: "1",
-                    next_state: "opinion_view_1_o_2",
+                    next_state: "opinion_result",
                     response: (
-                        "^I think something really stupid[^]" +
-                        "1. Yes, I agree[^]"+
-                        "2. No way$"
+                        "to be added"
                     )
                 });
                 p.then(function() {
@@ -1166,11 +1164,39 @@ describe("When using the USSD line", function() {
 
                     var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_1'];
                     assert.equal(opinion_kv, 1);
+
+                    //Assert that the next opinion is set
+                    var user = tester.api.im.user;
+                    assert.equal(user.next_opinion_state,"opinion_view_1_o_2");
+
+                    //Assert that the array is created and is correct
+                    assert.equal(user.opinion_counts.length,2);
+                    tester.assert_deep_equal(user.opinion_counts,[1,0]);
                 }).then(done, done);
             });
         });
 
-         describe("selecting 1 in response to opinion display",function(done) {
+        describe("after viewing the results",function() {
+            it("should take the user to the next opinion", function (done) {
+                var user = {
+                    current_state: 'opinion_result',
+                    next_opinion_state: 'opinion_view_1_o_2'
+                };
+                var p = tester.check_state({
+                    user: user,
+                    content: "1",
+                    next_state:  "opinion_view_1_o_2",
+                    response: (
+                        "^I think something really stupid[^]" +
+                        "1. Yes, I agree[^]"+
+                        "2. No way$"
+                    )
+                });
+                p.then(done, done);
+            });
+        });
+
+        describe("selecting 2 in response to opinion display",function(done) {
             it("should increment to the appropriate kv stores for the question and option",function(done) {
                 var user = {
                     current_state: 'opinions_view'
@@ -1178,11 +1204,9 @@ describe("When using the USSD line", function() {
                 var p = tester.check_state({
                     user: user,
                     content: "2",
-                    next_state: "opinion_view_1_o_2",
+                    next_state:  "opinion_result",
                     response: (
-                        "^I think something really stupid[^]" +
-                        "1. Yes, I agree[^]"+
-                        "2. No way$"
+                        "to be added"
                     )
                 });
                 p.then(function() {
@@ -1195,37 +1219,50 @@ describe("When using the USSD line", function() {
             });
         });
 
-        it("selecting 2 in response to opinion displayed should display another opinion to feedback on", function (done) {
-            var user = {
-                current_state: 'opinions_view'
-            };
-            var p = tester.check_state({
-                user: user,
-                content: "1",
-                next_state: "opinion_view_1_o_2",
-                response: (
-                    "^I think something really stupid[^]" +
-                    "1. Yes, I agree[^]"+
-                    "2. No way$"
-                )
-            });
-            p.then(done, done);
-
-
-        });
-
-        it("selecting 2 in response to last opinion available should display Opinions thank you", function (done) {
+        it("selecting 2 in response to opinion displayed should display the opinion results", function (done) {
             var user = {
                 current_state: 'opinion_view_1_o_2'
             };
             var p = tester.check_state({
                 user: user,
                 content: "2",
-                next_state: "opinions_thank_you",
+                next_state: "opinion_result",
                 response: (
-                    "^Thanks for sharing your opinion.\n"+
-                     "Press 1 to go back to the menu[^]" +
-                      "1. Continue$"
+                    "to be added"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 in response to last opinion available should display the results", function (done) {
+            var user = {
+                current_state: 'opinion_view_1_o_2'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinion_result",
+                response: (
+                    "to be added"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("after responding to the results of last opinion, take back to opinions page", function (done) {
+            var user = {
+                current_state: 'opinion_results',
+                next_opinion_state: 'opinions'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "2",
+                next_state: "opinions",
+                response: (
+                    "^Please choose an option:[^]" +
+                    "1. Popular opinions from SMS[^]" +
+                    "2. Leave your opinion[^]" +
+                    "3. Back$"
                 )
             });
             p.then(done, done);
