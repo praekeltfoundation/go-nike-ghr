@@ -1197,7 +1197,7 @@ describe("When using the USSD line", function() {
         });
 
         describe("selecting 2 in response to opinion display",function(done) {
-            it("should increment to the appropriate kv stores for the question and option",function(done) {
+            it.only("should increment to the appropriate kv stores for the question and option",function(done) {
                 var user = {
                     current_state: 'opinions_view'
                 };
@@ -1215,6 +1215,14 @@ describe("When using the USSD line", function() {
 
                     var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_2'];
                     assert.equal(opinion_kv, 1);
+
+                    //Assert that the next opinion is set
+                    var user = tester.api.im.user;
+                    assert.equal(user.next_opinion_state,"opinion_view_1_o_2");
+
+                    //Assert that the array is created and is correct
+                    assert.equal(user.opinion_counts.length,2);
+                    tester.assert_deep_equal(user.opinion_counts,[0,1]);
                 }).then(done, done);
             });
         });
