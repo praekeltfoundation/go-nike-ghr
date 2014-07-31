@@ -330,7 +330,7 @@ function GoNikeGHR() {
         return opinion_choice_keys;
     };
 
-    //Needed to create a stack frame so that the callback used a local variable.
+    //Needed to create a stack frame so that the callback used the correct item in the array
     self.add_opinion_kv_callback = function(im, promise, opinion_choice_keys, i) {
         promise.add_callback(function(count) {
 
@@ -373,7 +373,6 @@ function GoNikeGHR() {
         }
         return promise;
     };
-
 
 
     self.make_view_state = function(prefix, view, view_name) {
