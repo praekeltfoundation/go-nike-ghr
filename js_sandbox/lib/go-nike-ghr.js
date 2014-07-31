@@ -273,6 +273,7 @@ function GoNikeGHR() {
 
     self.add_creator("opinion_result",function(state_name, im) {
         var text = "to be added";
+        var results = im.user.opinion_counts;
         return new FreeText(
             state_name,
             function(content, done) {
@@ -293,10 +294,11 @@ function GoNikeGHR() {
         return promise;
     };
 
-    self.get_kv = function(im, key) {
-        return im.api_request('kv.get', {
+    self.get_kv = function(im, key, i) {
+        var promise = im.api_request('kv.get', {
             key: key
         });
+        return promise;
     };
 
     //This will increment appropriate kv stores for opinions
@@ -310,7 +312,7 @@ function GoNikeGHR() {
         return promise;
     };
 
-    self.get_opinion_results = function(im, total_key, prefix, view, opinion_reference) {
+    self.get_key_list = function(prefix, view, opinion_reference) {
         // Get a list of all keys
         var opinion_choices = view.choices;
         var opinion_choice_keys = [];
@@ -321,10 +323,40 @@ function GoNikeGHR() {
                 opinion_reference,
                 opinion_choices[i][1]
             );
-            opinion_choice_keys.push(key);
+            var item = [];
+            item.push(key); item.push(opinion_choices[i][1]);
+            opinion_choice_keys.push(item);
         }
+        return opinion_choice_keys;
+    };
 
-        //Get all the opinions.
+    //Needed to create a stack frame so that the callback used a local variable.
+    self.add_opinion_kv_callback = function(im, promise, opinion_choice_keys, i) {
+        promise.add_callback(function(count) {
+
+            //Save the value of the opinion
+            var total = im.user.opinion_total;
+            var count = count.value || 0;
+
+            var ratio = (total==0) ? 0 : count/total;
+            var item = [];
+
+            im.user.opinion_counts.push(ratio);
+
+            //If it's the last one, stop the chain.
+            if (i+1 < opinion_choice_keys.length) {
+                return self.get_kv(im, opinion_choice_keys[i + 1][0]);
+            }
+            else {
+                return im.user.opinion_counts;
+            }
+        });
+    };
+
+    self.get_opinion_results = function(im, total_key, prefix, view, opinion_reference) {
+        //Get key list for opinions
+        var opinion_choice_keys = self.get_key_list(prefix,view,opinion_reference);
+
         //Get the total
         var promise = self.get_kv(im,total_key);
 
@@ -332,31 +364,17 @@ function GoNikeGHR() {
         promise.add_callback(function(total_answers) {
             im.user.opinion_total = total_answers.value;
             im.user.opinion_counts = [];
-            return self.get_kv(im, opinion_choice_keys[0]);
+            return self.get_kv(im, opinion_choice_keys[0][0]);
         });
 
         //Get every item
         for (var i=0; i < opinion_choice_keys.length; i++) {
-            promise.add_callback(function(count) {
-
-                //Save the value of the opinion
-                var total = im.user.opinion_total;
-                var count = count.value || 0;
-
-                var ratio = (total==0) ? 0 : count/total;
-                im.user.opinion_counts.push(ratio);
-
-                //If it's the last one, stop the chain.
-                if (i+1 < opinion_choice_keys.length) {
-                    return self.get_kv(im, opinion_choice_keys[i + 1]);
-                }
-                else {
-                    return im.user.opinion_counts;
-                }
-            });
+            self.add_opinion_kv_callback(im, promise, opinion_choice_keys, i);
         }
         return promise;
     };
+
+
 
     self.make_view_state = function(prefix, view, view_name) {
 
