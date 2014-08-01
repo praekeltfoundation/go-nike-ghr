@@ -293,9 +293,29 @@ function GoNikeGHR() {
             function(content, done) {
                 var next =  im.user.next_opinion_state;
                 delete im.user.next_opinion_state;
+                delete im.user.opinion_counts;
                 done(next);
             },
             text
+        );
+    });
+
+    self.add_creator("opinion_result_navigation",function(state_name,im) {
+        var _ = im.i18n;
+        return new FreeText(
+            state_name,
+            function(content) {
+                if (content=="1") {
+                    return "opinion_result";
+                } else if (content=="3") {
+                    return "main_menu";
+                }
+            },
+            _.gettext("Press 1 to see the poll results and 3 to go to main menu."),
+            function(content) {
+                return (content=="1" || content=="3");
+            },
+            _.gettext("Error: Please press 1 to see the poll results and 3 to go to main menu.")
         );
     });
 
@@ -417,7 +437,7 @@ function GoNikeGHR() {
                     });
                     promise.add_callback(function() {
                         im.user.next_opinion_state = choice.value;
-                        done("opinion_result");
+                        done("opinion_result_navigation");
                     });
 
                     return promise;
@@ -494,7 +514,7 @@ function GoNikeGHR() {
                 });
                 promise.add_callback(function() {
                     im.user.next_opinion_state = choice.value;
-                    done("opinion_result");
+                    done("opinion_result_navigation");
                 });
                 return promise;
             },
