@@ -1145,69 +1145,85 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        describe("selecting 1 in response to opinion display",function(done) {
-            it("should increment to the appropriate kv stores for the question and option",function(done) {
-                var user = {
-                    current_state: 'opinions_view'
-                };
-                var p = tester.check_state({
-                    user: user,
-                    content: "1",
-                    next_state: "opinion_result",
-                    response: (
-                        "100% chose 'Yes, I agree' and 0% chose 'No way' for this question."
-                    )
-                });
-                p.then(function() {
-                    var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
-                    assert.equal(updated_kv, 1);
-
-                    var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_1'];
-                    assert.equal(opinion_kv, 1);
-
-                    //Assert that the next opinion is set
-                    var user = tester.api.im.user;
-                    assert.equal(user.next_opinion_state,"opinion_view_1_o_2");
-
-                    //Assert that the array is created and is correct
-                    assert.equal(user.opinion_counts.length,2);
-                    tester.assert_deep_equal(user.opinion_counts,[["Yes, I agree",100],["No way",0]]);
-                }).then(done, done);
+         it("selecting 1 in response to opinion display should increment to the appropriate kv stores for the question and option and take to navigation screen", function (done) {
+            var user = {
+                current_state: 'opinions_view'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_result_navigation",
+                response: (
+                    "Press 1 to see the poll results and 3 to go to main menu."
+                )
             });
+            p.then(function () {
+                var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
+                assert.equal(updated_kv, 1);
+
+                var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_1'];
+                assert.equal(opinion_kv, 1);
+
+                //Assert that the next opinion is set
+                var user = tester.api.im.user;
+                assert.equal(user.next_opinion_state, "opinion_view_1_o_2");
+
+                //Assert that the array is created and is correct
+                assert.equal(user.opinion_counts.length, 2);
+                tester.assert_deep_equal(user.opinion_counts, [
+                    ["Yes, I agree", 100],
+                    ["No way", 0]
+                ]);
+            }).then(done, done);
+         });
+
+        it("selecting 1 in the navigation menu should take you to see the correct results", function (done) {
+            var user = {
+                current_state: 'opinion_result_navigation',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",100],["No way",0]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_result",
+                response: (
+                    "100% chose 'Yes, I agree' and 0% chose 'No way' for this question."
+                )
+            });
+            p.then(done, done);
         });
 
-        describe("after viewing the results",function() {
-            it("should take the user to the next opinion", function (done) {
-                var user = {
-                    current_state: 'opinion_result',
-                    next_opinion_state: 'opinion_view_1_o_2',
-                    opinion_counts :[["Yes, I agree",0],["No way",100]]
-                };
-                var p = tester.check_state({
-                    user: user,
-                    content: "1",
-                    next_state:  "opinion_view_1_o_2",
-                    response: (
-                        "^I think something really stupid[^]" +
-                        "1. Yes, I agree[^]"+
-                        "2. No way$"
-                    )
-                });
-                p.then(done, done);
+
+        it("after viewing the results should take the user to the next opinion", function (done) {
+            var user = {
+                current_state: 'opinion_result',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state:  "opinion_view_1_o_2",
+                response: (
+                    "^I think something really stupid[^]" +
+                    "1. Yes, I agree[^]"+
+                    "2. No way$"
+                )
             });
+            p.then(done, done);
         });
 
-        describe("selecting 2 in response to opinion display",function(done) {
-            it("should increment to the appropriate kv stores for the question and option",function(done) {
+        it("selecting 2 in response to opinion display should increment to the appropriate kv stores for the question and option",function(done) {
                 var user = {
                     current_state: 'opinions_view'
                 };
                 var p = tester.check_state({
                     user: user,
                     content: "2",
-                    next_state:  "opinion_result",
+                    next_state:  "opinion_result_navigation",
                     response: (
-                        "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
+                        "Press 1 to see the poll results and 3 to go to main menu."
                     )
                 });
                 p.then(function() {
@@ -1226,6 +1242,22 @@ describe("When using the USSD line", function() {
                     tester.assert_deep_equal(user.opinion_counts,[["Yes, I agree",0],["No way",100]]);
                 }).then(done, done);
             });
+
+        it("selecting 2 in the opinions navigation menu should take you to see the correct results", function (done) {
+            var user = {
+                current_state: 'opinion_result_navigation',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_result",
+                response: (
+                   "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
+                )
+            });
+            p.then(done, done);
         });
 
         it("selecting 2 in response to opinion displayed should display the opinion results", function (done) {
@@ -1235,9 +1267,9 @@ describe("When using the USSD line", function() {
             var p = tester.check_state({
                 user: user,
                 content: "2",
-                next_state: "opinion_result",
+                next_state: "opinion_result_navigation",
                 response: (
-                    "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
+                   "Press 1 to see the poll results and 3 to go to main menu."
                 )
             });
             p.then(done, done);
@@ -1507,7 +1539,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
             'test/fixtures/userinteraction_wwsd.json',
-            'test/fixtures/hierarchy_sectors.json',
+            'test/fixtures/hierarchy_sectors.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
