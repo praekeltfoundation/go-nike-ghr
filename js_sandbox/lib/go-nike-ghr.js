@@ -68,7 +68,7 @@ function GoNikeGHR() {
     };
 
     self.error_state = function(im) {
-         var _ = im.i18n;
+        var _ = im.i18n;
         return new EndState(
             "end_state_error",
             _.gettext("Sorry! Something went wrong. Please redial and try again."),
@@ -117,12 +117,7 @@ function GoNikeGHR() {
 
     self.make_opinion_navigation_choices = function(choices, prefix, parent) {
         var nav_choices = choices.map(function(choice) {
-            var value = "";
-            if (choice[0] == parent){
-                value = "opinions_thank_you";
-            } else {
-                value = prefix + "_" + choice[0];
-            }
+            var value = prefix + "_" + choice[0];
             var name = choice[1];
             return new Choice(value, name);
         });
@@ -276,29 +271,256 @@ function GoNikeGHR() {
         )
     );
 
-    self.make_view_state = function(prefix, view) {
-         return function(state_name, im) {
-            var choices = self.make_opinion_navigation_choices(view.choices, prefix, "opinions");
+    self.get_opinion_result_text = function(im, opinion_counts) {
+        var _ = im.i18n;
+        var message = "";
+        for (var i=0; i < opinion_counts.length; i++) {
+            message += opinion_counts[i][1] + "%"
+                + _.gettext(" chose '")
+                + opinion_counts[i][0] + "'";
+            if (i+1 < opinion_counts.length) {
+                message += _.gettext(" and ");
+            }
+        }
+        message += " for this question.";
+        return message;
+    };
 
-            return new ChoiceState(state_name, function(choice) {
-                return choice.value;
-            }, view.opinions, choices, null,
+    self.add_creator("opinion_result",function(state_name, im) {
+        var text =  self.get_opinion_result_text(im, im.user.opinion_counts);
+        return new FreeText(
+            state_name,
+            function(content, done) {
+                var next =  im.user.next_opinion_state;
+                delete im.user.next_opinion_state;
+                delete im.user.opinion_counts;
+                done(next);
+            },
+            text
+        );
+    });
+
+    self.add_creator("opinion_result_navigation",function(state_name,im) {
+        var _ = im.i18n;
+        return new FreeText(
+            state_name,
+            function(content) {
+                if (content=="1") {
+                    return "opinion_result";
+                } else if (content=="3") {
+                    return "main_menu";
+                }
+            },
+            _.gettext("Press 1 to see the poll results and 3 to go to main menu."),
+            function(content) {
+                return (content=="1" || content=="3");
+            },
+            _.gettext("Error: Please press 1 to see the poll results and 3 to go to main menu.")
+        );
+    });
+
+    self.increment_kv = function(im, key) {
+        // Increment key value store
+        var promise =  im.api_request('kv.incr', {
+            key: key,
+            amount: 1
+        });
+        return promise;
+    };
+
+    self.get_kv = function(im, key, i) {
+        var promise = im.api_request('kv.get', {
+            key: key
+        });
+        return promise;
+    };
+
+    //This will increment appropriate kv stores for opinions
+    // 1. Will increment a total per question answered.
+    // 2. Will increment a total for specific option for question answered.
+    self.count_answers_of_opinions = function(im, opinion_name, opinion_value) {
+        var promise = self.increment_kv(im, opinion_name);
+        promise.add_callback(function() {
+            return self.increment_kv(im, opinion_value);
+        });
+        return promise;
+    };
+
+    self.get_key_list = function(prefix, view, opinion_reference) {
+        // Get a list of all keys
+        var opinion_choices = view.choices;
+        var opinion_choice_keys = [];
+        for (var i=0; i < opinion_choices.length; i++) {
+            var key = self.get_opinion_choice_kv_key(
+                prefix,
+                view,
+                opinion_reference,
+                opinion_choices[i][1]
+            );
+            opinion_choice_keys.push([key, opinion_choices[i][1]]);
+        }
+        return opinion_choice_keys;
+    };
+
+    //Needed to create a stack frame so that the callback used the correct item in the array
+    self.add_opinion_kv_callback = function(im, promise, opinion_choice_keys, i) {
+        promise.add_callback(function(count) {
+
+            //Save the value of the opinion
+            var total = im.user.opinion_total;
+            var count = count.value || 0;
+
+            var ratio = (total==0) ? 0 : Math.round(100*count/total);
+            im.user.opinion_counts.push([opinion_choice_keys[i][1], ratio]);
+
+            //If it's the last one, stop the chain.
+            if (i+1 < opinion_choice_keys.length) {
+                return self.get_kv(im, opinion_choice_keys[i + 1][0]);
+            }
+            else {
+                return im.user.opinion_counts;
+            }
+        });
+    };
+
+    self.get_opinion_results = function(im, total_key, prefix, view, opinion_reference) {
+        //Get key list for opinions
+        var opinion_choice_keys = self.get_key_list(prefix,view,opinion_reference);
+
+        //Get the total
+        var promise = self.get_kv(im,total_key);
+
+        //Assign the total and get the first choice value
+        promise.add_callback(function(total_answers) {
+            im.user.opinion_total = total_answers.value;
+            im.user.opinion_counts = [];
+            return self.get_kv(im, opinion_choice_keys[0][0]);
+        });
+
+        //Get every item
+        for (var i=0; i < opinion_choice_keys.length; i++) {
+            self.add_opinion_kv_callback(im, promise, opinion_choice_keys, i);
+        }
+        return promise;
+    };
+
+    self.make_view_state = function(prefix, view, view_name) {
+
+        return function(state_name, im) {
+            //Opinion navigation choices
+
+            var choices = self.make_opinion_navigation_choices(
+                view.choices,
+                prefix,
+                "opinions"
+            );
+
+            //Create choice state with provided name.
+            return new ChoiceState(
+                state_name,
+                function(choice, done) {
+                    var opinion_key = self.get_opinion_kv_key(prefix, view_name);
+                    var opinion_choice_key = self.get_opinion_choice_kv_key(
+                        prefix,
+                        view,
+                        view_name,
+                        choice.label
+                    );
+
+                    //Count total questions answered
+                    var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
+                    promise.add_callback(function() {
+                        return self.get_opinion_results(
+                            im, opinion_key,
+                            prefix, view, view_name
+                        );
+                    });
+                    promise.add_callback(function() {
+                        im.user.next_opinion_state = choice.value;
+                        done("opinion_result_navigation");
+                    });
+
+                    return promise;
+                },
+                view.opinions,
+                choices,
+                null,
                 {
                     on_enter: function() {
-                        var p_log = self.interaction_log("OPINIONS", "viewed", view.opinions);
+                        var p_log = self.interaction_log(
+                            "OPINIONS",
+                            "viewed",
+                            view.opinions
+                        );
                         return p_log;
                     }
                 });
         };
     };
 
+    //Since we do not have unique identifier values
+    //But we are recieving arrays of values
+    //We can identify a user's choice based on the index in the array
+    //But since we don't have this index to begin with,
+    //We need to search the array of choices for the label
+    self.get_opinion_choice_id_based_on_label = function(choices, label) {
+        for (var i=0; i < choices.length; i++) {
+            if (choices[i][1] === label) {
+                return i+1;
+            }
+        }
+        return null;
+    };
 
+    self.get_opinion_choice_kv_key = function(prefix, view, opinion_reference, label) {
+        return [
+            prefix,
+            opinion_reference,
+            self.get_opinion_choice_id_based_on_label(view.choices, label)
+        ].join('_');
+    };
 
-    self.make_initial_view_state = function(state_name, prefix, view) {
+    self.get_opinion_kv_key = function(prefix, opinion_reference) {
+        return [
+            prefix,
+            opinion_reference,
+            'total'
+        ].join('_');
+    };
+
+    self.make_initial_view_state = function(im, state_name, prefix, view, start_opinion ) {
+        //Build the navigation states
         var choices = self.make_navigation_choices(view.choices, prefix, null);
-        return new ChoiceState(state_name, function(choice) {
-            return choice.value;
-        }, view.opinions, choices);
+
+        //Create an actual state
+        return new ChoiceState(state_name,
+            function(choice,done) {
+                var opinion_key = self.get_opinion_kv_key(prefix, start_opinion);
+
+                var opinion_choice_key = self.get_opinion_choice_kv_key(
+                    prefix,
+                    view,
+                    start_opinion,
+                    choice.label
+                );
+
+                //Count total questions answered
+                var promise =  self.count_answers_of_opinions(im, opinion_key, opinion_choice_key);
+                promise.add_callback(function() {
+                    return self.get_opinion_results(
+                        im, opinion_key,
+                        prefix, view, start_opinion
+                    );
+                });
+                promise.add_callback(function() {
+                    im.user.next_opinion_state = choice.value;
+                    done("opinion_result_navigation");
+                });
+                return promise;
+            },
+            view.opinions,
+            choices
+        );
     };
 
     self.log_result = function(msg) {
@@ -1080,23 +1302,23 @@ function GoNikeGHR() {
     });
 
     self.add_state(new ChoiceState(
-            "opinions",
-            function(choice) {
-                return choice.value;
-            },
+        "opinions",
+        function(choice) {
+            return choice.value;
+        },
         _.gettext("Please choose an option:"),
-            [
-                new Choice("opinions_popular", _.gettext("Popular opinions from SMS")),
-                new Choice("opinions_view", _.gettext("Leave your opinion")),
-                new Choice("main_menu", _.gettext("Back"))
-            ],
-            null,
-            {
-                on_enter: function() {
-                    var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
-                    return p_log;
-                }
+        [
+            new Choice("opinions_popular", _.gettext("Popular opinions from SMS")),
+            new Choice("opinions_view", _.gettext("Leave your opinion")),
+            new Choice("main_menu", _.gettext("Back"))
+        ],
+        null,
+        {
+            on_enter: function() {
+                var p_log = self.increment_and_fire_direct("ghr_ussd_opinions_views");
+                return p_log;
             }
+        }
         )
     );
 
@@ -1199,12 +1421,28 @@ function GoNikeGHR() {
     });
 
     self.add_creator('opinions_view', function(state_name, im) {
+        // Get the opinion
         var p_opinion_view = self.crm_get('opinions/view/');
+
+        // Create the initial opinion viewing state.
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
+
+            // Prefix to the first opinion
             var first_view_prefix = im.config.opinion_view[0];
+
+            //The actual first opinion
             var first_view = im.config.opinion_view[1];
-            return self.make_initial_view_state(state_name, first_view_prefix, first_view);
+            var first_view_start_opinion = collection[first_view_prefix].start;
+
+            //Construct state
+            return self.make_initial_view_state(
+                im,
+                state_name,
+                first_view_prefix,
+                first_view,
+                first_view_start_opinion
+            );
         });
         return p_opinion_view;
     });
@@ -1421,26 +1659,48 @@ function GoNikeGHR() {
         return p_weeklyquiz;
     };
 
+    //Opinion view: is a set of opinions
+    //Each opinion has a set of choices
+    //Each opinion view: has a start opinion.
     self.build_opinion_states = function() {
-        // Build Opinion Viewing
+
+        // Get the collection of opinion views from cache
         var p_opinion_view = self.cached_crm_get('opinions/view/');
+
         p_opinion_view.add_callback(function(result) {
             var collection = result.opinions;
             var first_view_prefix = false;
             var first_view = false;
+
+            // For each opinion_view in the opinion view collection
             for (var opinion_view in collection){
+
+                //If this is the first item, then save the first prefix
                 if (!first_view_prefix) first_view_prefix = opinion_view;
+
+                // Get opinions for relevant opinion view
                 var opinions = collection[opinion_view];
-                // Create the quiz
+
+                //For each opinion name in the views (badly named)
                 for (var view_name in opinions.views){
+
+                    //Get the actual objects
                     var view = opinions.views[view_name];
+
+                    //Save the first opinion
                     if (!first_view) first_view = view;
+
+                    //Create a name based on the view + opinion_name
                     var view_state_name = opinion_view + "_" + view_name;
 
                     // construct a function using make_view_state()
                     // to prevent getting a wrongly scoped 'view'
-                    self.add_creator_unless_exists(view_state_name,
-                        self.make_view_state(opinion_view, view));
+                    // opinion_view = the whole view
+                    // view = an actual opinion with 'opinions' field and 'choices' field.
+                    self.add_creator_unless_exists(
+                        view_state_name,
+                        self.make_view_state(opinion_view, view, view_name)
+                    );
                 }
             }
             im.config.opinion_view = [first_view_prefix, first_view];
