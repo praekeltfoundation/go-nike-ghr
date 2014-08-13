@@ -1,215 +1,240 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2014-07-08 05:10:+0200\n"
-"Project-Id-Version: GHR USSD Translations_Final\n"
+"POT-Creation-Date: 2014-08-01 09:52:+0200\n"
+"Project-Id-Version: GHR USSD\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: rw_RW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-07-09 16:53+0530\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"PO-Revision-Date: 2014-08-12 13:47+0530\n"
 "Last-Translator: \n"
 "X-Generator: Poedit 1.6.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: rw_RW\n"
 
-#: go-nike-ghr.js:74
+#: ../lib/go-nike-ghr.js:74
 msgid "Sorry! Something went wrong. Please redial and try again."
-msgstr "Mwihangane, hari ibitakoretse. Ongera mukanya"
+msgstr "Mwihangane, hari ibidakoretse neza. Ongera usubiremo"
 
-#: go-nike-ghr.js:178
+#: ../lib/go-nike-ghr.js:173
 msgid "Thanks! Carry on."
-msgstr "Kanda 1. kujya Ahabanza na 2. Uko bakoresha Ni Nyampinga Mobile"
+msgstr "Kandi 1 kujya Ahabanza na 2 kumenya uko bakoresha Ni Nyampinga Mobile"
 
-#: go-nike-ghr.js:180 go-nike-ghr.js:1042 go-nike-ghr.js:1053
-#: go-nike-ghr.js:1113 go-nike-ghr.js:1124 go-nike-ghr.js:1170
-#: go-nike-ghr.js:1233 go-nike-ghr.js:1462 go-nike-ghr.js:1474
+#: ../lib/go-nike-ghr.js:175 ../lib/go-nike-ghr.js:1264
+#: ../lib/go-nike-ghr.js:1275 ../lib/go-nike-ghr.js:1335
+#: ../lib/go-nike-ghr.js:1346 ../lib/go-nike-ghr.js:1392
+#: ../lib/go-nike-ghr.js:1471 ../lib/go-nike-ghr.js:1722
+#: ../lib/go-nike-ghr.js:1734
 msgid "Main menu"
 msgstr "Ahabanza"
 
-#: go-nike-ghr.js:181
+#: ../lib/go-nike-ghr.js:176
 msgid "Instructions to user USSD menu"
-msgstr "Uko bakoresha Ni Nyampinga Mobile"
+msgstr "Ni gute wakoresha Ni Nyampinga mobile"
 
-#: go-nike-ghr.js:262 go-nike-ghr.js:537 go-nike-ghr.js:596
-#: go-nike-ghr.js:1039 go-nike-ghr.js:1040 go-nike-ghr.js:1041
-#: go-nike-ghr.js:1110 go-nike-ghr.js:1111 go-nike-ghr.js:1112
-#: go-nike-ghr.js:1166 go-nike-ghr.js:1167 go-nike-ghr.js:1168
-#: go-nike-ghr.js:1169
+#: ../lib/go-nike-ghr.js:257 ../lib/go-nike-ghr.js:759
+#: ../lib/go-nike-ghr.js:818 ../lib/go-nike-ghr.js:1261
+#: ../lib/go-nike-ghr.js:1262 ../lib/go-nike-ghr.js:1263
+#: ../lib/go-nike-ghr.js:1332 ../lib/go-nike-ghr.js:1333
+#: ../lib/go-nike-ghr.js:1334 ../lib/go-nike-ghr.js:1388
+#: ../lib/go-nike-ghr.js:1389 ../lib/go-nike-ghr.js:1390
+#: ../lib/go-nike-ghr.js:1391
 msgid "Next"
 msgstr "Komeza"
 
-#: go-nike-ghr.js:271
+#: ../lib/go-nike-ghr.js:266
 msgid ""
 "Thanks for sharing your opinion.\n"
 "Press 1 to go back to the menu"
 msgstr ""
-"Ni Nyampinga, Murakoze kutubwira uko mubyumva!"
+"Urakoze gusagiza igitekerezo cyawe. \n"
+"kanda 1 kujya ahabanza"
 
-#: go-nike-ghr.js:274 go-nike-ghr.js:698 go-nike-ghr.js:980
+#: ../lib/go-nike-ghr.js:269 ../lib/go-nike-ghr.js:920
+#: ../lib/go-nike-ghr.js:1202
 msgid "Continue"
 msgstr "Komeza"
 
-#: go-nike-ghr.js:536 go-nike-ghr.js:1094
-msgid "Back"
-msgstr "Subira inyuma"
+#: ../lib/go-nike-ghr.js:279
+msgid " chose '"
+msgstr " hitamo '"
 
-#: go-nike-ghr.js:625
+#: ../lib/go-nike-ghr.js:282
+msgid " and "
+msgstr " na "
+
+#: ../lib/go-nike-ghr.js:314
+msgid "Press 1 to see the poll results and 3 to go to main menu."
+msgstr "Kanda 1 kureba  uko abandi babibona 3 kujya ahabanza"
+
+#: ../lib/go-nike-ghr.js:318
+msgid "Error: Please press 1 to see the poll results and 3 to go to main menu."
+msgstr "Wibeshye:  Kanda 1 kureba  uko abandi babibona 3 kujya ahabanza"
+
+#: ../lib/go-nike-ghr.js:758 ../lib/go-nike-ghr.js:1316
+msgid "Back"
+msgstr "Inyuma"
+
+#: ../lib/go-nike-ghr.js:847
 msgid ""
 "\n"
 "1 for prev, 2 for next, 3 to end."
 msgstr ""
 "\n"
-"1. Subira inyuma 2. Komeza 3. Ahabanza"
+"1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
 
-#: go-nike-ghr.js:694
+#: ../lib/go-nike-ghr.js:916
 msgid ""
 "On the menu, press the number of the option you like to view.\n"
 "Once you have chosen your option, you can navigate by choosing\n"
 "1 for Prev, 2 for Next ,3 End session or 9 to go back to main menu."
 msgstr ""
-"Hitamo umubare wicyo ushaka kureba\n"
-"Igihe wamaze guhitamo icyo ushaka kureba, ushobora kubikora ukuresheje\n"
-"1. Subira inyuma 2. Komeza 3. Ahabanza"
+"Hitamo umubare wicyo ushaka kureba \n"
+"Igihe wamaze guhitamo icyo ushaka kureba, ushobora kubikora ukuresheje \n"
+"1. Gusubura inyuma 2. Gukomeza 3. Ahabanza"
 
-#: go-nike-ghr.js:710
+#: ../lib/go-nike-ghr.js:932
 msgid "Articles"
 msgstr "Inkuru"
 
-#: go-nike-ghr.js:711
+#: ../lib/go-nike-ghr.js:933
 msgid "Opinions"
 msgstr "Ubyumva ute"
 
-#: go-nike-ghr.js:712
+#: ../lib/go-nike-ghr.js:934
 msgid "What would Shangazi do?"
 msgstr "Inama za Shangazi"
 
-#: go-nike-ghr.js:713
+#: ../lib/go-nike-ghr.js:935
 msgid "Weekly quiz"
 msgstr "Tyaza ubwenge"
 
-#: go-nike-ghr.js:716
+#: ../lib/go-nike-ghr.js:938
 msgid "Directory"
 msgstr "Abo wakwiyambaza"
 
-#: go-nike-ghr.js:839
+#: ../lib/go-nike-ghr.js:1061
 msgid ""
 "To proceed with registration, do you accept the Terms and Conditions of Ni "
 "Nyampinga - "
 msgstr ""
 "Kugirango ukomeze kwiyandikisha uremera amabwiriza n'amategeko ya Ni "
-"Nyampinga Mobile "
+"Nyampinga Mobile"
 
-#: go-nike-ghr.js:842
+#: ../lib/go-nike-ghr.js:1064
 msgid "Yes"
 msgstr "Yego"
 
-#: go-nike-ghr.js:843
+#: ../lib/go-nike-ghr.js:1065
 msgid "No"
 msgstr "Hoya"
 
-#: go-nike-ghr.js:868
+#: ../lib/go-nike-ghr.js:1090
 msgid ""
 "Sorry but we can't proceed with your registration unless you accept the "
 "Terms & Conditions. Please redial if you change your mind. Thanks!"
 msgstr ""
-"Mwihangane. Ntiwakomeza utemeye amabwiriza n amategeko. Nuhindura "
-"igitekerezo kanda *900#. Urakoze"
+"Mwihangane. Ntago wakomeza utaremera amabwiriza n amategeko. uramutse "
+"uhinduye igitekerezo kanda *900#. Urakoze"
 
-#: go-nike-ghr.js:897
+#: ../lib/go-nike-ghr.js:1119
 msgid "Please choose your gender:"
 msgstr "Igitsina?"
 
-#: go-nike-ghr.js:899
+#: ../lib/go-nike-ghr.js:1121
 msgid "Male"
 msgstr "Gore"
 
-#: go-nike-ghr.js:900
+#: ../lib/go-nike-ghr.js:1122
 msgid "Female"
 msgstr "Gabo"
 
-#: go-nike-ghr.js:913
+#: ../lib/go-nike-ghr.js:1135
 msgid "Please choose your age:"
 msgstr "Ese imyaka yawe iri mu kihe kigero?"
 
-#: go-nike-ghr.js:915
+#: ../lib/go-nike-ghr.js:1137
 msgid "12 or under"
-msgstr "12 cyangwa munsi"
+msgstr "20 cyangwa irenga"
 
-#: go-nike-ghr.js:928
+#: ../lib/go-nike-ghr.js:1150
 msgid ""
 "Which sector do you live in?\n"
 "Press 1 if you do not know"
 msgstr ""
-"Utuye mu wuhe murenge?\n"
+"Utuye mu wuhe murenge? \n"
 "Niba ntabyo uzi kanda 1"
 
-#: go-nike-ghr.js:976
+#: ../lib/go-nike-ghr.js:1198
 msgid ""
 "Welcome Ni Nyampinga club member! We want to know you better. For each set "
 "of 4 questions you answer, you enter a lucky draw to win "
 msgstr ""
-"Murakaza neza mu muryango wa Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza "
-"urahabwa amahirwe yo dutsindira"
+"Murakaza neza muba nyamuryango ba Ni Nyampinga. Kuri buri gice kibibazo 4 "
+"usubiza urahabwa amahirwe yo dutsindira "
 
-#: go-nike-ghr.js:978
+#: ../lib/go-nike-ghr.js:1200
 msgid " RwF weekly."
 msgstr "RWF buri cyumweru"
 
-#: go-nike-ghr.js:1014 go-nike-ghr.js:1031
+#: ../lib/go-nike-ghr.js:1236 ../lib/go-nike-ghr.js:1253
 msgid "What district are you in?"
 msgstr "Utuye mu kahe karere?"
 
-#: go-nike-ghr.js:1021
+#: ../lib/go-nike-ghr.js:1243
 msgid ""
 "Sorry, cannot find a match. Please try again.\n"
 "Which sector do you live in?\n"
 "Press 1 if you do not know"
 msgstr ""
-"Mwihangane, ntago turi kubona icyo bihura. subiramo. \n"
-"Utuye mu wuhe murenge?\n"
+"Mwihangane, ntago turi kubona icyo bihura. subiramo \n"
+"Utuye mu wuhe murenge? \n"
 "Niba ntabyo uzi kanda 1"
 
-#: go-nike-ghr.js:1040 go-nike-ghr.js:1041 go-nike-ghr.js:1042
-#: go-nike-ghr.js:1111 go-nike-ghr.js:1112 go-nike-ghr.js:1113
-#: go-nike-ghr.js:1167 go-nike-ghr.js:1168 go-nike-ghr.js:1169
-#: go-nike-ghr.js:1170
+#: ../lib/go-nike-ghr.js:1262 ../lib/go-nike-ghr.js:1263
+#: ../lib/go-nike-ghr.js:1264 ../lib/go-nike-ghr.js:1333
+#: ../lib/go-nike-ghr.js:1334 ../lib/go-nike-ghr.js:1335
+#: ../lib/go-nike-ghr.js:1389 ../lib/go-nike-ghr.js:1390
+#: ../lib/go-nike-ghr.js:1391 ../lib/go-nike-ghr.js:1392
 msgid "Prev"
-msgstr "Subira Inyuma"
+msgstr "Inyuma"
 
-#: go-nike-ghr.js:1051
+#: ../lib/go-nike-ghr.js:1273
 msgid "Sorry there's no article this week, dial back soon!"
 msgstr "Mwihangane, Iki cyumweru nta nkuru shya ihari"
 
-#: go-nike-ghr.js:1090
+#: ../lib/go-nike-ghr.js:1312
 msgid "Please choose an option:"
 msgstr "Hitamo uburyo bumwe muri ubu"
 
-#: go-nike-ghr.js:1092
+#: ../lib/go-nike-ghr.js:1314
 msgid "Popular opinions from SMS"
-msgstr "Ubutumwa bwaturutse muri SMS"
+msgstr "Ibitekerezero byaturutse muri SMS"
 
-#: go-nike-ghr.js:1093
+#: ../lib/go-nike-ghr.js:1315
 msgid "Leave your opinion"
 msgstr "Nawe tubwire"
 
-#: go-nike-ghr.js:1122
+#: ../lib/go-nike-ghr.js:1344
 msgid "No new content this week"
-msgstr "Iki cyumweru nta nkuru shya twashyizeho"
+msgstr ""
+"Iki cyumweru nta nkuru shya twashyizehoIki cyumweru nta nkuru shya "
+"twashyizeho"
 
-#: go-nike-ghr.js:1230 go-nike-ghr.js:1454
+#: ../lib/go-nike-ghr.js:1468 ../lib/go-nike-ghr.js:1714
 msgid "Please select an option:"
 msgstr "Hitamo uburyo bumwe muri ubu"
 
-#: go-nike-ghr.js:1240
+#: ../lib/go-nike-ghr.js:1478
 msgid "Thank you and bye bye!"
 msgstr ""
 "Ni Nyampinga, Murakoze! Murarikiwe kugaruka gusoma inkuru n'ibindi "
 "bishimishije"
 
-#: go-nike-ghr.js:1465
+#: ../lib/go-nike-ghr.js:1725
 msgid "Please select an organization:"
 msgstr "Hitamo umushinga"
 
-#: go-nike-ghr.js:1474
+#: ../lib/go-nike-ghr.js:1734
 msgid "Back to categories"
 msgstr "Subira inyuma ahari ibyicaro"
