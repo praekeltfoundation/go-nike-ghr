@@ -130,7 +130,7 @@
     ],
     "Welcome Ni Nyampinga club member! We want to know you better. For each set of 4 questions you answer, you enter a lucky draw to win ": [
         null,
-        "Murakaza neza muba nyamuryango ba Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira "
+        "Murakaza neza mu muryango wa Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira"
     ],
     " RwF weekly.": [
         null,
@@ -167,6 +167,10 @@
     "No new content this week": [
         null,
         "Iki cyumweru nta nkuru shya twashyizehoIki cyumweru nta nkuru shya twashyizeho"
+    ],
+    "Thank you_opinions": [
+        null,
+        "Kurikira ikiganiro Ni Nyampinga cyiki cyumweru kuri radiyo. maze utange igitekerezo cyawe kuri SMS nimero 1019"
     ],
     "Please select an option:": [
         null,
