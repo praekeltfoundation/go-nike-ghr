@@ -47,7 +47,7 @@ var test_fixtures_full = [
     'test/fixtures/userinteraction_sector_duplicates.json',
     'test/fixtures/userinteraction_sector_duplicates_district.json',
     'test/fixtures/userinteraction_sector_duplicates_district_live.json',
-    'test/fixtures/userinteraction_gender_female.json',
+    'test/fixtures/userinteraction_gender_female.json'
 ];
 
 describe("When using the USSD line", function() {
@@ -569,7 +569,6 @@ describe("When using the USSD line", function() {
         });
     });
 
-
     describe("as an registered user - not completed all M&L questions", function() {
         // These are used to mock API reponses
         var fixtures = test_fixtures_full;
@@ -752,8 +751,6 @@ describe("When using the USSD line", function() {
             async: true
         });
 
-
-
         // first test should always start 'null, null' because we haven't
         // started interacting yet
         it("first screen should show us menu", function (done) {
@@ -928,7 +925,6 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
-
 
         it('should continue to main menu after Shangazi Opinions finish', function(done) {
             var p = tester.check_state({
@@ -1149,14 +1145,66 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 1 in response to opinion displayed should display another opinion to feedback on", function (done) {
+         it("selecting 1 in response to opinion display should increment to the appropriate kv stores for the question and option and take to navigation screen", function (done) {
             var user = {
                 current_state: 'opinions_view'
             };
             var p = tester.check_state({
                 user: user,
                 content: "1",
-                next_state: "opinion_view_1_o_2",
+                next_state: "opinion_result_navigation",
+                response: (
+                    "Press 1 to see the poll results and 3 to go to main menu."
+                )
+            });
+            p.then(function () {
+                var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
+                assert.equal(updated_kv, 1);
+
+                var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_1'];
+                assert.equal(opinion_kv, 1);
+
+                //Assert that the next opinion is set
+                var user = tester.api.im.user;
+                assert.equal(user.next_opinion_state, "opinion_view_1_o_2");
+
+                //Assert that the array is created and is correct
+                assert.equal(user.opinion_counts.length, 2);
+                tester.assert_deep_equal(user.opinion_counts, [
+                    ["Yes, I agree", 100],
+                    ["No way", 0]
+                ]);
+            }).then(done, done);
+         });
+
+        it("selecting 1 in the navigation menu should take you to see the correct results", function (done) {
+            var user = {
+                current_state: 'opinion_result_navigation',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",100],["No way",0]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_result",
+                response: (
+                    "100% chose 'Yes, I agree' and 0% chose 'No way' for this question."
+                )
+            });
+            p.then(done, done);
+        });
+
+
+        it("after viewing the results should take the user to the next opinion", function (done) {
+            var user = {
+                current_state: 'opinion_result',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state:  "opinion_view_1_o_2",
                 response: (
                     "^I think something really stupid[^]" +
                     "1. Yes, I agree[^]"+
@@ -1166,30 +1214,76 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 2 in response to last opinion available should display Opinions thank you", function (done) {
+        it("selecting 2 in response to opinion display should increment to the appropriate kv stores for the question and option",function(done) {
+                var user = {
+                    current_state: 'opinions_view'
+                };
+                var p = tester.check_state({
+                    user: user,
+                    content: "2",
+                    next_state:  "opinion_result_navigation",
+                    response: (
+                        "Press 1 to see the poll results and 3 to go to main menu."
+                    )
+                });
+                p.then(function() {
+                    var updated_kv = tester.api.kv_store['opinion_view_1_o_1_total'];
+                    assert.equal(updated_kv, 1);
+
+                    var opinion_kv = tester.api.kv_store['opinion_view_1_o_1_2'];
+                    assert.equal(opinion_kv, 1);
+
+                    //Assert that the next opinion is set
+                    var user = tester.api.im.user;
+                    assert.equal(user.next_opinion_state,"opinion_view_1_o_2");
+
+                    //Assert that the array is created and is correct
+                    assert.equal(user.opinion_counts.length,2);
+                    tester.assert_deep_equal(user.opinion_counts,[["Yes, I agree",0],["No way",100]]);
+                }).then(done, done);
+            });
+
+        it("selecting 2 in the opinions navigation menu should take you to see the correct results", function (done) {
+            var user = {
+                current_state: 'opinion_result_navigation',
+                next_opinion_state: 'opinion_view_1_o_2',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "opinion_result",
+                response: (
+                   "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("selecting 2 in response to opinion displayed should display the opinion results", function (done) {
             var user = {
                 current_state: 'opinion_view_1_o_2'
             };
             var p = tester.check_state({
                 user: user,
                 content: "2",
-                next_state: "opinions_thank_you",
+                next_state: "opinion_result_navigation",
                 response: (
-                    "^Thanks for sharing your opinion.\n"+
-                     "Press 1 to go back to the menu[^]" +
-                      "1. Continue$"
+                   "Press 1 to see the poll results and 3 to go to main menu."
                 )
             });
             p.then(done, done);
         });
 
-        it("selecting 1 in thank you screen should display menu", function (done) {
+        it("after responding to the results of last opinion, take back to opinions page", function (done) {
             var user = {
-                current_state: 'opinions_thank_you'
+                current_state: 'opinion_result',
+                next_opinion_state: 'opinions',
+                opinion_counts :[["Yes, I agree",0],["No way",100]]
             };
             var p = tester.check_state({
                 user: user,
-                content: "1",
+                content: "2",
                 next_state: "opinions",
                 response: (
                     "^Please choose an option:[^]" +
@@ -1445,7 +1539,7 @@ describe("When using the USSD line", function() {
             'test/fixtures/directory.json',
             'test/fixtures/userinteraction_articles.json',
             'test/fixtures/userinteraction_wwsd.json',
-            'test/fixtures/hierarchy_sectors.json',
+            'test/fixtures/hierarchy_sectors.json'
         ];
 
         var tester = new vumigo.test_utils.ImTester(app.api, {
