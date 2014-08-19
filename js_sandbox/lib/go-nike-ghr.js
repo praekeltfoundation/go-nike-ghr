@@ -275,14 +275,13 @@ function GoNikeGHR() {
         var _ = im.i18n;
         var message = "";
         for (var i=0; i < opinion_counts.length; i++) {
-            message += opinion_counts[i][1] + "%"
-                + _.gettext(" chose '")
+            message += opinion_counts[i][1] + "% - "
+                + _.gettext("Option '")
                 + opinion_counts[i][0] + "'";
             if (i+1 < opinion_counts.length) {
-                message += _.gettext(" and ");
+                message += _.gettext("\n");
             }
         }
-        message += " for this question.";
         return message;
     };
 
