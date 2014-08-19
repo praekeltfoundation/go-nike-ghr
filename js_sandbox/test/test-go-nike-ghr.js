@@ -1137,9 +1137,10 @@ describe("When using the USSD line", function() {
                 user: user,
                 content: "1",
                 next_state: "opinion_result",
-                response: (
-                    "100% chose 'Yes, I agree' and 0% chose 'No way' for this question."
-                )
+                response: ([
+                    "100% - Option 'Yes, I agree'",
+                    "0% - Option 'No way'"
+                ].join("\n"))
             });
             p.then(done, done);
         });
@@ -1203,9 +1204,10 @@ describe("When using the USSD line", function() {
                 user: user,
                 content: "1",
                 next_state: "opinion_result",
-                response: (
-                   "0% chose 'Yes, I agree' and 100% chose 'No way' for this question."
-                )
+                response: ([
+                   "0% - Option 'Yes, I agree'",
+                   "100% - Option 'No way'"
+                ].join("\n"))
             });
             p.then(done, done);
         });

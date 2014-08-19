@@ -220,9 +220,12 @@ msgid "No new content this week"
 msgstr ""
 "Iki cyumweru nta nkuru shya twashyizehoIki cyumweru nta nkuru shya "
 "twashyizeho"
+
 msgid "Thank you_opinions"
 msgstr "Kurikira ikiganiro Ni Nyampinga cyiki cyumweru kuri radiyo. maze utange igitekerezo cyawe kuri SMS nimero 1019"
 
+msgid "Thank you for your opinion"
+msgstr "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
 #: ../lib/go-nike-ghr.js:1468 ../lib/go-nike-ghr.js:1714
 msgid "Please select an option:"
 msgstr "Hitamo uburyo bumwe muri ubu"
@@ -240,3 +243,6 @@ msgstr "Hitamo umushinga"
 #: ../lib/go-nike-ghr.js:1734
 msgid "Back to categories"
 msgstr "Subira inyuma ahari ibyicaro"
+
+msgid "Option '"
+msgstr "Basubije '"
