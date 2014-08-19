@@ -1378,7 +1378,7 @@ function GoNikeGHR() {
         var next_page = function(page_number) {
             // We load the opinions in all in one go on_config_load
             if (page_number == 3){
-               return "Thank you_opinions" + footer[page_number]
+               return _.gettext("Thank you_opinions") + footer[page_number]
             }
             else
             {
