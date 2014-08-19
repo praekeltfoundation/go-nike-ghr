@@ -222,7 +222,7 @@ msgstr ""
 "twashyizeho"
 
 msgid "Thank you_opinions"
-msgstr "Kurikira ikiganiro Ni Nyampinga cyiki cyumweru kuri radiyo. maze utange igitekerezo cyawe kuri SMS nimero 1019"
+msgstr "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
 
 msgid "Thank you for your opinion"
 msgstr "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
