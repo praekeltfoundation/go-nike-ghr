@@ -1023,7 +1023,7 @@ describe("When using the USSD line", function() {
                 next_state: "opinions_popular",
                 response: (
                     "^Thank you_opinions[^]" +
-                    "1. Prev, 2. Next, 3. Main menu$"
+                    "3. Main menu$"
                 )
             });
             p.then(done, done);
