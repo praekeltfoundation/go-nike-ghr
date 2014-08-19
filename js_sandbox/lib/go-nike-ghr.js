@@ -282,6 +282,7 @@ function GoNikeGHR() {
                 message += _.gettext("\n");
             }
         }
+        message += "\n3. " + _.gettext('Main menu');
         return message;
     };
 
@@ -1387,14 +1388,12 @@ function GoNikeGHR() {
 
         };
 
-
-
         var footer =  [
-         "\n2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n3. " + _.gettext("Main menu")
-    ]
+             "\n2. " + _.gettext("Next"),
+             "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+             "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
+             "\n3. " + _.gettext("Main menu")
+        ]
         var counter = 0;
 
         return new BookletState(

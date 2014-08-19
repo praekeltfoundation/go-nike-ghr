@@ -1137,10 +1137,11 @@ describe("When using the USSD line", function() {
                 user: user,
                 content: "1",
                 next_state: "opinion_result",
-                response: ([
+                response: [
                     "100% - Option 'Yes, I agree'",
-                    "0% - Option 'No way'"
-                ].join("\n"))
+                    "0% - Option 'No way'",
+                    "3. Main menu"
+                ].join("\n")
             });
             p.then(done, done);
         });
@@ -1204,10 +1205,11 @@ describe("When using the USSD line", function() {
                 user: user,
                 content: "1",
                 next_state: "opinion_result",
-                response: ([
+                response: [
                    "0% - Option 'Yes, I agree'",
-                   "100% - Option 'No way'"
-                ].join("\n"))
+                   "100% - Option 'No way'",
+                   "3. Main menu"
+                ].join("\n")
             });
             p.then(done, done);
         });
