@@ -1393,7 +1393,7 @@ function GoNikeGHR() {
          "\n2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
          "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next"),
-         "\n1. "+ _.gettext("Prev") + ", 2. " + _.gettext("Next") +", 3. " + _.gettext("Main menu")
+         "\n3. " + _.gettext("Main menu")
     ]
         var counter = 0;
 
