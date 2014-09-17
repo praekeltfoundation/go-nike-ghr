@@ -4,8 +4,6 @@
     "model": "opinions.opinion", 
     "fields": {
         "updated_at": "2013-07-04T08:20:42.220Z", 
-        "opinion_4": "D", 
-        "opinion_5": "E", 
         "opinion_2": "B", 
         "opinion_3": "C", 
         "opinion_1": "A"
