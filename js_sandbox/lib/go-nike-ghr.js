@@ -1055,11 +1055,10 @@ function GoNikeGHR() {
                     // Did not finish registration and session state not found
                     return new ChoiceState(
                     state_name,
-                    "reg_age",
-                    _.gettext("Please choose your gender:"),
+                    "reg_gender",
+                    _.gettext("Welcome to Ni Nyampinga:"),
                     [
-                        new Choice("Male", _.gettext("Male")),
-                        new Choice("Female", _.gettext("Female"))
+                        new Choice("continue", _.gettext("Continue"))
                     ],
                         null,
                         {

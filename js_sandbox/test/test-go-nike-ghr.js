@@ -100,14 +100,13 @@ describe("When using the USSD line", function() {
         // first test should always start 'null, null' because we haven't
         // started interacting yet
 
-        it("first screen should ask us to accept T&Cs", function (done) {
+        it("first screen should be a welcome screen", function (done) {
             var p = tester.check_state({
                 user: null,
                 content: null,
                 next_state: "initial_state",
-                response: "^Please choose your gender:[^]" +
-                    "1. Male[^]"+
-                    "2. Female$",
+                response: "^Welcome to Ni Nyampinga:[^]" +
+                    "1. Continue$",
                 session_event: "new"
             });
             p.then(function() {
@@ -153,6 +152,21 @@ describe("When using the USSD line", function() {
             });
             p.add_callback(done);
 
+        });
+
+        it("should ask gender", function (done) {
+            var user = {
+                current_state: 'initial_state'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "reg_gender",
+                response: "^Please choose your gender:[^]" +
+                    "1. Male[^]"+
+                    "2. Female$"
+            });
+            p.then(done, done);
         });
 
 
@@ -305,6 +319,28 @@ describe("When using the USSD line", function() {
                     "^Welcome Ni Nyampinga club member! We want to know you better. " +
                     "For each set of 4 questions you answer, you enter a lucky draw to " +
                     "win 100 RwF weekly.[^]" +
+                    "1. Continue$"
+                )
+            });
+            p.then(done, done);
+        });
+
+        it("entering !restart should go back to welcome screen", function (done) {
+            var user = {
+                current_state: 'reg_district',
+                answers: {
+                    initial_state: 'reg_gender',
+                    reg_gender: 'Female',
+                    reg_sector: 'Remera',
+                    reg_age: '19-24'
+                }
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "!restart",
+                next_state: "initial_state",
+                response: (
+                    "^Welcome to Ni Nyampinga:[^]" +
                     "1. Continue$"
                 )
             });
