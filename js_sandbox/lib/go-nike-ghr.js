@@ -1146,6 +1146,10 @@ function GoNikeGHR() {
         _.gettext("Which sector do you live in?\nPress 1 if you do not know")
     ));
 
+    self.check_mandl = function(im){
+        return im.config.disable_mandl
+    };
+
     self.add_creator('reg_thanks', function(state_name, im) {
         var sector = im.get_user_answer('reg_sector');
         var gender = im.get_user_answer('reg_gender');
@@ -1161,9 +1165,12 @@ function GoNikeGHR() {
                 var p = self.get_contact(im);
 
                 p.add_callback(function(result) {
+
                     // This callback updates extras when contact is found
+                    if (!self.check_mandl(im)) {
                     var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
                     next_state = 'mandl_quiz_' + possible_mandl[0]  + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
+                    }
                     if (result.success){
 
                         var fields = {
@@ -1171,9 +1178,14 @@ function GoNikeGHR() {
                             "ghr_gender": JSON.stringify(gender),
                             "ghr_age": JSON.stringify(age),
                             "ghr_sector": JSON.stringify(sector),
-                            "ghr_district": JSON.stringify(district),
-                            "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
+                            "ghr_district": JSON.stringify(district)
+
                         };
+
+                        if (!self.check_mandl(im)) {
+                        fields.push({"ghr_mandl_inprog": JSON.stringify(possible_mandl[0])})
+                        }
+
                         // Run the extras update
                         return im.api_request('contacts.update_extras', {
                             key: result.contact.key,
