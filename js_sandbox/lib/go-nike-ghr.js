@@ -1173,6 +1173,7 @@ function GoNikeGHR() {
                     }
                     if (result.success){
 
+                        if (!self.check_mandl(im)) {
                         var fields = {
                             "ghr_reg_complete": "true",
                             "ghr_gender": JSON.stringify(gender),
@@ -1181,9 +1182,16 @@ function GoNikeGHR() {
                             "ghr_district": JSON.stringify(district)
 
                         };
-
+                        }
                         if (!self.check_mandl(im)) {
-                        fields.push({"ghr_mandl_inprog": JSON.stringify(possible_mandl[0])})
+                        var fields = {
+                            "ghr_reg_complete": "true",
+                            "ghr_gender": JSON.stringify(gender),
+                            "ghr_age": JSON.stringify(age),
+                            "ghr_sector": JSON.stringify(sector),
+                            "ghr_district": JSON.stringify(district),
+                            "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
+                        };
                         }
 
                         // Run the extras update
