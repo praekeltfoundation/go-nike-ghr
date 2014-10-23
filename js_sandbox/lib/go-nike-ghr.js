@@ -926,6 +926,10 @@ function GoNikeGHR() {
         return im.config.directory_disable
     };
 
+    self.check_mandl = function(im){
+        return im.config.mandl_disable
+    };
+
     self.make_main_menu = function(im){
         _ = im.i18n;
         var choices =  [
@@ -1071,7 +1075,13 @@ function GoNikeGHR() {
                 } else {
                     // Registration complete so check for questions
                     // Check all question sets have been answered
-                    return self.make_mandl_or_mainmenu(state_name, result.contact, im);
+                    if(!self.check_mandl(im)){
+                        return self.make_mandl_or_mainmenu(state_name, result.contact, im);
+
+                    }
+                    else{
+                        return self.make_main_menu(im);
+                    }
                 }
             } else {
                 // Something went wrong saving the extras
