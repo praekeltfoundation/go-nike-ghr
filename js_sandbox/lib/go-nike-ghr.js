@@ -923,7 +923,12 @@ function GoNikeGHR() {
     );
 
     self.check_directory = function(im){
-        return im.config.directory_disable
+        return im.config.directory_disable;
+    };
+
+    self.check_mandl = function(im){
+        return im.config.mandl_disable;
+
     };
 
     self.make_main_menu = function(im){
@@ -1070,8 +1075,15 @@ function GoNikeGHR() {
                     );
                 } else {
                     // Registration complete so check for questions
-                    // Check all question sets have been answered
-                    return self.make_mandl_or_mainmenu(state_name, result.contact, im);
+                    // Check all question sets have been answ
+
+                    if(self.check_mandl(im)){
+
+                         return self.make_main_menu(im);
+                    }
+                    else{
+                        return self.make_mandl_or_mainmenu(state_name, result.contact, im);
+                    }
                 }
             } else {
                 // Something went wrong saving the extras
