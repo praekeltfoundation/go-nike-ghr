@@ -639,10 +639,7 @@ describe("When using the USSD line", function() {
                     "4. Weekly quiz[^]" +
                     "5. Directory$"
             });
-            p.then(function() {
-                var updated_kv = tester.api.kv_store['ghr_ussd_total_users_2013-05-27'];
-                assert.equal(updated_kv, undefined);
-            }).then(done, done);
+            p.then(done, done);
         });
     });
 
