@@ -1164,79 +1164,101 @@ function GoNikeGHR() {
         var age = im.get_user_answer('reg_age');
         var district = im.get_user_answer("reg_district");
         var next_state;
-
         var _ = im.i18n;
 
         if (self.validate_sector(im, sector) || sector == "1") {
             // Get the user
             if (self.unique_sector(im, sector) || (!self.unique_sector(im, sector) && district) || sector == "1") {
-                var p = self.get_contact(im);
 
-                p.add_callback(function(result) {
-                    // This callback updates extras when contact is found
-                    var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
-                    next_state = 'mandl_quiz_' + possible_mandl[0]  + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
-                    if (result.success){
+                if(!self.check_mandl(im)) {
+                    var p = self.get_contact(im);
 
-                        var fields = {
-                            "ghr_reg_complete": "true",
-                            "ghr_gender": JSON.stringify(gender),
-                            "ghr_age": JSON.stringify(age),
-                            "ghr_sector": JSON.stringify(sector),
-                            "ghr_district": JSON.stringify(district),
-                            "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
-                        };
-                        // Run the extras update
-                        return im.api_request('contacts.update_extras', {
-                            key: result.contact.key,
-                            fields: fields
-                        });
-                    } else {
-                        // Error finding contact
-                        return self.error_state(im);
-                    }
-                });
-                p.add_callback(function(result) {
-                    var _ = im.i18n;
-                    if (result.success){
-                        var girl = ["12 or under", "12-15", "16-18"];
-                        return new ChoiceState(
-                            state_name,
-                            next_state,
-                            _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
-                            "For each set of 4 questions you answer, you enter a lucky draw to " +
-                            "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
-                            [
-                                new Choice("continue", _.gettext("Continue"))
-                            ],
-                            null,
-                            {
-                                on_enter: function() {
-                                    var p_log = new Promise();
-                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "gender", gender);});
-                                    p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "age", age);});
-                                    if(sector!="1"){
-                                        p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "sector", sector);});
-                                        if (district) {  // If not district this will not run
-                                            p_log.add_callback(function(){return self.interaction_log("REGISTRATION", "district", district);});
-                                        }
-                                    }
-                                    p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
-                                    p_log.add_callback(function(){
-                                        if (gender == "Female" && girl.indexOf(age)){
-                                            return self.increment_and_fire("ghr_ussd_total_girl_registered_users");
-                                        }
-                                    });
-                                    p_log.callback();
-                                    return p_log;
-                                }
+                    p.add_callback(function (result) {
+                        // This callback updates extras when contact is found
+                        var possible_mandl = self.array_parse_ints(im.config.mandl_quizzes);
+                        next_state = 'mandl_quiz_' + possible_mandl[0] + "_" + im.config.quizzes["mandl_quiz_" + possible_mandl[0]]["start"];
+                        if (result.success) {
+
+                            var fields = {
+                                "ghr_reg_complete": "true",
+                                "ghr_gender": JSON.stringify(gender),
+                                "ghr_age": JSON.stringify(age),
+                                "ghr_sector": JSON.stringify(sector),
+                                "ghr_district": JSON.stringify(district),
+                                "ghr_mandl_inprog": JSON.stringify(possible_mandl[0])
+                            };
+                            // Run the extras update
+                            return im.api_request('contacts.update_extras', {
+                                key: result.contact.key,
+                                fields: fields
                             });
-                    } else {
-                        // Error saving contact extras
-                        return self.error_state(im);
-                    }
-                });
-                return p;
+                        } else {
+                            // Error finding contact
+                            return self.error_state(im);
+                        }
+                    });
+                    p.add_callback(function (result) {
+                        var _ = im.i18n;
+                        if (result.success) {
+                            var girl = ["12 or under", "12-15", "16-18"];
+                            return new ChoiceState(
+                                state_name,
+                                next_state,
+                                _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
+                                "For each set of 4 questions you answer, you enter a lucky draw to " +
+                                "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
+                                [
+                                    new Choice("continue", _.gettext("Continue"))
+                                ],
+                                null,
+                                {
+                                    on_enter: function () {
+                                        var p_log = new Promise();
+                                        p_log.add_callback(function () {
+                                            return self.interaction_log("REGISTRATION", "gender", gender);
+                                        });
+                                        p_log.add_callback(function () {
+                                            return self.interaction_log("REGISTRATION", "age", age);
+                                        });
+                                        if (sector != "1") {
+                                            p_log.add_callback(function () {
+                                                return self.interaction_log("REGISTRATION", "sector", sector);
+                                            });
+                                            if (district) {  // If not district this will not run
+                                                p_log.add_callback(function () {
+                                                    return self.interaction_log("REGISTRATION", "district", district);
+                                                });
+                                            }
+                                        }
+                                        p_log.add_callback(self.increment_and_fire("ghr_ussd_total_registrations"));
+                                        p_log.add_callback(function () {
+                                            if (gender == "Female" && girl.indexOf(age)) {
+                                                return self.increment_and_fire("ghr_ussd_total_girl_registered_users");
+                                            }
+                                        });
+                                        p_log.callback();
+                                        return p_log;
+                                    }
+                                });
+                        } else {
+                            // Error saving contact extras
+                            return self.error_state(im);
+                        }
+                    });
+                    return p;
+                } else{
+                    return new ChoiceState(
+                        "reg_thanks",
+                        "main_menu",
+                        _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
+                        "For each set of 4 questions you answer, you enter a lucky draw to " +
+                        "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
+                        [
+                            new Choice("continue", _.gettext("Continue"))
+                        ],
+                        null
+                    );
+                }
             } else {
                 return new FreeText(
                     "reg_district",
