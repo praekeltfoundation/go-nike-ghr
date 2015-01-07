@@ -6,7 +6,7 @@
         "mime-version": "1.0",
         "content-type": "text/plain; charset=UTF-8",
         "content-transfer-encoding": "8bit",
-        "po-revision-date": "2014-08-12 13:47+0530",
+        "po-revision-date": "2015-01-07 09:12+0200",
         "last-translator": "",
         "x-generator": "Poedit 1.6.5",
         "plural-forms": "nplurals=2; plural=(n != 1);",
@@ -88,6 +88,10 @@
         null,
         "Abo wakwiyambaza"
     ],
+    "Welcome to Ni Nyampinga:": [
+        null,
+        "Murakaza neza kuri Ni Nyampinga mobile. iri ni igerageza ry uko ikora. niba ubyemeye kanda 2 ukomeze. reba amabwiriza namategeko hano"
+    ],
     "To proceed with registration, do you accept the Terms and Conditions of Ni Nyampinga - ": [
         null,
         "Kugirango ukomeze kwiyandikisha uremera amabwiriza n'amategeko ya Ni Nyampinga Mobile"
@@ -132,10 +136,6 @@
         null,
         "Murakaza neza muba nyamuryango ba Ni Nyampinga. Kuri buri gice kibibazo 4 usubiza urahabwa amahirwe yo dutsindira "
     ],
-    "Welcome to Ni Nyampinga:": [
-        null,
-        "Murakaza neza kuri Ni Nyampinga mobile. iri ni igerageza ry uko ikora. niba ubyemeye kanda 2 ukomeze. reba amabwiriza namategeko hano"
-    ],
     " RwF weekly.": [
         null,
         "RWF buri cyumweru"
@@ -174,11 +174,11 @@
     ],
     "Thank you_opinions": [
         null,
-        "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
+        "Murakoze! Nawe ohereza SMS kuri 1019."
     ],
     "Thank you for your opinion": [
         null,
-        "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
+        "Murakoze! Nawe ohereza SMS kuri 1019."
     ],
     "Please select an option:": [
         null,

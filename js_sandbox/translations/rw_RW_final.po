@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-08-12 13:47+0530\n"
+"PO-Revision-Date: 2015-01-07 09:12+0200\n"
 "Last-Translator: \n"
 "X-Generator: Poedit 1.6.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -115,8 +115,9 @@ msgstr "Abo wakwiyambaza"
 
 #: ../lib/go-nike-ghr.js:1059
 msgid "Welcome to Ni Nyampinga:"
-msgstr "Murakaza neza kuri Ni Nyampinga mobile. iri ni igerageza ry uko ikora. "
-"niba ubyemeye kanda 2 ukomeze. reba amabwiriza namategeko hano"
+msgstr ""
+"Murakaza neza kuri Ni Nyampinga mobile. iri ni igerageza ry uko ikora. niba "
+"ubyemeye kanda 2 ukomeze. reba amabwiriza namategeko hano"
 
 #: ../lib/go-nike-ghr.js:1061
 msgid ""
@@ -227,10 +228,11 @@ msgstr ""
 "twashyizeho"
 
 msgid "Thank you_opinions"
-msgstr "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
+msgstr "Murakoze! Nawe ohereza SMS kuri 1019."
 
 msgid "Thank you for your opinion"
-msgstr "Murakoze! Nawe watanga igitekerezo. Kurikirana ikiganiro Ni Nyampinga"
+msgstr "Murakoze! Nawe ohereza SMS kuri 1019."
+
 #: ../lib/go-nike-ghr.js:1468 ../lib/go-nike-ghr.js:1714
 msgid "Please select an option:"
 msgstr "Hitamo uburyo bumwe muri ubu"
