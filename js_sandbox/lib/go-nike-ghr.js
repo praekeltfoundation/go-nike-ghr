@@ -931,6 +931,17 @@ function GoNikeGHR() {
 
     };
 
+    self.welcome_message = function(im){
+        if(self.check_mandl(im)){
+            return _.gettext("Welcome to Ni Nyampinga:");
+        }
+        else{
+             return _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
+                        "For each set of 4 questions you answer, you enter a lucky draw to " +
+                        "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly.");
+        }
+    };
+
     self.make_main_menu = function(im){
         _ = im.i18n;
         var choices =  [
@@ -1204,9 +1215,7 @@ function GoNikeGHR() {
                             return new ChoiceState(
                                 state_name,
                                 next_state,
-                                _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
-                                "For each set of 4 questions you answer, you enter a lucky draw to " +
-                                "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
+                                self.welcome_message(im),
                                 [
                                     new Choice("continue", _.gettext("Continue"))
                                 ],
@@ -1250,9 +1259,7 @@ function GoNikeGHR() {
                     return new ChoiceState(
                         "reg_thanks",
                         "main_menu",
-                        _.gettext("Welcome Ni Nyampinga club member! We want to know you better. " +
-                        "For each set of 4 questions you answer, you enter a lucky draw to " +
-                        "win ") + im.config.airtime_reward_amount + _.gettext(" RwF weekly."),
+                        self.welcome_message(im),
                         [
                             new Choice("continue", _.gettext("Continue"))
                         ],
