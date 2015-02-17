@@ -1032,12 +1032,16 @@ function GoNikeGHR() {
     };
 
     self.add_creator('initial_state', function(state_name, im) {
+        im.set_user_lang('rw');
+        var p = im.refresh_i18n();
+
         // Check if they've already registered
-        var p = self.get_contact(im);
+        p.add_callback(function() {
+          return self.get_contact(im);
+        });
 
         p.add_callback(function(result) {
             // This callback creates extras if first time visitor - or just passes through
-            im.set_user_lang('rw')
             if (result.contact["extras-ghr_reg_complete"] === undefined){
                 // First visit - create extras
                 var today = self.get_today(im);
