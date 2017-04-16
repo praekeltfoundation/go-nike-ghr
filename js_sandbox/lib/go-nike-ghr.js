@@ -1504,6 +1504,7 @@ function GoNikeGHR() {
         return p_weeklyquiz;
     });
 
+    /*
     self.add_creator('directory_start', function(state_name, im) {
         var _ = im.i18n;
         // Get the directory
@@ -1519,6 +1520,20 @@ function GoNikeGHR() {
         });
         return p_dir;
     });
+
+    */
+
+     self.add_state(new ChoiceState(
+            "directory_start",
+            function(choice) {
+                return choice.value;
+            },
+            "Directory is currently not populated:",
+            [
+                new Choice("main_menu", _.gettext("Back"))
+            ]
+        )
+    );
 
     self.add_state(new EndState(
         "end_state",

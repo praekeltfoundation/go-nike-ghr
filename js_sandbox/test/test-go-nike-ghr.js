@@ -349,6 +349,7 @@ describe("When using the USSD line", function() {
         });
 
        
+
         it("should register a user successfully with duplicate district", function(done){
             var user = {
                 current_state: 'reg_thanks',
@@ -1394,7 +1395,8 @@ describe("When using the USSD line", function() {
             p.then(done, done);
         });
 
-        it("selecting 5 from menu should show the directory category listing", function (done) {
+
+        it("selecting 5 from menu should show the directory category listing(unavailable)", function (done) {
             var user = {
                 current_state: 'main_menu'
             };
@@ -1403,20 +1405,33 @@ describe("When using the USSD line", function() {
                 content: "5",
                 next_state: "directory_start",
                 response: (
-                    "^Please select an option:[^]" +
-                    "1. category one[^]" +
-                    "2. category two[^]" +
-                    "3. category three[^]" +
-                    "4. Next[^]" +
-                    "5. Main menu$"
+                    "^Directory is currently not populated:[^]" +
+                    "1. Back$"
                 )
             });
-            p.then(function() {
-                var updated_kv = tester.api.kv_store['ghr_ussd_directory_views'];
-                assert.equal(updated_kv, 1);
-            }).then(done, done);
+            p.then(done, done);
         });
 
+        it("selecting 1 from Directory submenu should return to the main menu", function (done) {
+            var user = {
+                current_state: 'directory_start'
+            };
+            var p = tester.check_state({
+                user: user,
+                content: "1",
+                next_state: "main_menu",
+                response: (
+                    "^[^]" +
+                    "1. Articles[^]" +
+                    "2. Opinions[^]" +
+                    "3. What would Shangazi do\\?[^]" +
+                    "4. Weekly quiz[^]" +
+                    "5. Directory$"
+                )
+            });
+            p.then(done, done);
+        });
+        /*
         it("selecting 4 from directory should show the second page of directory category listing", function (done) {
             var user = {
                 current_state: 'directory_start'
@@ -1584,7 +1599,7 @@ describe("When using the USSD line", function() {
             });
             p.then(done, done);
         });
-
+        */
     });
 
     describe("with no articles or Shangazi in system", function() {
